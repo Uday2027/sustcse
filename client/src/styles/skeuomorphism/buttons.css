@@ -1,4 +1,4 @@
-/* ===== Skeuomorphic Buttons ===== */
+/* ===== Luxury Buttons ===== */
 .skeu-btn {
   display: inline-flex;
   align-items: center;
@@ -6,60 +6,77 @@
   gap: 0.5rem;
   padding: 0.65rem 1.5rem;
   font-family: var(--font-sans);
-  font-size: 0.9rem;
-  font-weight: 600;
-  letter-spacing: 0.02em;
+  font-size: 0.85rem;
+  font-weight: 500;
+  letter-spacing: 0.01em;
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
-  background: linear-gradient(180deg, #ffffff 0%, #f5f3f0 60%, #edeae6 100%);
+  background: var(--color-bg-elevated);
   color: var(--color-text-primary);
-  box-shadow:
-    0 2px 4px rgba(0, 0, 0, 0.08),
-    inset 0 1px 0 rgba(255, 255, 255, 0.9),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.05);
-  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.7);
   cursor: pointer;
-  transition: all 0.15s ease;
+  transition: all var(--transition-base);
   position: relative;
   overflow: hidden;
+  white-space: nowrap;
 }
 
 .skeu-btn:hover {
-  background: linear-gradient(180deg, #ffffff 0%, #f8f6f3 60%, #f0edea 100%);
-  box-shadow:
-    0 3px 6px rgba(0, 0, 0, 0.1),
-    inset 0 1px 0 rgba(255, 255, 255, 0.9),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.05);
+  background: var(--color-bg-tertiary);
+  border-color: rgba(255, 255, 255, 0.10);
   transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
 }
 
 .skeu-btn:active {
-  transform: translateY(0);
-  box-shadow: var(--shadow-pressed);
-  background: linear-gradient(180deg, #edeae6 0%, #f5f3f0 100%);
+  transform: translateY(0) scale(0.98);
+  transition-duration: 80ms;
 }
 
 .skeu-btn--primary {
-  background: var(--gradient-gold);
-  color: #ffffff;
-  border-color: var(--color-accent-dark);
-  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+  background: var(--color-accent);
+  color: #fff;
+  border-color: transparent;
+  font-weight: 600;
 }
 
 .skeu-btn--primary:hover {
-  background: linear-gradient(135deg, #2580b0 0%, #1f6896 50%, #1a5276 100%);
+  background: var(--color-accent-hover);
+  box-shadow: 0 4px 16px rgba(16, 185, 129, 0.20);
+}
+
+.skeu-btn--gold {
+  background: linear-gradient(135deg, #D4AF37, #C5A028);
+  color: #0a0a0c;
+  border-color: transparent;
+  font-weight: 600;
+}
+
+.skeu-btn--gold:hover {
+  background: linear-gradient(135deg, #E8C967, #D4AF37);
+  box-shadow: var(--shadow-gold);
 }
 
 .skeu-btn--danger {
-  background: linear-gradient(180deg, #e74c3c 0%, #d64332 60%, #c0392b 100%);
-  border-color: #c0392b;
+  background: var(--color-danger);
+  border-color: transparent;
   color: #fff;
 }
 
+.skeu-btn--danger:hover {
+  background: #dc2626;
+  box-shadow: 0 4px 16px rgba(239, 68, 68, 0.20);
+}
+
 .skeu-btn--success {
-  background: linear-gradient(180deg, #2ecc71 0%, #27ae60 60%, #219a52 100%);
-  border-color: #219a52;
+  background: var(--color-success);
+  border-color: transparent;
   color: #fff;
+  font-weight: 600;
+}
+
+.skeu-btn--success:hover {
+  background: var(--color-accent-hover);
+  box-shadow: 0 4px 16px rgba(16, 185, 129, 0.20);
 }
 
 .skeu-btn--sm {
@@ -69,7 +86,8 @@
 
 .skeu-btn--lg {
   padding: 0.85rem 2rem;
-  font-size: 1rem;
+  font-size: 0.95rem;
+  letter-spacing: 0.02em;
 }
 
 .skeu-btn--full {
@@ -77,7 +95,7 @@
 }
 
 .skeu-btn:disabled {
-  opacity: 0.5;
+  opacity: 0.4;
   cursor: not-allowed;
   transform: none;
 }

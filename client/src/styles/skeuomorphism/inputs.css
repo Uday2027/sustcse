@@ -1,29 +1,28 @@
-/* ===== Skeuomorphic Inputs ===== */
+/* ===== Luxury Inputs ===== */
 .skeu-input-group {
   margin-bottom: var(--spacing-md);
 }
 
 .skeu-input-group label {
   display: block;
-  font-size: 0.85rem;
-  font-weight: 600;
+  font-family: var(--font-sans);
+  font-size: 0.8rem;
+  font-weight: 500;
   color: var(--color-text-secondary);
-  margin-bottom: var(--spacing-xs);
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
+  margin-bottom: 6px;
+  letter-spacing: 0.01em;
 }
 
 .skeu-input {
   width: 100%;
   padding: 0.7rem 1rem;
   font-family: var(--font-sans);
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   color: var(--color-text-primary);
-  background: var(--color-bg-card);
+  background: var(--color-bg-primary);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
-  box-shadow: var(--shadow-inset);
-  transition: border-color 0.2s, box-shadow 0.2s;
+  transition: border-color var(--transition-base), box-shadow var(--transition-base);
   outline: none;
 }
 
@@ -33,19 +32,21 @@
 
 .skeu-input:focus {
   border-color: var(--color-accent);
-  box-shadow:
-    var(--shadow-inset),
-    0 0 0 2px var(--color-accent-glow);
+  box-shadow: 0 0 0 3px var(--color-accent-glow);
 }
 
 .skeu-input--error {
   border-color: var(--color-danger);
 }
 
+.skeu-input--error:focus {
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+}
+
 .skeu-input-error {
-  font-size: 0.8rem;
+  font-size: 0.78rem;
   color: var(--color-danger);
-  margin-top: var(--spacing-xs);
+  margin-top: 6px;
 }
 
 /* Select */
@@ -53,26 +54,24 @@
   width: 100%;
   padding: 0.7rem 1rem;
   font-family: var(--font-sans);
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   color: var(--color-text-primary);
-  background: var(--color-bg-card);
+  background: var(--color-bg-primary);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
-  box-shadow: var(--shadow-inset);
   appearance: none;
   cursor: pointer;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%235d6d7e' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10l-5 5z'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%2371717a' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10l-5 5z'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right 1rem center;
   padding-right: 2.5rem;
+  transition: border-color var(--transition-base), box-shadow var(--transition-base);
 }
 
 .skeu-select:focus {
   border-color: var(--color-accent);
   outline: none;
-  box-shadow:
-    var(--shadow-inset),
-    0 0 0 2px var(--color-accent-glow);
+  box-shadow: 0 0 0 3px var(--color-accent-glow);
 }
 
 /* Textarea */
@@ -80,30 +79,28 @@
   width: 100%;
   padding: 0.7rem 1rem;
   font-family: var(--font-sans);
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   color: var(--color-text-primary);
-  background: var(--color-bg-card);
+  background: var(--color-bg-primary);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
-  box-shadow: var(--shadow-inset);
   resize: vertical;
   min-height: 100px;
   outline: none;
+  transition: border-color var(--transition-base), box-shadow var(--transition-base);
 }
 
 .skeu-textarea:focus {
   border-color: var(--color-accent);
-  box-shadow:
-    var(--shadow-inset),
-    0 0 0 2px var(--color-accent-glow);
+  box-shadow: 0 0 0 3px var(--color-accent-glow);
 }
 
 /* Toggle Switch */
 .skeu-toggle {
   position: relative;
   display: inline-block;
-  width: 48px;
-  height: 26px;
+  width: 44px;
+  height: 24px;
 }
 
 .skeu-toggle input {
@@ -116,32 +113,30 @@
   position: absolute;
   cursor: pointer;
   top: 0; left: 0; right: 0; bottom: 0;
-  background: var(--color-bg-secondary);
+  background: var(--color-bg-tertiary);
   border: 1px solid var(--color-border);
-  border-radius: 26px;
-  box-shadow: var(--shadow-inset);
-  transition: 0.3s;
+  border-radius: var(--radius-full);
+  transition: all var(--transition-base);
 }
 
 .skeu-toggle__slider::before {
   content: '';
   position: absolute;
-  height: 20px;
-  width: 20px;
+  height: 18px;
+  width: 18px;
   left: 2px;
   bottom: 2px;
-  background: linear-gradient(180deg, #ffffff 0%, #e8e5e0 100%);
+  background: var(--color-text-muted);
   border-radius: 50%;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
-  transition: 0.3s;
+  transition: all var(--transition-base);
 }
 
 .skeu-toggle input:checked + .skeu-toggle__slider {
   background: var(--color-accent);
-  border-color: var(--color-accent-dark);
+  border-color: var(--color-accent);
 }
 
 .skeu-toggle input:checked + .skeu-toggle__slider::before {
-  transform: translateX(22px);
-  background: linear-gradient(180deg, #ffffff 0%, #f0edea 100%);
+  transform: translateX(20px);
+  background: #fff;
 }

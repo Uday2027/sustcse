@@ -13,7 +13,7 @@ export const getPermissions = async (userId?: string) => {
   let query = supabaseAdmin
     .from('admin_permissions')
     .select('*, user:profiles!admin_permissions_user_id_fkey(id, full_name, email, avatar_url)')
-    .order('created_at', { ascending: true });
+    .order('granted_at', { ascending: true });
 
   if (userId) {
     query = query.eq('user_id', userId);
@@ -43,9 +43,11 @@ export const setPermission = async (
       {
         user_id: userId,
         section,
-        permissions,
+        can_create: permissions.can_create ?? false,
+        can_read: permissions.can_read ?? true,
+        can_update: permissions.can_update ?? false,
+        can_delete: permissions.can_delete ?? false,
         granted_by: grantedBy,
-        updated_at: new Date().toISOString(),
       },
       { onConflict: 'user_id,section' }
     )
@@ -70,7 +72,7 @@ export const getSessions = async () => {
   const { data, error } = await supabaseAdmin
     .from('sessions_config')
     .select('*')
-    .order('name', { ascending: true });
+    .order('session_name', { ascending: true });
 
   if (error) {
     throw createError(500, `Failed to fetch sessions: ${error.message}`);

@@ -1,27 +1,16 @@
-/* ===== Skeuomorphic Cards ===== */
+/* ===== Luxury Cards ===== */
 .skeu-card {
   background: var(--color-bg-card);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-md);
-  padding: var(--spacing-lg);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  padding: var(--spacing-xl);
+  transition: all var(--transition-base);
   position: relative;
 }
 
-.skeu-card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.8), transparent);
-  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
-}
-
 .skeu-card:hover {
-  transform: translateY(-2px);
+  border-color: rgba(255, 255, 255, 0.08);
+  transform: translateY(-3px);
   box-shadow: var(--shadow-lg);
 }
 
@@ -37,44 +26,48 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: var(--spacing-md);
+  margin-bottom: var(--spacing-lg);
   padding-bottom: var(--spacing-md);
   border-bottom: 1px solid var(--color-border-light);
 }
 
 .skeu-card__title {
-  font-family: var(--font-primary);
+  font-family: var(--font-display);
   font-size: 1.15rem;
+  font-weight: 600;
   color: var(--color-text-heading);
-  text-shadow: none;
+  letter-spacing: -0.01em;
 }
 
 .skeu-card__body {
   color: var(--color-text-secondary);
-  font-size: 0.95rem;
-  line-height: 1.7;
+  font-size: 0.9rem;
+  line-height: 1.75;
 }
 
 .skeu-card__footer {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-top: var(--spacing-md);
+  margin-top: var(--spacing-lg);
   padding-top: var(--spacing-md);
   border-top: 1px solid var(--color-border-light);
 }
 
 .skeu-card__badge {
-  display: inline-block;
-  padding: 0.2rem 0.6rem;
-  font-size: 0.75rem;
+  display: inline-flex;
+  align-items: center;
+  padding: 0.2rem 0.65rem;
+  font-family: var(--font-sans);
+  font-size: 0.68rem;
   font-weight: 600;
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-full);
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.06em;
 }
 
-.skeu-card__badge--academic { background: rgba(52, 152, 219, 0.1); color: var(--color-info); }
-.skeu-card__badge--urgent { background: rgba(231, 76, 60, 0.1); color: var(--color-danger); }
-.skeu-card__badge--general { background: rgba(26, 82, 118, 0.1); color: var(--color-accent); }
-.skeu-card__badge--success { background: rgba(39, 174, 96, 0.1); color: var(--color-success); }
+.skeu-card__badge--academic { background: rgba(59, 130, 246, 0.1); color: var(--color-info); }
+.skeu-card__badge--exam { background: rgba(245, 158, 11, 0.1); color: var(--color-warning); }
+.skeu-card__badge--urgent { background: rgba(239, 68, 68, 0.1); color: var(--color-danger); }
+.skeu-card__badge--general { background: rgba(16, 185, 129, 0.1); color: var(--color-accent); }
+.skeu-card__badge--success { background: rgba(16, 185, 129, 0.1); color: var(--color-success); }

@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import HeroBanner from '../components/home/HeroBanner';
+import NoticeTicker from '../components/home/NoticeTicker';
 import DepartmentInfo from '../components/home/DepartmentInfo';
 import VisionMission from '../components/home/VisionMission';
 import SocietyShowcase from '../components/home/SocietyShowcase';
@@ -25,6 +26,7 @@ export default function HomePage() {
   return (
     <div ref={pageRef} className="home-page">
       <HeroBanner />
+      <NoticeTicker />
       <DepartmentInfo />
       <VisionMission />
       <SocietyShowcase />

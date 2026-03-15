@@ -2,14 +2,18 @@ import { ReactNode } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import {
   FiHome, FiUsers, FiMail, FiSend, FiCalendar,
-  FiShield, FiFileText, FiDollarSign, FiClipboard
+  FiShield, FiFileText, FiDollarSign, FiClipboard,
+  FiBell, FiStar
 } from 'react-icons/fi';
 
 const sidebarLinks = [
   { to: '/admin', label: 'Dashboard', icon: FiHome, exact: true },
   { to: '/admin/users', label: 'Users', icon: FiUsers },
+  { to: '/admin/notices', label: 'Notices', icon: FiBell },
+  { to: '/admin/events', label: 'Events', icon: FiCalendar },
+  { to: '/admin/society', label: 'Society', icon: FiStar },
   { to: '/admin/permissions', label: 'Permissions', icon: FiShield },
-  { to: '/admin/sessions', label: 'Sessions', icon: FiCalendar },
+  { to: '/admin/sessions', label: 'Sessions', icon: FiClipboard },
   { to: '/admin/email-logs', label: 'Email Logs', icon: FiFileText },
   { to: '/admin/send-email', label: 'Send Email', icon: FiSend },
 ];

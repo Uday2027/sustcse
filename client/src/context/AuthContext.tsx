@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { createContext, useContext, useState, useEffect, useRef, ReactNode } from 'react';
 import { supabase } from '../config/supabase';
 import api from '../lib/api';
 import type { User } from '../types';
@@ -17,8 +17,12 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+  const initedRef = useRef(false);
 
   useEffect(() => {
+    if (initedRef.current) return;
+    initedRef.current = true;
+
     const initAuth = async () => {
       try {
         const { data: { session } } = await supabase.auth.getSession();
@@ -28,7 +32,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           setUser(data.data);
         }
       } catch {
-        // Profile fetch failed — clear everything to avoid reload loops
         localStorage.removeItem('access_token');
         await supabase.auth.signOut();
         setUser(null);
@@ -39,7 +42,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     initAuth();
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event, session) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       if (session) {
         localStorage.setItem('access_token', session.access_token);
       } else {

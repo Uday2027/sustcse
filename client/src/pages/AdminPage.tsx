@@ -2,6 +2,9 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import AdminLayout from '../components/admin/AdminLayout';
 import AdminDashboard from '../components/admin/AdminDashboard';
 import UserManagement from '../components/admin/UserManagement';
+import NoticeManagement from '../components/admin/NoticeManagement';
+import EventManagement from '../components/admin/EventManagement';
+import SocietyManagement from '../components/admin/SocietyManagement';
 import EmailLog from '../components/admin/EmailLog';
 import EmailComposer from '../components/admin/EmailComposer';
 import SessionConfig from '../components/admin/SessionConfig';
@@ -13,6 +16,9 @@ export default function AdminPage() {
       <Routes>
         <Route index element={<AdminDashboard />} />
         <Route path="users" element={<UserManagement />} />
+        <Route path="notices" element={<NoticeManagement />} />
+        <Route path="events" element={<EventManagement />} />
+        <Route path="society" element={<SocietyManagement />} />
         <Route path="email-logs" element={<EmailLog />} />
         <Route path="send-email" element={<EmailComposer />} />
         <Route path="sessions" element={<SessionConfig />} />

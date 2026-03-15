@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { FiUsers, FiClock, FiMail, FiAlertCircle } from 'react-icons/fi';
 import api from '../../lib/api';
@@ -15,7 +15,12 @@ export default function AdminDashboard() {
     totalUsers: 0, pendingApprovals: 0, totalEmailsSent: 0, failedEmails: 0,
   });
 
+  const fetchedRef = useRef(false);
+
   useEffect(() => {
+    if (fetchedRef.current) return;
+    fetchedRef.current = true;
+
     const fetchStats = async () => {
       try {
         const [usersRes, pendingRes, emailsRes] = await Promise.all([

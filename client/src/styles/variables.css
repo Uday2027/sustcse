@@ -1,49 +1,54 @@
-/* ===== CSS Variables for Light Skeuomorphism Theme ===== */
+/* ===== CSS Variables: Luxury Elegant Design System ===== */
 :root {
-  /* Base Colors - Clean, Light Palette */
-  --color-bg-primary: #f5f3f0;
-  --color-bg-secondary: #edeae6;
-  --color-bg-tertiary: #e4e0dc;
-  --color-bg-card: #ffffff;
-  --color-bg-elevated: #ffffff;
+  /* Base Colors - Warm Dark Palette */
+  --color-bg-primary: #0a0a0c;
+  --color-bg-secondary: #100f13;
+  --color-bg-tertiary: #1a191e;
+  --color-bg-card: #121115;
+  --color-bg-elevated: #1c1b21;
 
-  /* Accent Colors - Deep Teal/Navy */
-  --color-accent: #1a5276;
-  --color-accent-hover: #1f6896;
-  --color-accent-dark: #154360;
-  --color-accent-glow: rgba(26, 82, 118, 0.1);
+  /* Accent Colors - Emerald */
+  --color-accent: #10b981;
+  --color-accent-hover: #34d399;
+  --color-accent-dark: #059669;
+  --color-accent-glow: rgba(16, 185, 129, 0.06);
+  --color-accent-subtle: rgba(16, 185, 129, 0.10);
 
-  /* Text Colors */
-  --color-text-primary: #2c3e50;
-  --color-text-secondary: #5d6d7e;
-  --color-text-muted: #95a5a6;
-  --color-text-heading: #1a2a3a;
+  /* Gold / Champagne Secondary Accent */
+  --color-gold: #D4AF37;
+  --color-gold-light: #E8C967;
+  --color-gold-dark: #B8960C;
+  --color-gold-glow: rgba(212, 175, 55, 0.08);
+  --color-gold-subtle: rgba(212, 175, 55, 0.12);
+
+  /* Text Colors - Warm Stone Tones */
+  --color-text-primary: #f5f5f4;
+  --color-text-secondary: #a8a29e;
+  --color-text-muted: #78716c;
+  --color-text-heading: #fafaf9;
 
   /* Surface Colors */
-  --color-surface-light: rgba(255, 255, 255, 0.8);
-  --color-surface-dark: rgba(0, 0, 0, 0.04);
-  --color-border: #d5d2cd;
-  --color-border-light: #e0ddd8;
-  --color-border-accent: #b8c6d0;
+  --color-surface-light: rgba(255, 255, 255, 0.03);
+  --color-surface-hover: rgba(255, 255, 255, 0.05);
+  --color-surface-dark: rgba(0, 0, 0, 0.2);
+  --color-border: rgba(255, 255, 255, 0.06);
+  --color-border-light: rgba(255, 255, 255, 0.04);
+  --color-border-accent: rgba(16, 185, 129, 0.15);
+  --color-border-gold: rgba(212, 175, 55, 0.2);
 
   /* Status Colors */
-  --color-success: #27ae60;
-  --color-warning: #f39c12;
-  --color-danger: #e74c3c;
-  --color-info: #3498db;
+  --color-success: #10b981;
+  --color-warning: #f59e0b;
+  --color-danger: #ef4444;
+  --color-info: #3b82f6;
 
-  /* Shadow Presets - Soft light shadows for depth */
-  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.06);
-  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.07), 0 2px 4px rgba(0, 0, 0, 0.06);
-  --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.08), 0 4px 10px rgba(0, 0, 0, 0.05);
-  --shadow-inset: inset 0 2px 4px rgba(0, 0, 0, 0.06);
-  --shadow-pressed: inset 0 2px 6px rgba(0, 0, 0, 0.1);
-
-  /* Texture Gradients - Subtle light gradients */
-  --gradient-leather: linear-gradient(145deg, #ffffff 0%, #f5f3f0 50%, #edeae6 100%);
-  --gradient-metal: linear-gradient(180deg, #ffffff 0%, #f8f6f3 40%, #f0edea 100%);
-  --gradient-panel: linear-gradient(135deg, #ffffff 0%, #f8f6f3 100%);
-  --gradient-gold: linear-gradient(135deg, #1f6896 0%, #1a5276 50%, #154360 100%);
+  /* Shadow Presets - Soft Luxury Shadows */
+  --shadow-xs: 0 1px 3px rgba(0, 0, 0, 0.12);
+  --shadow-sm: 0 2px 6px rgba(0, 0, 0, 0.15);
+  --shadow-md: 0 4px 12px -2px rgba(0, 0, 0, 0.2), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 12px 24px -4px rgba(0, 0, 0, 0.25), 0 4px 8px -4px rgba(0, 0, 0, 0.15);
+  --shadow-xl: 0 24px 48px -8px rgba(0, 0, 0, 0.3), 0 8px 16px -6px rgba(0, 0, 0, 0.2);
+  --shadow-gold: 0 4px 16px rgba(212, 175, 55, 0.1);
 
   /* Spacing */
   --spacing-xs: 0.25rem;
@@ -53,15 +58,26 @@
   --spacing-xl: 2rem;
   --spacing-2xl: 3rem;
   --spacing-3xl: 4rem;
+  --spacing-4xl: 5rem;
+  --spacing-5xl: 7rem;
 
   /* Border Radius */
-  --radius-sm: 4px;
-  --radius-md: 8px;
-  --radius-lg: 12px;
-  --radius-xl: 16px;
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 20px;
+  --radius-full: 9999px;
 
   /* Typography */
-  --font-primary: 'Georgia', 'Times New Roman', serif;
-  --font-sans: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
-  --font-mono: 'Consolas', 'Courier New', monospace;
+  --font-primary: 'DM Sans', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-sans: 'DM Sans', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-display: 'Playfair Display', 'Georgia', 'Times New Roman', serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+
+  /* Transitions - Elegant, unhurried */
+  --transition-fast: 180ms cubic-bezier(0.25, 0.1, 0.25, 1);
+  --transition-base: 280ms cubic-bezier(0.25, 0.1, 0.25, 1);
+  --transition-slow: 400ms cubic-bezier(0.25, 0.1, 0.25, 1);
+  --transition-spring: 600ms cubic-bezier(0.34, 1.56, 0.64, 1);
+  --transition-elegant: 500ms cubic-bezier(0.4, 0, 0, 1);
 }
