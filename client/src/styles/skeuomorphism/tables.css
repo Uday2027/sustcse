@@ -1,12 +1,10 @@
-/* ===== Light Cream & Purple Tables ===== */
+/* ===== Obsidian Tables ===== */
 .skeu-table-container {
   overflow-x: auto;
-  border: 1px solid rgba(54, 6, 77, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: var(--radius-lg);
-  background: rgba(255, 255, 255, 0.5);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  box-shadow: var(--glass-shadow);
+  background: var(--color-bg-secondary);
+  box-shadow: var(--shadow-md);
 }
 
 .skeu-table {
@@ -17,24 +15,25 @@
 }
 
 .skeu-table thead {
-  background: rgba(54, 6, 77, 0.04);
+  background: rgba(255, 255, 255, 0.02);
 }
 
 .skeu-table th {
-  padding: 0.875rem 1.25rem;
+  padding: 1rem 1.25rem;
   text-align: left;
-  font-weight: 600;
+  font-family: var(--font-mono);
+  font-weight: 500;
   font-size: 0.75rem;
   text-transform: uppercase;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.05em;
   color: var(--color-text-muted);
-  border-bottom: 1px solid rgba(54, 6, 77, 0.08);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .skeu-table td {
-  padding: 0.875rem 1.25rem;
+  padding: 1rem 1.25rem;
   color: var(--color-text-secondary);
-  border-bottom: 1px solid rgba(54, 6, 77, 0.04);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
 }
 
 .skeu-table tbody tr {
@@ -43,5 +42,5 @@
 }
 
 .skeu-table tbody tr:hover {
-  background: rgba(54, 6, 77, 0.03);
+  background: rgba(255, 255, 255, 0.03);
 }

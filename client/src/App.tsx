@@ -30,6 +30,11 @@ import NotFoundPage from './pages/NotFoundPage';
 function App() {
   return (
     <div className="app">
+      {/* Ambient Background Blobs from Fusion UI */}
+      <div className="app-blob-1"></div>
+      <div className="app-blob-2"></div>
+      <div className="app-blob-3"></div>
+
       <Navbar />
       <main className="main-content">
         <Routes>

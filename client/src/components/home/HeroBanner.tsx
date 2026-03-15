@@ -6,10 +6,8 @@ gsap.registerPlugin(ScrollTrigger);
 
 export default function HeroBanner() {
   const heroRef = useRef<HTMLDivElement>(null);
-  const titleRef = useRef<HTMLHeadingElement>(null);
-  const subtitleRef = useRef<HTMLParagraphElement>(null);
-  const ctaRef = useRef<HTMLDivElement>(null);
-  const cardRef = useRef<HTMLDivElement>(null);
+  const textColRef = useRef<HTMLDivElement>(null);
+  const imageColRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!heroRef.current) return;
@@ -17,44 +15,19 @@ export default function HeroBanner() {
     const ctx = gsap.context(() => {
       const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
 
-      // Title lines fade in
-      tl.fromTo('.hero__title-line',
-        { opacity: 0, y: 40 },
-        { opacity: 1, y: 0, duration: 0.7, stagger: 0.15, delay: 0.2 }
+      // Text column animation
+      tl.fromTo(textColRef.current?.children ? Array.from(textColRef.current.children) : [],
+        { opacity: 0, y: 30 },
+        { opacity: 1, y: 0, duration: 0.8, stagger: 0.2, delay: 0.2 }
       );
 
-      // Subtitle fade in
-      tl.fromTo(subtitleRef.current,
-        { opacity: 0, y: 20 },
-        { opacity: 1, y: 0, duration: 0.8 },
-        '-=0.3'
+      // Image column animation
+      tl.fromTo(imageColRef.current,
+        { opacity: 0, scale: 0.95 },
+        { opacity: 1, scale: 1, duration: 1 },
+        '-=0.6'
       );
 
-      // CTA buttons
-      tl.fromTo(ctaRef.current,
-        { opacity: 0, y: 20 },
-        { opacity: 1, y: 0, duration: 0.6 },
-        '-=0.4'
-      );
-
-      // Card slide in from right
-      tl.fromTo(cardRef.current,
-        { opacity: 0, x: 40 },
-        { opacity: 1, x: 0, duration: 0.8 },
-        '-=0.8'
-      );
-
-      // Parallax on scroll
-      gsap.to('.hero__card', {
-        yPercent: 15,
-        ease: 'none',
-        scrollTrigger: {
-          trigger: heroRef.current,
-          start: 'top top',
-          end: 'bottom top',
-          scrub: true,
-        },
-      });
     }, heroRef);
 
     return () => ctx.revert();
@@ -62,52 +35,58 @@ export default function HeroBanner() {
 
   return (
     <section ref={heroRef} className="hero">
-      <div className="hero__bg-grid" />
-      <div className="hero__content">
-        <div className="hero__text">
-          <div className="hero__badge">Est. 1992</div>
-          <h1 ref={titleRef} className="hero__title">
-            <span className="hero__title-line">Learn, Build &</span>
-            <span className="hero__title-line">Innovate with</span>
-            <span className="hero__title-line"><span className="hero__title-accent">Confidence</span> &</span>
-            <span className="hero__title-line"><span className="hero__title-accent">Clarity</span></span>
+      <div className="hero__container">
+
+        {/* Left Column: Text & CTAs */}
+        <div ref={textColRef} className="hero__text-col">
+          <h1 className="hero__title">
+            Fostering <span className="hero__title-accent">Confidence</span><br />
+            and <span className="hero__title-accent">Clarity</span> within the<br />
+            Academic Ecosystem
           </h1>
-          <p ref={subtitleRef} className="hero__subtitle">
-            Department of Computer Science & Engineering, SUST — Shaping the
-            future of technology since 1992. Explore our academic programs,
-            research initiatives, and vibrant community.
+
+          <p className="hero__subtitle">
+            Acquire premium knowledge from leading educators and<br />
+            contribute to the expansion of the CSE community.
           </p>
-          <div ref={ctaRef} className="hero__cta">
-            <a href="/notices" className="skeu-btn skeu-btn--primary skeu-btn--lg">
-              Latest Notices
+
+          <div className="hero__cta-group">
+            <a href="/research" className="hero__btn hero__btn--primary">
+              Start Learning
             </a>
-            <a href="/events" className="skeu-btn skeu-btn--lg">
-              Upcoming Events
+            <a href="/about" className="hero__btn hero__btn--secondary">
+              Learn How
             </a>
           </div>
         </div>
-        <div ref={cardRef} className="hero__card">
-          <div className="hero__card-image">
-            <img src="/images/IICT1.jpg" alt="IICT Building" />
-          </div>
-          <div className="hero__card-footer">
-            <div className="hero__card-info">
-              <div className="hero__card-avatar">CSE</div>
-              <div>
-                <span className="hero__card-name">CSE SUST</span>
-                <span className="hero__card-handle">@cse.sust.edu</span>
+
+        {/* Right Column: Image Showcase */}
+        <div ref={imageColRef} className="hero__image-col">
+          <div className="hero__image-showcase">
+            {/* Top Badge Overlay */}
+            <div className="hero__image-badge">
+              <div className="hero__image-badge-avatar">
+                <img src="/images/IICT1.jpg" alt="avatar" />
               </div>
+              <span className="hero__image-badge-text">dept_cse_sust</span>
             </div>
-            <div className="hero__card-dots">
-              <span className="hero__card-dot hero__card-dot--active" />
-              <span className="hero__card-dot" />
-              <span className="hero__card-dot" />
-            </div>
+
+            {/* Main Image */}
+            <img
+              src="/images/IICT1.jpg"
+              alt="IICT Building"
+              className="hero__main-img"
+            />
+          </div>
+
+          {/* Slider Indicators */}
+          <div className="hero__slider-indicators">
+            <div className="hero__slider-dot hero__slider-dot--active"></div>
+            <div className="hero__slider-dot"></div>
+            <div className="hero__slider-dot"></div>
           </div>
         </div>
-      </div>
-      <div className="hero__scroll-indicator">
-        <div className="hero__scroll-line" />
+
       </div>
     </section>
   );

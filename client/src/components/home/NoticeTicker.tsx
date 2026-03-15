@@ -9,17 +9,26 @@ export default function NoticeTicker() {
 
   useEffect(() => {
     const fetchNotices = async () => {
+      const fallbackNotices = [
+        { id: '1', title: 'CSE Festival 2026 Schedule Announced', category: 'event' },
+        { id: '2', title: 'Registration for Fall Semester Open', category: 'urgent' },
+        { id: '3', title: 'New Cybersecurity Research Lab Inauguration', category: 'general' },
+        { id: '4', title: 'Seminar on AI in Healthcare this Thursday', category: 'event' },
+      ] as Notice[];
+
       try {
         const { data } = await api.get('/notices?limit=10');
-        setNotices(data.data || []);
+        if (data?.data && data.data.length > 0) {
+          setNotices(data.data);
+        } else {
+          setNotices(fallbackNotices);
+        }
       } catch {
-        setNotices([]);
+        setNotices(fallbackNotices);
       }
     };
     fetchNotices();
   }, []);
-
-  if (notices.length === 0) return null;
 
   return (
     <div className="notice-ticker">

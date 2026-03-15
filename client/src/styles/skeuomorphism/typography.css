@@ -1,72 +1,72 @@
-/* ===== Light Cream & Purple Typography ===== */
+/* ===== Brutalist Editorial Typography ===== */
 .skeu-heading {
   font-family: var(--font-display);
-  font-weight: 700;
+  font-weight: 800;
   color: var(--color-text-heading);
-  letter-spacing: -0.02em;
+  letter-spacing: -0.04em;
+  text-transform: uppercase;
 }
 
 .skeu-heading--xl {
-  font-size: 3rem;
-  line-height: 1.1;
-  letter-spacing: -0.03em;
+  font-size: clamp(3rem, 8vw, 6rem);
+  line-height: 1;
+  letter-spacing: -0.05em;
 }
 
 .skeu-heading--lg {
-  font-size: 2.25rem;
-  line-height: 1.2;
-  letter-spacing: -0.025em;
+  font-size: clamp(2rem, 5vw, 4rem);
+  line-height: 1.1;
+  letter-spacing: -0.04em;
 }
 
 .skeu-heading--md {
-  font-size: 1.5rem;
-  line-height: 1.3;
-  letter-spacing: -0.015em;
+  font-size: clamp(1.5rem, 3vw, 2.5rem);
+  line-height: 1.2;
+  letter-spacing: -0.03em;
 }
 
 .skeu-heading--sm {
-  font-size: 1.15rem;
-  line-height: 1.4;
-  letter-spacing: -0.01em;
+  font-size: 1.25rem;
+  line-height: 1.3;
+  letter-spacing: -0.02em;
 }
 
-/* Purple gradient text */
+/* Neon Text Accents */
 .skeu-text-gold {
-  background: linear-gradient(135deg, #36064D, #4a1265, #36064D);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: var(--color-gold);
+  text-shadow: 0 0 20px var(--color-gold-glow);
 }
 
-/* Accent gradient text */
 .skeu-text-emerald {
-  background: linear-gradient(135deg, #36064D, #250338);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: var(--color-accent);
+  text-shadow: 0 0 20px var(--color-accent-glow);
 }
 
-/* Subtle text */
-.skeu-text-inset {
+.skeu-text-subtle {
   color: var(--color-text-muted);
+}
+
+.skeu-text-inset {
+  color: var(--color-text-secondary);
 }
 
 /* Label style */
 .skeu-label {
-  font-family: var(--font-sans);
-  font-size: 0.7rem;
-  font-weight: 600;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 500;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.15em;
   color: var(--color-text-muted);
 }
 
 /* Decorative separator */
 .skeu-separator {
-  width: 40px;
-  height: 2px;
-  background: linear-gradient(90deg, var(--color-accent), rgba(54, 6, 77, 0.15));
-  margin: 1rem auto;
+  width: 60px;
+  height: 4px;
+  background: var(--color-accent);
+  margin: 1.5rem auto;
   border: none;
-  border-radius: 1px;
+  border-radius: 2px;
+  box-shadow: 0 0 10px var(--color-accent-glow);
 }
