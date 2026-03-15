@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
-import { FiSearch, FiCalendar, FiPaperclip, FiChevronLeft, FiChevronRight, FiMapPin } from 'react-icons/fi';
+import { FiSearch, FiCalendar, FiPaperclip, FiChevronLeft, FiChevronRight, FiMapPin, FiFileText } from 'react-icons/fi';
 import { usePaginatedFetch } from '../hooks/usePagination';
 import { useScrollReveal } from '../hooks/useGSAP';
 import { formatDate, formatRelative } from '../lib/formatters';
@@ -43,30 +43,28 @@ export default function NoticesPage() {
           </div>
 
           {/* Filters */}
-          <div className="skeu-panel" style={{ marginBottom: '2rem', padding: '1.5rem' }}>
-            <div className="grid" style={{ gridTemplateColumns: '1fr auto', gap: '1rem', alignItems: 'center' }}>
-              <div style={{ position: 'relative' }}>
-                <FiSearch style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} />
-                <input
-                  type="text"
-                  className="skeu-input"
-                  placeholder="Search notices..."
-                  value={search}
-                  onChange={(e) => { setSearch(e.target.value); setPage(1); }}
-                  style={{ paddingLeft: '2.5rem', width: '100%' }}
-                />
-              </div>
-              <select
+          <div className="filter-bar">
+            <div style={{ position: 'relative', flex: 1 }}>
+              <FiSearch style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: 'var(--color-text-muted)' }} />
+              <input
+                type="text"
                 className="skeu-input"
-                value={category}
-                onChange={(e) => { setCategory(e.target.value); setPage(1); }}
-                style={{ minWidth: '160px' }}
-              >
-                {CATEGORIES.map((cat) => (
-                  <option key={cat} value={cat}>{cat}</option>
-                ))}
-              </select>
+                placeholder="Search notices..."
+                value={search}
+                onChange={(e) => { setSearch(e.target.value); setPage(1); }}
+                style={{ paddingLeft: '2.5rem', width: '100%' }}
+              />
             </div>
+            <select
+              className="skeu-input"
+              value={category}
+              onChange={(e) => { setCategory(e.target.value); setPage(1); }}
+              style={{ minWidth: '160px' }}
+            >
+              {CATEGORIES.map((cat) => (
+                <option key={cat} value={cat}>{cat}</option>
+              ))}
+            </select>
           </div>
 
           {/* Loading State */}
@@ -74,17 +72,19 @@ export default function NoticesPage() {
 
           {/* Error State */}
           {error && (
-            <div className="skeu-card" style={{ padding: '2rem', textAlign: 'center', color: 'var(--color-error)' }}>
+            <div className="bento-card" style={{ textAlign: 'center', color: 'var(--color-danger)' }}>
               <p>Failed to load notices. Please try again later.</p>
             </div>
           )}
 
           {/* Empty State */}
           {!loading && !error && notices.length === 0 && (
-            <div className="skeu-card" style={{ padding: '3rem', textAlign: 'center' }}>
-              <FiCalendar size={48} style={{ marginBottom: '1rem', color: 'var(--text-muted)' }} />
-              <h3>No Notices Found</h3>
-              <p style={{ color: 'var(--text-muted)' }}>
+            <div className="bento-card empty-state">
+              <div className="empty-state__icon">
+                <FiFileText size={48} />
+              </div>
+              <h3 className="empty-state__title">No Notices Found</h3>
+              <p className="empty-state__text">
                 {search || category !== 'All'
                   ? 'Try adjusting your search or filter criteria.'
                   : 'There are no notices published yet.'}
@@ -98,7 +98,7 @@ export default function NoticesPage() {
               <h2 style={{ marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                 <FiMapPin /> Pinned Notices
               </h2>
-              <div className="grid" style={{ gap: '1rem' }}>
+              <div className="notices-bento">
                 {pinnedNotices.map((notice) => (
                   <NoticeCard key={notice.id} notice={notice} pinned />
                 ))}
@@ -108,7 +108,7 @@ export default function NoticesPage() {
 
           {/* Regular Notices */}
           {!loading && regularNotices.length > 0 && (
-            <div className="grid" style={{ gap: '1rem' }}>
+            <div className="notices-bento">
               {regularNotices.map((notice) => (
                 <NoticeCard key={notice.id} notice={notice} />
               ))}
@@ -117,7 +117,7 @@ export default function NoticesPage() {
 
           {/* Pagination */}
           {!loading && pagination.totalPages > 1 && (
-            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '1rem', marginTop: '2rem' }}>
+            <div className="pagination">
               <button
                 className="skeu-btn"
                 onClick={() => setPage(pagination.page - 1)}
@@ -125,7 +125,7 @@ export default function NoticesPage() {
               >
                 <FiChevronLeft /> Previous
               </button>
-              <span style={{ color: 'var(--text-muted)' }}>
+              <span className="pagination__info">
                 Page {pagination.page} of {pagination.totalPages}
               </span>
               <button
@@ -145,52 +145,42 @@ export default function NoticesPage() {
 
 function NoticeCard({ notice, pinned = false }: { notice: Notice; pinned?: boolean }) {
   return (
-    <Link to={`/notices/${notice.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
-      <div
-        className="skeu-card"
-        style={{
-          padding: '1.5rem',
-          borderLeft: pinned ? '4px solid var(--color-primary)' : undefined,
-          transition: 'transform 0.2s, box-shadow 0.2s',
-          cursor: 'pointer',
-        }}
-      >
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '1rem' }}>
-          <div style={{ flex: 1 }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem', flexWrap: 'wrap' }}>
-              {pinned && (
-                <span style={{
-                  display: 'inline-flex', alignItems: 'center', gap: '0.25rem',
-                  padding: '0.15rem 0.5rem', borderRadius: '9999px',
-                  background: 'var(--color-primary)', color: '#fff', fontSize: '0.75rem', fontWeight: 600,
-                }}>
-                  <FiMapPin size={10} /> Pinned
-                </span>
-              )}
-              {notice.category && (
-                <span style={{
-                  padding: '0.15rem 0.5rem', borderRadius: '9999px',
-                  background: 'var(--color-surface-alt, #e8e8e8)', fontSize: '0.75rem', fontWeight: 600,
-                  color: 'var(--text-secondary)',
-                }}>
-                  {notice.category}
-                </span>
-              )}
-            </div>
-            <h3 style={{ margin: '0 0 0.5rem', fontSize: '1.1rem' }}>{notice.title}</h3>
-            <p style={{ margin: 0, color: 'var(--text-muted)', fontSize: '0.875rem', lineHeight: 1.5 }}>
-              {notice.content.length > 200 ? notice.content.substring(0, 200) + '...' : notice.content}
-            </p>
-          </div>
+    <Link
+      to={`/notices/${notice.id}`}
+      className={`notice-card bento-card${pinned ? ' bento-card--accent-left notice-card--pinned' : ''}`}
+    >
+      <div className="notice-card__icon-col">
+        <div className="icon-box icon-box--accent">
+          <FiFileText size={20} />
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginTop: '1rem', fontSize: '0.8rem', color: 'var(--text-muted)' }}>
-          <span style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+      </div>
+      <div className="notice-card__content">
+        <div style={{ display: 'flex', gap: '0.4rem', marginBottom: '0.5rem', flexWrap: 'wrap' }}>
+          {notice.category && (
+            <span className="badge badge--accent">{notice.category}</span>
+          )}
+          {pinned && (
+            <span className="badge badge--warning">
+              <FiMapPin size={10} /> Pinned
+            </span>
+          )}
+        </div>
+        <h3 className="notice-card__title">{notice.title}</h3>
+        <p className="notice-card__excerpt">
+          {notice.content.length > 200 ? notice.content.substring(0, 200) + '...' : notice.content}
+        </p>
+        <div className="notice-card__meta">
+          <span className="notice-card__meta-item">
             <FiCalendar size={12} /> {formatDate(notice.published_at)}
           </span>
-          <span title={formatDate(notice.published_at)}>{formatRelative(notice.published_at)}</span>
-          {notice.publisher_name && <span>by {notice.publisher_name}</span>}
+          <span className="notice-card__meta-item" title={formatDate(notice.published_at)}>
+            {formatRelative(notice.published_at)}
+          </span>
+          {notice.publisher_name && (
+            <span className="notice-card__meta-item">by {notice.publisher_name}</span>
+          )}
           {notice.attachment_urls.length > 0 && (
-            <span style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+            <span className="notice-card__meta-item">
               <FiPaperclip size={12} /> {notice.attachment_urls.length} attachment{notice.attachment_urls.length > 1 ? 's' : ''}
             </span>
           )}

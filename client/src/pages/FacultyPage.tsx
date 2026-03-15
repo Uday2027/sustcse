@@ -45,22 +45,24 @@ export default function FacultyPage() {
           {loading && <LoadingSpinner />}
 
           {error && (
-            <div className="skeu-card" style={{ padding: '2rem', textAlign: 'center', color: 'var(--color-error)' }}>
+            <div className="bento-card bento-card--no-hover" style={{ textAlign: 'center', color: 'var(--color-danger)' }}>
               <p>{error}</p>
             </div>
           )}
 
           {!loading && !error && faculty.length === 0 && (
-            <div className="skeu-card" style={{ padding: '3rem', textAlign: 'center' }}>
-              <FiUser size={48} style={{ marginBottom: '1rem', color: 'var(--text-muted)' }} />
-              <h3>No Faculty Members Found</h3>
-              <p style={{ color: 'var(--text-muted)' }}>Faculty information has not been added yet.</p>
+            <div className="bento-card bento-card--no-hover empty-state">
+              <div className="empty-state__icon">
+                <FiUser size={48} />
+              </div>
+              <h3 className="empty-state__title">No Faculty Members Found</h3>
+              <p className="empty-state__text">Faculty information has not been added yet.</p>
             </div>
           )}
 
           {/* Active Faculty */}
           {!loading && activeFaculty.length > 0 && (
-            <div className="grid" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '1.5rem', marginBottom: '2rem' }}>
+            <div className="faculty-bento">
               {activeFaculty.map((member) => (
                 <FacultyCard key={member.id} member={member} onClick={() => setSelectedFaculty(member)} />
               ))}
@@ -70,8 +72,10 @@ export default function FacultyPage() {
           {/* On Leave Faculty */}
           {!loading && onLeaveFaculty.length > 0 && (
             <div>
-              <h2 style={{ marginBottom: '1rem', color: 'var(--text-muted)' }}>On Leave</h2>
-              <div className="grid" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '1.5rem' }}>
+              <h2 style={{ marginBottom: '1.25rem', marginTop: '2.5rem', color: 'var(--color-text-muted)', fontSize: '1.15rem', fontWeight: 600 }}>
+                On Leave
+              </h2>
+              <div className="faculty-bento">
                 {onLeaveFaculty.map((member) => (
                   <FacultyCard key={member.id} member={member} onClick={() => setSelectedFaculty(member)} />
                 ))}
@@ -90,62 +94,36 @@ export default function FacultyPage() {
 }
 
 function FacultyCard({ member, onClick }: { member: Faculty; onClick: () => void }) {
+  const cardClass = `bento-card faculty-card${member.is_on_leave ? ' faculty-card--on-leave' : ''}`;
+
   return (
-    <div
-      className="skeu-card"
-      onClick={onClick}
-      style={{
-        padding: '1.5rem',
-        textAlign: 'center',
-        cursor: 'pointer',
-        transition: 'transform 0.2s, box-shadow 0.2s',
-        opacity: member.is_on_leave ? 0.7 : 1,
-      }}
-    >
+    <div className={cardClass} onClick={onClick}>
       {/* Avatar */}
-      <div style={{
-        width: '100px', height: '100px', borderRadius: '50%', margin: '0 auto 1rem',
-        overflow: 'hidden', background: 'var(--color-surface-alt, #f0f0f0)',
-        border: '3px solid var(--color-primary)',
-      }}>
+      <div className="faculty-card__avatar">
         {member.avatar_url ? (
-          <img src={member.avatar_url} alt={member.full_name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+          <img src={member.avatar_url} alt={member.full_name} />
         ) : (
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
-            <FiUser size={36} style={{ color: 'var(--text-muted)' }} />
+          <div className="icon-box icon-box--accent icon-box--lg" style={{ width: '100%', height: '100%', borderRadius: 'inherit' }}>
+            <FiUser size={32} />
           </div>
         )}
       </div>
 
-      <h3 style={{ margin: '0 0 0.25rem', fontSize: '1.05rem' }}>{member.full_name}</h3>
-      <p style={{ margin: '0 0 0.75rem', color: 'var(--color-primary)', fontSize: '0.875rem', fontWeight: 500 }}>
-        {member.designation}
-      </p>
+      <h3 className="faculty-card__name">{member.full_name}</h3>
+      <p className="faculty-card__designation">{member.designation}</p>
 
       {member.is_on_leave && (
-        <span style={{
-          display: 'inline-block', padding: '0.15rem 0.5rem', borderRadius: '9999px',
-          background: '#fef3c7', color: '#92400e', fontSize: '0.7rem', fontWeight: 600, marginBottom: '0.5rem',
-        }}>
-          On Leave
-        </span>
+        <span className="badge badge--warning">On Leave</span>
       )}
 
       {/* Research Areas Tags */}
       {member.research_areas.length > 0 && (
-        <div style={{ display: 'flex', justifyContent: 'center', gap: '0.35rem', flexWrap: 'wrap', marginTop: '0.5rem' }}>
+        <div className="faculty-card__research">
           {member.research_areas.slice(0, 3).map((area, i) => (
-            <span key={i} style={{
-              padding: '0.15rem 0.5rem', borderRadius: '9999px',
-              background: 'var(--color-surface-alt, #e8e8e8)', fontSize: '0.7rem',
-            }}>
-              {area}
-            </span>
+            <span key={i} className="faculty-card__tag">{area}</span>
           ))}
           {member.research_areas.length > 3 && (
-            <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>
-              +{member.research_areas.length - 3} more
-            </span>
+            <span className="faculty-card__tag">+{member.research_areas.length - 3} more</span>
           )}
         </div>
       )}
@@ -155,16 +133,9 @@ function FacultyCard({ member, onClick }: { member: Faculty; onClick: () => void
 
 function FacultyModal({ faculty, onClose }: { faculty: Faculty; onClose: () => void }) {
   return (
-    <div
-      style={{
-        position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', zIndex: 1000,
-        display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '2rem',
-      }}
-      onClick={onClose}
-    >
+    <div className="faculty-modal-overlay" onClick={onClose}>
       <div
-        className="skeu-card"
-        style={{ maxWidth: '700px', width: '100%', maxHeight: '85vh', overflowY: 'auto', padding: '2rem', position: 'relative' }}
+        className="bento-card bento-card--no-hover faculty-modal"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Close Button */}
@@ -177,42 +148,40 @@ function FacultyModal({ faculty, onClose }: { faculty: Faculty; onClose: () => v
         </button>
 
         {/* Header */}
-        <div style={{ display: 'flex', gap: '1.5rem', marginBottom: '1.5rem', flexWrap: 'wrap' }}>
-          <div style={{
-            width: '120px', height: '120px', borderRadius: '50%', overflow: 'hidden', flexShrink: 0,
-            background: 'var(--color-surface-alt, #f0f0f0)', border: '3px solid var(--color-primary)',
-          }}>
+        <div className="faculty-modal__header">
+          <div className="faculty-modal__avatar">
             {faculty.avatar_url ? (
-              <img src={faculty.avatar_url} alt={faculty.full_name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+              <img src={faculty.avatar_url} alt={faculty.full_name} />
             ) : (
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
-                <FiUser size={40} style={{ color: 'var(--text-muted)' }} />
+              <div className="icon-box icon-box--accent" style={{ width: '100%', height: '100%', borderRadius: 'inherit' }}>
+                <FiUser size={40} />
               </div>
             )}
           </div>
-          <div>
-            <h2 style={{ margin: '0 0 0.25rem' }}>{faculty.full_name}</h2>
-            <p style={{ margin: '0 0 0.75rem', color: 'var(--color-primary)', fontWeight: 500 }}>{faculty.designation}</p>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem', fontSize: '0.875rem' }}>
+          <div className="faculty-modal__info">
+            <h2 className="faculty-modal__name">{faculty.full_name}</h2>
+            <p className="faculty-modal__designation">{faculty.designation}</p>
+            <div className="faculty-modal__contacts">
               {faculty.email && (
-                <span style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                  <FiMail size={14} /> <a href={`mailto:${faculty.email}`} style={{ color: 'var(--color-primary)' }}>{faculty.email}</a>
+                <span className="faculty-modal__contact-item">
+                  <FiMail size={14} />
+                  <a href={`mailto:${faculty.email}`}>{faculty.email}</a>
                 </span>
               )}
               {faculty.phone && (
-                <span style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                <span className="faculty-modal__contact-item">
                   <FiPhone size={14} /> {faculty.phone}
                 </span>
               )}
               {faculty.office_room && (
-                <span style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                <span className="faculty-modal__contact-item">
                   <FiMapPin size={14} /> Room: {faculty.office_room}
                 </span>
               )}
               {faculty.personal_website && (
-                <span style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                <span className="faculty-modal__contact-item">
                   <FiGlobe size={14} />
-                  <a href={faculty.personal_website} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--color-primary)' }}>
+                  <a href={faculty.personal_website} target="_blank" rel="noopener noreferrer">
                     Personal Website
                   </a>
                 </span>
@@ -223,16 +192,11 @@ function FacultyModal({ faculty, onClose }: { faculty: Faculty; onClose: () => v
 
         {/* Research Areas */}
         {faculty.research_areas.length > 0 && (
-          <div style={{ marginBottom: '1.5rem' }}>
-            <h3 style={{ marginBottom: '0.5rem', fontSize: '1rem' }}>Research Areas</h3>
-            <div style={{ display: 'flex', gap: '0.35rem', flexWrap: 'wrap' }}>
+          <div className="faculty-modal__section">
+            <h3 className="faculty-modal__section-title">Research Areas</h3>
+            <div className="faculty-modal__tags">
               {faculty.research_areas.map((area, i) => (
-                <span key={i} style={{
-                  padding: '0.25rem 0.65rem', borderRadius: '9999px',
-                  background: 'var(--color-surface-alt, #e8e8e8)', fontSize: '0.8rem', fontWeight: 500,
-                }}>
-                  {area}
-                </span>
+                <span key={i} className="badge badge--accent">{area}</span>
               ))}
             </div>
           </div>
@@ -240,13 +204,13 @@ function FacultyModal({ faculty, onClose }: { faculty: Faculty; onClose: () => v
 
         {/* Qualifications */}
         {faculty.qualifications.length > 0 && (
-          <div style={{ marginBottom: '1.5rem' }}>
-            <h3 style={{ marginBottom: '0.5rem', fontSize: '1rem' }}>Qualifications</h3>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+          <div className="faculty-modal__section">
+            <h3 className="faculty-modal__section-title">Qualifications</h3>
+            <div className="faculty-modal__list">
               {faculty.qualifications.map((q, i) => (
-                <div key={i} className="skeu-panel" style={{ padding: '0.75rem' }}>
-                  <div style={{ fontWeight: 600 }}>{q.degree}</div>
-                  <div style={{ fontSize: '0.875rem', color: 'var(--text-muted)' }}>
+                <div key={i} className="bento-card bento-card--no-hover faculty-modal__item">
+                  <div className="faculty-modal__item-title">{q.degree}</div>
+                  <div className="faculty-modal__item-sub">
                     {q.institution}{q.year ? ` (${q.year})` : ''}
                   </div>
                 </div>
@@ -257,22 +221,22 @@ function FacultyModal({ faculty, onClose }: { faculty: Faculty; onClose: () => v
 
         {/* Publications */}
         {faculty.publications.length > 0 && (
-          <div>
-            <h3 style={{ marginBottom: '0.5rem', fontSize: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+          <div className="faculty-modal__section">
+            <h3 className="faculty-modal__section-title">
               <FiBook size={16} /> Publications ({faculty.publications.length})
             </h3>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+            <div className="faculty-modal__list">
               {faculty.publications.map((pub, i) => (
-                <div key={i} className="skeu-panel" style={{ padding: '0.75rem' }}>
-                  <div style={{ fontWeight: 500, display: 'flex', alignItems: 'flex-start', gap: '0.5rem' }}>
+                <div key={i} className="bento-card bento-card--no-hover faculty-modal__item">
+                  <div className="faculty-modal__item-title">
                     {pub.title}
                     {pub.url && (
-                      <a href={pub.url} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--color-primary)', flexShrink: 0 }}>
+                      <a href={pub.url} target="_blank" rel="noopener noreferrer" className="faculty-modal__pub-link">
                         <FiExternalLink size={14} />
                       </a>
                     )}
                   </div>
-                  <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>
+                  <div className="faculty-modal__item-sub">
                     {pub.journal}{pub.year ? ` (${pub.year})` : ''}
                   </div>
                 </div>

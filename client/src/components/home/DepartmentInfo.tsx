@@ -30,11 +30,11 @@ export default function DepartmentInfo() {
   useEffect(() => {
     if (!sectionRef.current) return;
     const ctx = gsap.context(() => {
-      gsap.fromTo('.dept-info__text',
+      gsap.fromTo('.dept-info__about-card',
         { opacity: 0, y: 40 },
         {
           opacity: 1, y: 0, duration: 0.8, ease: 'power3.out',
-          scrollTrigger: { trigger: '.dept-info__text', start: 'top 85%' },
+          scrollTrigger: { trigger: '.dept-info__about-card', start: 'top 85%' },
         }
       );
     }, sectionRef);
@@ -49,31 +49,33 @@ export default function DepartmentInfo() {
           <p className="section__subtitle">Pioneering Computer Science Education Since 1992</p>
         </div>
 
-        <div className="dept-info__text skeu-panel">
-          <p>
-            Department of Computer Science & Engineering got down to its journey along with that of
-            School of Applied Science in 1992. This department has brought numerous graduates into
-            reality that are speeding up not only Bangladesh but also the whole world in various IT
-            fields by their skill that they have gathered from this department.
-          </p>
-          <p>
-            CSE department mainly offers a four-year undergraduate course in Computer Science &
-            Engineering where courses are designed in such a way so that students graduating from this
-            department have a balance of theory and practical skills to prepare them for the highly
-            competitive workplace. Now a team of full-time faculty members and staff are working
-            ceaselessly under the smashing leadership of Prof. Md Masum, Head, Dept. of CSE.
-          </p>
-          <p>
-            The department has successfully run research activities in Bangla Computerization,
-            Natural Language Processing, Optical Character Recognition, Parallel Processing,
-            Cluster Computing, and Cellular Phone & Computer Interfacing.
-          </p>
-        </div>
+        <div className="dept-info__bento">
+          <div className="dept-info__about-card skeu-card">
+            <p>
+              Department of Computer Science & Engineering got down to its journey along with that of
+              School of Applied Science in 1992. This department has brought numerous graduates into
+              reality that are speeding up not only Bangladesh but also the whole world in various IT
+              fields by their skill that they have gathered from this department.
+            </p>
+            <p>
+              CSE department mainly offers a four-year undergraduate course in Computer Science &
+              Engineering where courses are designed in such a way so that students graduating from this
+              department have a balance of theory and practical skills to prepare them for the highly
+              competitive workplace. Now a team of full-time faculty members and staff are working
+              ceaselessly under the smashing leadership of Prof. Md Masum, Head, Dept. of CSE.
+            </p>
+            <p>
+              The department has successfully run research activities in Bangla Computerization,
+              Natural Language Processing, Optical Character Recognition, Parallel Processing,
+              Cluster Computing, and Cellular Phone & Computer Interfacing.
+            </p>
+          </div>
 
-        <div className="dept-stats">
-          {stats.map((stat) => (
-            <StatCounter key={stat.label} label={stat.label} value={stat.value} />
-          ))}
+          <div className="dept-stats">
+            {stats.map((stat) => (
+              <StatCounter key={stat.label} label={stat.label} value={stat.value} />
+            ))}
+          </div>
         </div>
       </div>
     </section>

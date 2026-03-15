@@ -1,4 +1,4 @@
-/* ===== Auth Pages - Modern ===== */
+/* ===== Auth Pages - Light Cream & Purple ===== */
 .auth-page {
   display: flex;
   align-items: center;
@@ -64,16 +64,16 @@
   text-align: center;
   margin-bottom: 1rem;
   padding: 0.625rem 0.875rem;
-  background: rgba(245, 158, 11, 0.07);
+  background: rgba(217, 119, 6, 0.06);
   border-radius: var(--radius-md);
-  border: 1px solid rgba(245, 158, 11, 0.12);
+  border: 1px solid rgba(217, 119, 6, 0.12);
 }
 
 .auth-form__footer {
   text-align: center;
   margin-top: 1.25rem;
   padding-top: 1.25rem;
-  border-top: 1px solid var(--color-border);
+  border-top: 1px solid rgba(54, 6, 77, 0.06);
 }
 
 .auth-form__footer p {

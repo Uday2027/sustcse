@@ -1,4 +1,4 @@
-/* ===== Modern Typography ===== */
+/* ===== Light Cream & Purple Typography ===== */
 .skeu-heading {
   font-family: var(--font-display);
   font-weight: 700;
@@ -30,17 +30,17 @@
   letter-spacing: -0.01em;
 }
 
-/* Cyan gradient text */
+/* Purple gradient text */
 .skeu-text-gold {
-  background: linear-gradient(135deg, #22d3ee, #67e8f9, #22d3ee);
+  background: linear-gradient(135deg, #36064D, #4a1265, #36064D);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
-/* Blue gradient text */
+/* Accent gradient text */
 .skeu-text-emerald {
-  background: linear-gradient(135deg, #3b82f6, #60a5fa);
+  background: linear-gradient(135deg, #36064D, #250338);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -65,7 +65,8 @@
 .skeu-separator {
   width: 40px;
   height: 2px;
-  background: linear-gradient(90deg, var(--color-accent), transparent);
+  background: linear-gradient(90deg, var(--color-accent), rgba(54, 6, 77, 0.15));
   margin: 1rem auto;
   border: none;
+  border-radius: 1px;
 }

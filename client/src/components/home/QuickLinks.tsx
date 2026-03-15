@@ -27,7 +27,7 @@ export default function QuickLinks() {
         {
           opacity: 1, y: 0,
           duration: 0.5, stagger: 0.1, ease: 'back.out(1.5)',
-          scrollTrigger: { trigger: '.quick-links__grid', start: 'top 85%' },
+          scrollTrigger: { trigger: '.quick-links__bento', start: 'top 85%' },
         }
       );
 
@@ -52,7 +52,7 @@ export default function QuickLinks() {
           <h2 className="section__title skeu-heading">Explore More</h2>
         </div>
 
-        <div className="quick-links__grid grid grid--4">
+        <div className="quick-links__bento">
           {links.map((link) => {
             const Icon = link.icon;
             return (

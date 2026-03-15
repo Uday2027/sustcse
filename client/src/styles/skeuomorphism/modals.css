@@ -1,27 +1,27 @@
-/* ===== Glassmorphism Modals ===== */
+/* ===== Light Cream & Purple Modals ===== */
 .skeu-modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(10, 22, 40, 0.7);
+  background: rgba(54, 6, 77, 0.25);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 2000;
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(12px) saturate(120%);
+  -webkit-backdrop-filter: blur(12px) saturate(120%);
   animation: fadeIn var(--transition-fast) ease-out;
 }
 
 .skeu-modal {
-  background: rgba(13, 31, 60, 0.9);
-  backdrop-filter: var(--glass-blur-strong);
-  -webkit-backdrop-filter: var(--glass-blur-strong);
-  border: 1px solid var(--glass-border);
+  background: rgba(247, 246, 229, 0.95);
+  backdrop-filter: blur(32px) saturate(180%);
+  -webkit-backdrop-filter: blur(32px) saturate(180%);
+  border: 1px solid rgba(54, 6, 77, 0.10);
   border-radius: var(--radius-xl);
-  box-shadow: var(--shadow-xl);
+  box-shadow: 0 24px 64px rgba(54, 6, 77, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.6);
   width: 90%;
   max-width: 560px;
   max-height: 85vh;
@@ -30,12 +30,24 @@
   animation: scaleIn var(--transition-slow) ease-out;
 }
 
+.skeu-modal::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.8), transparent);
+  border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+  pointer-events: none;
+}
+
 .skeu-modal__header {
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: var(--spacing-lg);
-  border-bottom: 1px solid var(--color-border-light);
+  border-bottom: 1px solid rgba(54, 6, 77, 0.06);
 }
 
 .skeu-modal__title {
@@ -47,8 +59,8 @@
 }
 
 .skeu-modal__close {
-  background: transparent;
-  border: 1px solid var(--color-border);
+  background: rgba(54, 6, 77, 0.04);
+  border: 1px solid rgba(54, 6, 77, 0.08);
   border-radius: var(--radius-sm);
   color: var(--color-text-muted);
   width: 32px;
@@ -62,9 +74,9 @@
 }
 
 .skeu-modal__close:hover {
-  background: var(--color-surface-hover);
+  background: rgba(54, 6, 77, 0.08);
   color: var(--color-text-primary);
-  border-color: rgba(255, 255, 255, 0.12);
+  border-color: rgba(54, 6, 77, 0.14);
 }
 
 .skeu-modal__body {
@@ -76,5 +88,5 @@
   justify-content: flex-end;
   gap: var(--spacing-sm);
   padding: var(--spacing-lg);
-  border-top: 1px solid var(--color-border-light);
+  border-top: 1px solid rgba(54, 6, 77, 0.06);
 }

@@ -31,7 +31,7 @@ export default function SocietyShowcase() {
         {
           opacity: 1, scale: 1, y: 0,
           duration: 0.5, stagger: 0.1, ease: 'back.out(1.5)',
-          scrollTrigger: { trigger: '.society-showcase__grid', start: 'top 85%' },
+          scrollTrigger: { trigger: '.society-showcase__bento', start: 'top 85%' },
         }
       );
     }, sectionRef);
@@ -47,7 +47,7 @@ export default function SocietyShowcase() {
         </div>
 
         {members.length > 0 ? (
-          <div className="society-showcase__grid grid grid--4">
+          <div className="society-showcase__bento">
             {members.map((member) => (
               <div key={member.id} className="society-member-card skeu-card">
                 <div className="society-member-card__avatar">

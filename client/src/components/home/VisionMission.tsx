@@ -79,32 +79,34 @@ export default function VisionMission() {
   return (
     <section ref={sectionRef} className="section vision-mission">
       <div className="container">
-        <div className="vision-card skeu-panel skeu-panel--elevated">
-          <h2 className="skeu-heading skeu-heading--lg">Our Vision</h2>
-          <p>
-            The Department of Computer Science and Engineering, SUST intends to provide an
-            excellent educational environment in order to develop professionals with strong
-            technical and research backgrounds.
-          </p>
-        </div>
+        <div className="vision-mission__bento">
+          <div className="vision-card skeu-panel skeu-panel--elevated">
+            <h2 className="skeu-heading skeu-heading--lg">Our Vision</h2>
+            <p>
+              The Department of Computer Science and Engineering, SUST intends to provide an
+              excellent educational environment in order to develop professionals with strong
+              technical and research backgrounds.
+            </p>
+          </div>
 
-        <h2 className="section__title skeu-heading" style={{ textAlign: 'center', margin: '3rem 0 2rem' }}>
-          Our Mission
-        </h2>
+          <h2 className="section__title skeu-heading" style={{ textAlign: 'center', margin: '3rem 0 2rem' }}>
+            Our Mission
+          </h2>
 
-        <div className="missions-grid grid grid--2">
-          {missions.map((mission) => {
-            const Icon = mission.icon;
-            return (
-              <div key={mission.code} className="mission-card skeu-card" style={{ perspective: '1000px' }}>
-                <div className="mission-card__icon">
-                  <Icon size={28} />
+          <div className="missions-grid">
+            {missions.map((mission) => {
+              const Icon = mission.icon;
+              return (
+                <div key={mission.code} className="mission-card skeu-card">
+                  <div className="mission-card__icon">
+                    <Icon size={28} />
+                  </div>
+                  <div className="mission-card__code">{mission.code}</div>
+                  <p className="mission-card__text">{mission.text}</p>
                 </div>
-                <div className="mission-card__code">{mission.code}</div>
-                <p className="mission-card__text">{mission.text}</p>
-              </div>
-            );
-          })}
+              );
+            })}
+          </div>
         </div>
       </div>
     </section>
