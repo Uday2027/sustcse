@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{{subject}}</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #1a1a2e;
+      color: #e0e0e0;
+    }
+    .email-wrapper {
+      max-width: 600px;
+      margin: 0 auto;
+      background-color: #16213e;
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1px solid #0f3460;
+    }
+    .email-header {
+      background: linear-gradient(135deg, #0f3460 0%, #1a1a2e 100%);
+      padding: 32px 24px;
+      text-align: center;
+      border-bottom: 3px solid #c9a84c;
+    }
+    .email-header h1 {
+      margin: 0;
+      font-size: 28px;
+      font-weight: 700;
+      color: #c9a84c;
+      letter-spacing: 2px;
+    }
+    .email-header p {
+      margin: 8px 0 0;
+      font-size: 13px;
+      color: #8a8fa8;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+    .email-body {
+      padding: 32px 24px;
+      line-height: 1.7;
+      font-size: 15px;
+      color: #d0d0d0;
+    }
+    .email-body a {
+      color: #c9a84c;
+      text-decoration: underline;
+    }
+    .email-body .btn {
+      display: inline-block;
+      padding: 12px 32px;
+      background-color: #c9a84c;
+      color: #1a1a2e;
+      text-decoration: none;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: 15px;
+      margin: 16px 0;
+    }
+    .email-body .btn:hover {
+      background-color: #b8973f;
+    }
+    .email-body .highlight {
+      background-color: #0f3460;
+      border-left: 4px solid #c9a84c;
+      padding: 16px;
+      margin: 16px 0;
+      border-radius: 0 6px 6px 0;
+    }
+    .email-footer {
+      background-color: #0f3460;
+      padding: 24px;
+      text-align: center;
+      font-size: 12px;
+      color: #8a8fa8;
+      border-top: 1px solid #1a1a2e;
+    }
+    .email-footer a {
+      color: #c9a84c;
+      text-decoration: none;
+    }
+    .email-footer .divider {
+      width: 40px;
+      height: 2px;
+      background-color: #c9a84c;
+      margin: 12px auto;
+    }
+  </style>
+</head>
+<body>
+  <div style="padding: 24px; background-color: #1a1a2e;">
+    <div class="email-wrapper">
+      <!-- Header -->
+      <div class="email-header">
+        <h1>CSE SUST</h1>
+        <p>Department of Computer Science &amp; Engineering</p>
+      </div>
+
+      <!-- Body Content -->
+      <div class="email-body">
+        {{> content}}
+      </div>
+
+      <!-- Footer -->
+      <div class="email-footer">
+        <div class="divider"></div>
+        <p>
+          Department of Computer Science &amp; Engineering<br />
+          Shahjalal University of Science &amp; Technology<br />
+          Sylhet-3114, Bangladesh
+        </p>
+        <p>
+          <a href="https://www.sust.edu/d/cse">www.sust.edu/d/cse</a>
+        </p>
+        <p>&copy; {{year}} CSE SUST. All rights reserved.</p>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

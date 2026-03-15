@@ -1,0 +1,56 @@
+<h2 style="color: #c9a84c; margin-top: 0;">Upcoming Event</h2>
+
+<p>Hi {{name}},</p>
+
+<p>
+  You are invited to an upcoming event organized by the Department of Computer
+  Science &amp; Engineering, SUST.
+</p>
+
+<div class="highlight">
+  <h3 style="margin: 0 0 12px; color: #c9a84c;">{{title}}</h3>
+
+  <table style="width: 100%; border-collapse: collapse; font-size: 14px;">
+    {{#if date}}
+    <tr>
+      <td style="padding: 4px 8px 4px 0; color: #8a8fa8; white-space: nowrap; vertical-align: top;">Date:</td>
+      <td style="padding: 4px 0;">{{date}}</td>
+    </tr>
+    {{/if}}
+    {{#if time}}
+    <tr>
+      <td style="padding: 4px 8px 4px 0; color: #8a8fa8; white-space: nowrap; vertical-align: top;">Time:</td>
+      <td style="padding: 4px 0;">{{time}}</td>
+    </tr>
+    {{/if}}
+    {{#if venue}}
+    <tr>
+      <td style="padding: 4px 8px 4px 0; color: #8a8fa8; white-space: nowrap; vertical-align: top;">Venue:</td>
+      <td style="padding: 4px 0;">{{venue}}</td>
+    </tr>
+    {{/if}}
+    {{#if organizer}}
+    <tr>
+      <td style="padding: 4px 8px 4px 0; color: #8a8fa8; white-space: nowrap; vertical-align: top;">Organizer:</td>
+      <td style="padding: 4px 0;">{{organizer}}</td>
+    </tr>
+    {{/if}}
+  </table>
+
+  {{#if description}}
+  <p style="margin: 12px 0 0;">{{description}}</p>
+  {{/if}}
+</div>
+
+<div style="text-align: center;">
+  <a href="{{eventUrl}}" class="btn">View Event Details</a>
+</div>
+
+<p>
+  We look forward to seeing you there!
+</p>
+
+<p>
+  Best regards,<br />
+  <strong style="color: #c9a84c;">CSE SUST Team</strong>
+</p>

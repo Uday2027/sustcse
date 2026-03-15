@@ -1,0 +1,38 @@
+<h2 style="color: #c9a84c; margin-top: 0;">Registration Not Approved</h2>
+
+<p>Hi {{name}},</p>
+
+<p>
+  We regret to inform you that your account registration on the CSE SUST portal
+  was <strong style="color: #e74c3c;">not approved</strong>.
+</p>
+
+{{#if reason}}
+<div class="highlight">
+  <p style="margin: 0;">
+    <strong>Reason:</strong> {{reason}}
+  </p>
+</div>
+{{/if}}
+
+<p>
+  If you believe this was a mistake or would like further clarification, please
+  contact the department administration. You may also re-register with corrected
+  information if applicable.
+</p>
+
+{{#if contactEmail}}
+<p>
+  You can reach us at:
+  <a href="mailto:{{contactEmail}}">{{contactEmail}}</a>
+</p>
+{{/if}}
+
+<p>
+  We appreciate your interest in the CSE SUST community.
+</p>
+
+<p>
+  Regards,<br />
+  <strong style="color: #c9a84c;">CSE SUST Team</strong>
+</p>

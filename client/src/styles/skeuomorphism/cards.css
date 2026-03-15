@@ -1,0 +1,80 @@
+/* ===== Skeuomorphic Cards ===== */
+.skeu-card {
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  padding: var(--spacing-lg);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  position: relative;
+}
+
+.skeu-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.8), transparent);
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+}
+
+.skeu-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+.skeu-card--flat {
+  transform: none !important;
+}
+
+.skeu-card--flat:hover {
+  transform: none !important;
+}
+
+.skeu-card__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--spacing-md);
+  padding-bottom: var(--spacing-md);
+  border-bottom: 1px solid var(--color-border-light);
+}
+
+.skeu-card__title {
+  font-family: var(--font-primary);
+  font-size: 1.15rem;
+  color: var(--color-text-heading);
+  text-shadow: none;
+}
+
+.skeu-card__body {
+  color: var(--color-text-secondary);
+  font-size: 0.95rem;
+  line-height: 1.7;
+}
+
+.skeu-card__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: var(--spacing-md);
+  padding-top: var(--spacing-md);
+  border-top: 1px solid var(--color-border-light);
+}
+
+.skeu-card__badge {
+  display: inline-block;
+  padding: 0.2rem 0.6rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border-radius: var(--radius-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.skeu-card__badge--academic { background: rgba(52, 152, 219, 0.1); color: var(--color-info); }
+.skeu-card__badge--urgent { background: rgba(231, 76, 60, 0.1); color: var(--color-danger); }
+.skeu-card__badge--general { background: rgba(26, 82, 118, 0.1); color: var(--color-accent); }
+.skeu-card__badge--success { background: rgba(39, 174, 96, 0.1); color: var(--color-success); }

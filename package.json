@@ -1,0 +1,26 @@
+{
+  "name": "sust-cse-website",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "client",
+    "server",
+    "shared"
+  ],
+  "scripts": {
+    "dev": "concurrently \"npm run dev:server\" \"npm run dev:client\"",
+    "dev:client": "npm run dev --workspace=client",
+    "dev:server": "npm run dev --workspace=server",
+    "build": "npm run build --workspace=shared && npm run build --workspace=client && npm run build --workspace=server",
+    "build:client": "npm run build --workspace=client",
+    "build:server": "npm run build --workspace=server"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2",
+    "typescript": "^5.7.3"
+  },
+  "overrides": {
+    "@types/express": "^4.17.21",
+    "@types/express-serve-static-core": "^4.19.0"
+  }
+}

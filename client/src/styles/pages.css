@@ -1,0 +1,265 @@
+/* ===== Faculty Page ===== */
+.faculty-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.faculty-card {
+  text-align: center;
+  padding: 2rem 1.5rem;
+}
+
+.faculty-card__avatar {
+  width: 100px;
+  height: 100px;
+  margin: 0 auto 1rem;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 3px solid var(--color-border-accent);
+  box-shadow: var(--shadow-md);
+}
+
+.faculty-card__avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.faculty-card__name {
+  font-family: var(--font-primary);
+  font-size: 1.1rem;
+  color: var(--color-text-heading);
+  margin-bottom: 0.3rem;
+}
+
+.faculty-card__designation {
+  font-size: 0.85rem;
+  color: var(--color-accent);
+  margin-bottom: 0.5rem;
+}
+
+.faculty-card__research {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+  justify-content: center;
+}
+
+.faculty-card__tag {
+  font-size: 0.7rem;
+  padding: 0.2rem 0.5rem;
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  color: var(--color-text-muted);
+}
+
+/* ===== Alumni Page ===== */
+.alumni-filters {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+}
+
+.alumni-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+.alumni-card {
+  display: flex;
+  gap: 1rem;
+  padding: 1.5rem;
+}
+
+.alumni-card__avatar {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 2px solid var(--color-border-accent);
+  flex-shrink: 0;
+}
+
+.alumni-card__info h4 {
+  font-size: 1rem;
+  color: var(--color-text-heading);
+}
+
+.alumni-card__info p {
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+}
+
+/* ===== Student Profile (LinkedIn-like) ===== */
+.student-profile {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.student-profile__header {
+  display: flex;
+  gap: 2rem;
+  align-items: flex-start;
+  padding: 2rem;
+}
+
+.student-profile__avatar {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 3px solid var(--color-border-accent);
+  box-shadow: var(--shadow-lg);
+  flex-shrink: 0;
+}
+
+.student-profile__name {
+  font-family: var(--font-primary);
+  font-size: 1.8rem;
+  color: var(--color-text-heading);
+}
+
+.student-profile__headline {
+  font-size: 1rem;
+  color: var(--color-text-secondary);
+  margin-top: 0.3rem;
+}
+
+.student-profile__section {
+  padding: 1.5rem 2rem;
+  border-top: 1px solid var(--color-border);
+}
+
+.student-profile__section h3 {
+  font-family: var(--font-primary);
+  font-size: 1.2rem;
+  color: var(--color-text-heading);
+  margin-bottom: 1rem;
+}
+
+.skills-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.skill-tag {
+  padding: 0.35rem 0.8rem;
+  font-size: 0.85rem;
+  background: var(--color-accent-glow);
+  border: 1px solid var(--color-border-accent);
+  border-radius: 20px;
+  color: var(--color-accent);
+}
+
+/* ===== Finance Page ===== */
+.finance-overview {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.finance-card {
+  padding: 1.5rem;
+  text-align: center;
+}
+
+.finance-card__amount {
+  font-family: var(--font-primary);
+  font-size: 2rem;
+  color: var(--color-accent);
+}
+
+.finance-card__label {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+}
+
+/* ===== Work Assignments Board ===== */
+.assignments-board {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  min-height: 400px;
+}
+
+@media (max-width: 768px) {
+  .assignments-board {
+    grid-template-columns: 1fr;
+  }
+}
+
+.assignments-column {
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: 1rem;
+}
+
+.assignments-column__header {
+  font-family: var(--font-primary);
+  font-size: 1rem;
+  color: var(--color-text-heading);
+  padding: 0.5rem 0;
+  margin-bottom: 1rem;
+  border-bottom: 2px solid var(--color-border);
+}
+
+.assignment-card {
+  padding: 1rem;
+  margin-bottom: 0.75rem;
+}
+
+.priority-badge {
+  display: inline-block;
+  padding: 0.15rem 0.5rem;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  border-radius: var(--radius-sm);
+}
+
+.priority-badge--low { background: rgba(39, 174, 96, 0.1); color: var(--color-success); }
+.priority-badge--medium { background: rgba(26, 82, 118, 0.1); color: var(--color-accent); }
+.priority-badge--high { background: rgba(243, 156, 18, 0.1); color: var(--color-warning); }
+.priority-badge--urgent { background: rgba(231, 76, 60, 0.1); color: var(--color-danger); }
+
+/* ===== Notice/Event Detail Pages ===== */
+.detail-page {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.detail-page__header {
+  margin-bottom: 2rem;
+}
+
+.detail-page__title {
+  font-family: var(--font-primary);
+  font-size: 2rem;
+  color: var(--color-text-heading);
+  margin-bottom: 0.5rem;
+}
+
+.detail-page__meta {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+}
+
+.detail-page__content {
+  line-height: 1.8;
+  color: var(--color-text-secondary);
+}
+
+.detail-page__content p {
+  margin-bottom: 1rem;
+}

@@ -1,0 +1,38 @@
+<h2 style="color: #c9a84c; margin-top: 0;">New Notice Published</h2>
+
+<p>Hi {{name}},</p>
+
+<p>
+  A new notice has been published on the CSE SUST portal.
+</p>
+
+<div class="highlight">
+  <h3 style="margin: 0 0 8px; color: #c9a84c;">{{title}}</h3>
+  {{#if category}}
+  <p style="margin: 0 0 8px; font-size: 13px; color: #8a8fa8;">
+    Category: <strong>{{category}}</strong>
+  </p>
+  {{/if}}
+  {{#if content}}
+  <p style="margin: 0;">{{content}}</p>
+  {{/if}}
+</div>
+
+{{#if publishedAt}}
+<p style="font-size: 13px; color: #8a8fa8;">
+  Published on: {{publishedAt}}
+</p>
+{{/if}}
+
+<div style="text-align: center;">
+  <a href="{{noticeUrl}}" class="btn">View Full Notice</a>
+</div>
+
+<p>
+  Stay updated with the latest announcements from the department.
+</p>
+
+<p>
+  Best regards,<br />
+  <strong style="color: #c9a84c;">CSE SUST Team</strong>
+</p>

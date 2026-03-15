@@ -1,0 +1,67 @@
+/* ===== CSS Variables for Light Skeuomorphism Theme ===== */
+:root {
+  /* Base Colors - Clean, Light Palette */
+  --color-bg-primary: #f5f3f0;
+  --color-bg-secondary: #edeae6;
+  --color-bg-tertiary: #e4e0dc;
+  --color-bg-card: #ffffff;
+  --color-bg-elevated: #ffffff;
+
+  /* Accent Colors - Deep Teal/Navy */
+  --color-accent: #1a5276;
+  --color-accent-hover: #1f6896;
+  --color-accent-dark: #154360;
+  --color-accent-glow: rgba(26, 82, 118, 0.1);
+
+  /* Text Colors */
+  --color-text-primary: #2c3e50;
+  --color-text-secondary: #5d6d7e;
+  --color-text-muted: #95a5a6;
+  --color-text-heading: #1a2a3a;
+
+  /* Surface Colors */
+  --color-surface-light: rgba(255, 255, 255, 0.8);
+  --color-surface-dark: rgba(0, 0, 0, 0.04);
+  --color-border: #d5d2cd;
+  --color-border-light: #e0ddd8;
+  --color-border-accent: #b8c6d0;
+
+  /* Status Colors */
+  --color-success: #27ae60;
+  --color-warning: #f39c12;
+  --color-danger: #e74c3c;
+  --color-info: #3498db;
+
+  /* Shadow Presets - Soft light shadows for depth */
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.07), 0 2px 4px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.08), 0 4px 10px rgba(0, 0, 0, 0.05);
+  --shadow-inset: inset 0 2px 4px rgba(0, 0, 0, 0.06);
+  --shadow-pressed: inset 0 2px 6px rgba(0, 0, 0, 0.1);
+
+  /* Texture Gradients - Subtle light gradients */
+  --gradient-leather: linear-gradient(145deg, #ffffff 0%, #f5f3f0 50%, #edeae6 100%);
+  --gradient-metal: linear-gradient(180deg, #ffffff 0%, #f8f6f3 40%, #f0edea 100%);
+  --gradient-panel: linear-gradient(135deg, #ffffff 0%, #f8f6f3 100%);
+  --gradient-gold: linear-gradient(135deg, #1f6896 0%, #1a5276 50%, #154360 100%);
+
+  /* Spacing */
+  --spacing-xs: 0.25rem;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --spacing-xl: 2rem;
+  --spacing-2xl: 3rem;
+  --spacing-3xl: 4rem;
+
+  /* Border Radius */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+
+  /* Typography */
+  --font-primary: 'Georgia', 'Times New Roman', serif;
+  --font-sans: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: 'Consolas', 'Courier New', monospace;
+}
