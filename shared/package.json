@@ -2,6 +2,9 @@
   "name": "shared",
   "version": "1.0.0",
   "main": "types/index.ts",
+  "scripts": {
+    "build": "echo 'No build needed for shared'"
+  },
   "dependencies": {
     "zod": "^3.24.1"
   }
