@@ -183,18 +183,42 @@ ul, ol {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(59, 130, 246, 0.15);
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.18);
+  background: rgba(59, 130, 246, 0.25);
 }
 
 /* ===== Selection ===== */
 ::selection {
   background: var(--color-accent);
-  color: #0a0a0c;
+  color: #0a1628;
+}
+
+/* ===== Section Curve Dividers ===== */
+.section-curve {
+  position: relative;
+  width: 100%;
+  height: 80px;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.section-curve svg {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.section-curve--down svg path {
+  fill: var(--color-bg-secondary);
+}
+
+.section-curve--up svg path {
+  fill: var(--color-bg-primary);
 }
 
 /* ===== Modern Animations ===== */

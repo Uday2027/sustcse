@@ -71,16 +71,16 @@ export default function HeroBanner() {
 
   return (
     <section ref={heroRef} className="hero">
+      <div className="hero__bg-image" />
       <div className="hero__bg-overlay" />
       <div className="hero__content">
         <div className="hero__badge">Est. 1992</div>
         <h1 ref={titleRef} className="hero__title">
-          Department of Computer Science & Engineering
+          CSE ⚡ SUST
         </h1>
         <p ref={subtitleRef} className="hero__subtitle">
-          Shahjalal University of Science and Technology — Shaping the future of
-          technology since 1992. Empowering graduates who are driving innovation
-          across Bangladesh and the world.
+          Department of Computer Science & Engineering, Shahjalal University of
+          Science and Technology — Shaping the future of technology since 1992.
         </p>
         <div ref={ctaRef} className="hero__cta">
           <a href="/notices" className="skeu-btn skeu-btn--primary skeu-btn--lg">

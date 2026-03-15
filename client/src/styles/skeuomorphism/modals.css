@@ -1,11 +1,11 @@
-/* ===== Modern Modals ===== */
+/* ===== Glassmorphism Modals ===== */
 .skeu-modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.6);
+  background: rgba(10, 22, 40, 0.7);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -16,8 +16,10 @@
 }
 
 .skeu-modal {
-  background: var(--color-bg-elevated);
-  border: 1px solid var(--color-border);
+  background: rgba(13, 31, 60, 0.9);
+  backdrop-filter: var(--glass-blur-strong);
+  -webkit-backdrop-filter: var(--glass-blur-strong);
+  border: 1px solid var(--glass-border);
   border-radius: var(--radius-xl);
   box-shadow: var(--shadow-xl);
   width: 90%;

@@ -1,4 +1,4 @@
-/* ===== Hero Banner - Luxury ===== */
+/* ===== Hero Banner - Navy Glassmorphism ===== */
 .hero {
   position: relative;
   min-height: 100vh;
@@ -11,20 +11,30 @@
   padding-top: 72px;
 }
 
+.hero__bg-image {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: url('/images/IICT1.jpg') center/cover no-repeat;
+  background-color: #0a1628;
+  z-index: 0;
+}
+
 .hero__bg-overlay {
   position: absolute;
   top: 0; left: 0; right: 0; bottom: 0;
   background:
-    radial-gradient(ellipse at 20% 50%, rgba(16, 185, 129, 0.04) 0%, transparent 60%),
-    radial-gradient(ellipse at 80% 20%, rgba(212, 175, 55, 0.03) 0%, transparent 50%);
+    linear-gradient(180deg, rgba(10, 22, 40, 0.85) 0%, rgba(10, 22, 40, 0.5) 50%, rgba(10, 22, 40, 0.95) 100%),
+    radial-gradient(ellipse at 30% 50%, rgba(59, 130, 246, 0.15) 0%, transparent 60%),
+    radial-gradient(ellipse at 70% 30%, rgba(34, 211, 238, 0.10) 0%, transparent 50%);
   pointer-events: none;
+  z-index: 1;
 }
 
 .hero__content {
   position: relative;
-  z-index: 1;
+  z-index: 2;
   text-align: center;
-  max-width: 800px;
+  max-width: 900px;
   padding: 0 2rem;
   animation: fadeInUp 0.8s ease-out;
 }
@@ -42,22 +52,25 @@
   border: 1px solid var(--color-border-gold);
   border-radius: var(--radius-full);
   background: var(--color-gold-glow);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   margin-bottom: 2rem;
 }
 
 .hero__title {
   font-family: var(--font-display);
-  font-size: clamp(2.5rem, 5.5vw, 4.25rem);
+  font-size: clamp(3.5rem, 8vw, 7rem);
   font-weight: 700;
-  line-height: 1.08;
-  color: var(--color-text-heading);
+  line-height: 1.0;
+  color: #ffffff;
   margin-bottom: 1.5rem;
-  letter-spacing: -0.03em;
+  letter-spacing: -0.04em;
+  text-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
 }
 
 .hero__subtitle {
   font-family: var(--font-sans);
-  font-size: clamp(1rem, 2vw, 1.1rem);
+  font-size: clamp(1rem, 2vw, 1.15rem);
   color: var(--color-text-secondary);
   line-height: 1.75;
   max-width: 600px;
@@ -76,12 +89,13 @@
   bottom: 2.5rem;
   left: 50%;
   transform: translateX(-50%);
+  z-index: 2;
 }
 
 .hero__scroll-line {
   width: 1.5px;
   height: 40px;
-  background: var(--color-gold);
+  background: var(--color-accent);
   opacity: 0.4;
   animation: scrollPulse 2.5s ease-in-out infinite;
 }
@@ -113,15 +127,18 @@
 .dept-stats__item {
   text-align: center;
   padding: 1.5rem 1.25rem;
-  background: var(--color-bg-card);
-  border: 1px solid var(--color-border);
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
   border-radius: var(--radius-lg);
   transition: all var(--transition-base);
 }
 
 .dept-stats__item:hover {
-  border-color: var(--color-border-gold);
+  border-color: var(--color-border-accent);
   transform: translateY(-2px);
+  box-shadow: 0 0 20px rgba(59, 130, 246, 0.08);
 }
 
 .dept-stats__number {
@@ -439,8 +456,8 @@
   align-items: center;
   gap: 0.4rem;
   padding: 0.75rem 1.25rem;
-  background: var(--color-gold);
-  color: #0a0a0c;
+  background: var(--color-accent);
+  color: #fff;
   font-family: var(--font-sans);
   font-size: 0.75rem;
   font-weight: 700;
@@ -534,8 +551,8 @@
 }
 
 .notice-ticker__badge--general {
-  background: rgba(16, 185, 129, 0.15);
-  color: #34d399;
+  background: rgba(59, 130, 246, 0.15);
+  color: #60a5fa;
 }
 
 .notice-ticker__title {

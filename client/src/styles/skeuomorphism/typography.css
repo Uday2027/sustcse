@@ -1,4 +1,4 @@
-/* ===== Luxury Typography ===== */
+/* ===== Modern Typography ===== */
 .skeu-heading {
   font-family: var(--font-display);
   font-weight: 700;
@@ -30,17 +30,17 @@
   letter-spacing: -0.01em;
 }
 
-/* Gold gradient text */
+/* Cyan gradient text */
 .skeu-text-gold {
-  background: linear-gradient(135deg, #D4AF37, #E8C967, #D4AF37);
+  background: linear-gradient(135deg, #22d3ee, #67e8f9, #22d3ee);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
-/* Emerald gradient text */
+/* Blue gradient text */
 .skeu-text-emerald {
-  background: linear-gradient(135deg, #10b981, #34d399);
+  background: linear-gradient(135deg, #3b82f6, #60a5fa);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -65,7 +65,7 @@
 .skeu-separator {
   width: 40px;
   height: 2px;
-  background: linear-gradient(90deg, var(--color-gold), transparent);
+  background: linear-gradient(90deg, var(--color-accent), transparent);
   margin: 1rem auto;
   border: none;
 }

@@ -95,7 +95,7 @@ export default function Navbar() {
           ) : (
             <div className="navbar__auth-links">
               <Link to="/login" className="navbar__link navbar__link--login">Login</Link>
-              <Link to="/register" className="skeu-btn skeu-btn--primary skeu-btn--sm">Register</Link>
+              <Link to="/register" className="skeu-btn skeu-btn--primary skeu-btn--sm navbar__cta">Get Started</Link>
             </div>
           )}
         </div>

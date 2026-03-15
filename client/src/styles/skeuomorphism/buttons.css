@@ -1,4 +1,4 @@
-/* ===== Luxury Buttons ===== */
+/* ===== Modern Buttons ===== */
 .skeu-btn {
   display: inline-flex;
   align-items: center;
@@ -33,27 +33,27 @@
 }
 
 .skeu-btn--primary {
-  background: var(--color-accent);
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
   color: #fff;
   border-color: transparent;
   font-weight: 600;
 }
 
 .skeu-btn--primary:hover {
-  background: var(--color-accent-hover);
-  box-shadow: 0 4px 16px rgba(16, 185, 129, 0.20);
+  background: linear-gradient(135deg, #60a5fa, #3b82f6);
+  box-shadow: 0 4px 20px rgba(59, 130, 246, 0.25);
 }
 
 .skeu-btn--gold {
-  background: linear-gradient(135deg, #D4AF37, #C5A028);
-  color: #0a0a0c;
+  background: linear-gradient(135deg, #22d3ee, #06b6d4);
+  color: #0a1628;
   border-color: transparent;
   font-weight: 600;
 }
 
 .skeu-btn--gold:hover {
-  background: linear-gradient(135deg, #E8C967, #D4AF37);
-  box-shadow: var(--shadow-gold);
+  background: linear-gradient(135deg, #67e8f9, #22d3ee);
+  box-shadow: 0 4px 16px rgba(34, 211, 238, 0.20);
 }
 
 .skeu-btn--danger {
@@ -75,7 +75,7 @@
 }
 
 .skeu-btn--success:hover {
-  background: var(--color-accent-hover);
+  background: #34d399;
   box-shadow: 0 4px 16px rgba(16, 185, 129, 0.20);
 }
 
