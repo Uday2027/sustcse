@@ -1,0 +1,1 @@
+﻿src/modules/admin/admin.routes.ts(14,74): error TS2339: Property 'removePermission' does not exist on type 'typeof import("F:/SUST_CSE/backend/src/modules/admin/admin.controller")'.
