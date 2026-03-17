@@ -56,31 +56,15 @@ export default function AlumniShowcase() {
             </div>
           </div>
 
-          <div className="alumni-showcase__visual bento-card glass">
-            {/* Visual representation of alumni network - simplified grid of "pioneers" */}
-            <div className="alumni-visual-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1rem' }}>
-              {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((i) => (
-                <div key={i} className="alumni-dot-card" style={{ 
-                  aspectRatio: '1', 
-                  borderRadius: '0.75rem', 
-                  background: `rgba(248, 186, 121, ${0.1 + (i * 0.05)})`,
-                  border: '1px solid rgba(248, 186, 121, 0.2)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  color: 'rgba(255,255,255,0.2)',
-                  fontSize: '1.5rem'
-                }}>
-                  <FiUsers />
-                </div>
-              ))}
+          <div className="alumni-showcase__visual">
+            <div className="alumni-showcase__image-container">
+              <img 
+                src="/images/alumni_network.webp" 
+                alt="Global Alumni Network" 
+                className="alumni-showcase__image"
+              />
+              <div className="alumni-showcase__image-overlay"></div>
             </div>
-            <div className="alumni-visual-overlay" style={{ 
-              position: 'absolute', 
-              inset: 0, 
-              background: 'linear-gradient(to bottom, transparent 60%, var(--glass-bg) 95%)',
-              pointerEvents: 'none'
-            }}></div>
           </div>
         </div>
       </div>

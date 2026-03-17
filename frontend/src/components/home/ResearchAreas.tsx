@@ -79,7 +79,6 @@ export default function ResearchAreas() {
                                     <div className="research-card__icon">{area.icon}</div>
                                     <h3 className="research-card__title">{area.title}</h3>
                                     <p className="research-card__text">{area.description}</p>
-                                    <div className="research-card__arrow">→</div>
                                 </div>
                             </div>
                         ))}

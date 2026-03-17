@@ -2,6 +2,7 @@ import { useRef, useEffect } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useCountUp } from '../../hooks/useGSAP';
+import { FiUsers, FiUser, FiAward, FiFileText, FiBookOpen } from 'react-icons/fi';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -18,8 +19,10 @@ function StatCounter({ label, value }: { label: string; value: number }) {
   const countRef = useCountUp(value);
   return (
     <div className="dept-stats__item">
-      <span ref={countRef} className="dept-stats__number">0</span>
-      <span className="dept-stats__label">{label}</span>
+      <div className="dept-stats__content">
+        <span ref={countRef} className="dept-stats__number">0</span>
+        <span className="dept-stats__label">{label}</span>
+      </div>
     </div>
   );
 }
