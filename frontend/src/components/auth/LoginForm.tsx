@@ -6,7 +6,11 @@ import toast from 'react-hot-toast';
 import { useAuth } from '../../context/AuthContext';
 import { loginSchema, type LoginInput } from '../../lib/validators';
 
-export default function LoginForm() {
+interface LoginFormProps {
+  onToggleMode?: () => void;
+}
+
+export default function LoginForm({ onToggleMode }: LoginFormProps) {
   const { login } = useAuth();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
@@ -36,7 +40,7 @@ export default function LoginForm() {
   };
 
   return (
-    <div className="auth-form skeu-panel skeu-panel--elevated">
+    <div className="auth-form skeu-panel skeu-panel--elevated auth-form--premium">
       <div className="auth-form__header">
         <h2 className="skeu-heading skeu-heading--md">Welcome Back</h2>
         <p>Sign in to your CSE SUST account</p>
@@ -74,7 +78,20 @@ export default function LoginForm() {
 
       <div className="auth-form__footer">
         <p><Link to="/forgot-password">Forgot your password?</Link></p>
-        <p>Don't have an account? <Link to="/register">Register here</Link></p>
+        <p>
+          Don't have an account?{' '}
+          {onToggleMode ? (
+            <button
+              type="button"
+              onClick={onToggleMode}
+              className="text-accent hover:underline bg-transparent border-none p-0 cursor-pointer font-semibold"
+            >
+              Register now
+            </button>
+          ) : (
+            <Link to="/register">Register now</Link>
+          )}
+        </p>
       </div>
     </div>
   );

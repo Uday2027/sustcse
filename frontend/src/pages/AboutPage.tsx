@@ -21,7 +21,7 @@ export default function AboutPage() {
           <div ref={contentRef} className="about-content">
             <div className="about-hero-card skeu-card">
               <div className="about-hero-image">
-                <img src="/images/iict.jpg" alt="IICT Building" />
+                <img src="/images/IICT1.jpg" alt="IICT Building" />
                 <div className="image-overlay">
                   <h1>About the Department</h1>
                 </div>

@@ -9,7 +9,11 @@ import { SESSION_OPTIONS } from '../../config/constants';
 
 type RegisterType = 'student' | 'teacher';
 
-export default function RegisterForm() {
+interface RegisterFormProps {
+  onToggleMode?: () => void;
+}
+
+export default function RegisterForm({ onToggleMode }: RegisterFormProps) {
   const { register: registerUser } = useAuth();
   const navigate = useNavigate();
   const [type, setType] = useState<RegisterType>('student');
@@ -176,7 +180,20 @@ export default function RegisterForm() {
       </form>
 
       <div className="auth-form__footer">
-        <p>Already have an account? <Link to="/login">Sign in here</Link></p>
+        <p>
+          Already have an account?{' '}
+          {onToggleMode ? (
+            <button 
+              type="button" 
+              onClick={onToggleMode}
+              className="text-accent hover:underline bg-transparent border-none p-0 cursor-pointer font-semibold"
+            >
+              Login now
+            </button>
+          ) : (
+            <Link to="/login">Login now</Link>
+          )}
+        </p>
       </div>
     </div>
   );

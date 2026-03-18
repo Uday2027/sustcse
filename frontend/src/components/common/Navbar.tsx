@@ -10,6 +10,17 @@ const publicLinks = [
   { path: '/events', label: 'Events' },
   { path: '/achievements', label: 'Achievements' },
   { path: '/faculty', label: 'Faculty' },
+  { 
+    path: '/academic', 
+    label: 'Academic',
+    subLinks: [
+      { path: '/program', label: 'Program' },
+      { path: '/academic', label: 'Admission' },
+      { path: '/tuition-fees', label: 'Average Annual Tuition Fees' },
+      { path: '/statistics', label: 'Statistics (Jan 2024 - Dec 2024)' },
+      { path: '/degrees-awarded', label: 'Degrees Awarded' }
+    ]
+  },
   { path: '/alumni', label: 'Alumni' },
   { path: '/society', label: 'Society' },
 ];
@@ -57,15 +68,39 @@ export default function Navbar() {
         </Link>
 
         <div className={`navbar__links ${mobileOpen ? 'navbar__links--open' : ''}`}>
-          {publicLinks.map((link) => (
-            <Link
-              key={link.path}
-              to={link.path}
-              className={`navbar__link ${location.pathname === link.path ? 'navbar__link--active' : ''}`}
-            >
-              {link.label}
-            </Link>
-          ))}
+          {publicLinks.map((link) => {
+            if (link.subLinks) {
+              return (
+                <div key={link.label} className="navbar__user-menu" style={{ marginLeft: 0 }}>
+                  <div className={`navbar__link ${location.pathname.startsWith(link.path) || link.subLinks.some(s => location.pathname === s.path) ? 'navbar__link--active' : ''}`} style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.2rem', border: 'none', background: 'transparent', padding: '0.5rem' }}>
+                    {link.label} <FiChevronDown style={{ marginTop: '2px', opacity: 0.7 }} />
+                  </div>
+                  <div className="navbar__dropdown">
+                    {link.subLinks.map((subLink) => (
+                      <Link
+                        key={subLink.path}
+                        to={subLink.path}
+                        className="navbar__dropdown-item"
+                        onClick={() => setMobileOpen(false)}
+                      >
+                        {subLink.label}
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              );
+            }
+            return (
+              <Link
+                key={link.path}
+                to={link.path}
+                className={`navbar__link ${location.pathname === link.path ? 'navbar__link--active' : ''}`}
+                onClick={() => setMobileOpen(false)}
+              >
+                {link.label}
+              </Link>
+            );
+          })}
 
           {user && authLinks.map((link) => (
             <Link
