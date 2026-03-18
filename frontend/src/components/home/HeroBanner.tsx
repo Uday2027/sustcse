@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { Link } from 'react-router-dom';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
@@ -28,20 +29,63 @@ export default function HeroBanner() {
     if (!heroRef.current) return;
 
     const ctx = gsap.context(() => {
-      const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
+      // Tag line chip
+      gsap.fromTo('.hero__eyebrow',
+        { opacity: 0, y: 20, filter: 'blur(6px)' },
+        { opacity: 1, y: 0, filter: 'blur(0px)', duration: 0.9, ease: 'power3.out', delay: 0.1 }
+      );
 
-      // Text column animation
-      tl.fromTo(textColRef.current?.children ? Array.from(textColRef.current.children) : [],
+      // Headline words stagger
+      const words = textColRef.current?.querySelectorAll('.hero__title-word');
+      if (words && words.length > 0) {
+        gsap.fromTo(words,
+          { opacity: 0, y: 60, rotate: 4 },
+          { opacity: 1, y: 0, rotate: 0, duration: 0.9, stagger: 0.12, ease: 'expo.out', delay: 0.3 }
+        );
+      }
+
+      // Subtitle
+      gsap.fromTo('.hero__subtitle',
         { opacity: 0, y: 30 },
-        { opacity: 1, y: 0, duration: 0.8, stagger: 0.2, delay: 0.2 }
+        { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out', delay: 0.7 }
       );
 
-      // Image column animation
-      tl.fromTo(imageColRef.current,
-        { opacity: 0, scale: 0.95 },
-        { opacity: 1, scale: 1, duration: 1 },
-        '-=0.6'
+      // CTAs
+      gsap.fromTo('.hero__cta-group',
+        { opacity: 0, y: 20 },
+        { opacity: 1, y: 0, duration: 0.7, ease: 'power3.out', delay: 0.9 }
       );
+
+      // Image column
+      gsap.fromTo(imageColRef.current,
+        { opacity: 0, scale: 0.93, x: 40 },
+        { opacity: 1, scale: 1, x: 0, duration: 1.4, ease: 'expo.out', delay: 0.2 }
+      );
+
+      // Scroll-linked parallax on hero image
+      gsap.to(imageColRef.current, {
+        y: -80,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: heroRef.current,
+          start: 'top top',
+          end: 'bottom top',
+          scrub: 1.5,
+        }
+      });
+
+      // Text fades on scroll
+      gsap.to(textColRef.current, {
+        y: -40,
+        opacity: 0.3,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: heroRef.current,
+          start: 'top top',
+          end: '60% top',
+          scrub: 2,
+        }
+      });
 
     }, heroRef);
 
@@ -54,31 +98,48 @@ export default function HeroBanner() {
 
         {/* Left Column: Text & CTAs */}
         <div ref={textColRef} className="hero__text-col">
+          <div className="hero__eyebrow">
+            <span className="hero__eyebrow-badge">Est. 1991</span>
+            <span className="hero__eyebrow-separator">·</span>
+            <span className="hero__eyebrow-text">Department of Computer Science & Engineering</span>
+          </div>
+
           <h1 className="hero__title">
-            Fostering <span className="hero__title-accent">Confidence</span><br />
-            and <span className="hero__title-accent">Clarity</span> within the<br />
-            Academic Ecosystem
+            <span className="hero__title-word">Fostering</span>{' '}
+            <span className="hero__title-word hero__title-accent">Confidence</span>
+            <br />
+            <span className="hero__title-word">and</span>{' '}
+            <span className="hero__title-word hero__title-accent">Clarity</span>{' '}
+            <span className="hero__title-word">within the</span>
+            <br />
+            <span className="hero__title-word">Academic Ecosystem</span>
           </h1>
 
           <p className="hero__subtitle">
-            Acquire premium knowledge from leading educators and<br />
+            Acquire premium knowledge from leading educators and
             contribute to the expansion of the CSE community.
           </p>
 
           <div className="hero__cta-group">
-            <a href="/research" className="hero__btn hero__btn--primary">
+            <Link to="/research" className="hero__btn hero__btn--primary">
               Start Learning
-            </a>
-            <a href="/about" className="hero__btn hero__btn--secondary">
-              Learn How
-            </a>
+            </Link>
+            <Link to="/about" className="hero__btn hero__btn--secondary">
+              Explore CSE ↗
+            </Link>
+          </div>
+
+          {/* Scroll indicator */}
+          <div className="hero__scroll-hint">
+            <span className="hero__scroll-hint-line" />
+            <span className="hero__scroll-hint-text">Scroll to explore</span>
           </div>
         </div>
 
         {/* Right Column: Image Showcase */}
         <div ref={imageColRef} className="hero__image-col">
           <div className="hero__image-showcase">
-            {/* Top Badge Overlay */}
+            {/* Badge Overlay */}
             <div className="hero__image-badge">
               <div className="hero__image-badge-avatar">
                 <img src="/images/IICT1.jpg" alt="avatar" />
@@ -86,14 +147,14 @@ export default function HeroBanner() {
               <span className="hero__image-badge-text">dept_cse_sust</span>
             </div>
 
-            {/* Sliding Images Container */}
-            <div 
+            {/* Sliding Images */}
+            <div
               className="hero__main-img-container"
               style={{
                 display: 'flex',
                 width: '100%',
                 height: '100%',
-                transition: 'transform 0.8s cubic-bezier(0.65, 0, 0.35, 1)',
+                transition: 'transform 0.9s cubic-bezier(0.65, 0, 0.35, 1)',
                 transform: `translateX(-${activeIndex * 100}%)`
               }}
             >
@@ -103,12 +164,7 @@ export default function HeroBanner() {
                   src={src}
                   alt={`IICT Building ${idx + 1}`}
                   className="hero__main-img"
-                  style={{
-                    flex: '0 0 100%',
-                    width: '100%',
-                    height: '100%',
-                    objectFit: 'cover'
-                  }}
+                  style={{ flex: '0 0 100%', width: '100%', height: '100%', objectFit: 'cover' }}
                 />
               ))}
             </div>
@@ -121,7 +177,7 @@ export default function HeroBanner() {
                 key={idx}
                 onClick={() => setActiveIndex(idx)}
                 className={`hero__slider-dot ${activeIndex === idx ? 'hero__slider-dot--active' : ''}`}
-              ></div>
+              />
             ))}
           </div>
         </div>
@@ -130,4 +186,3 @@ export default function HeroBanner() {
     </section>
   );
 }
-

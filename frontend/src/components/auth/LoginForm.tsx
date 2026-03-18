@@ -84,7 +84,7 @@ export default function LoginForm({ onToggleMode }: LoginFormProps) {
             <button
               type="button"
               onClick={onToggleMode}
-              className="text-accent hover:underline bg-transparent border-none p-0 cursor-pointer font-semibold"
+              className="auth-toggle-btn"
             >
               Register now
             </button>

@@ -46,7 +46,7 @@ export default function RegisterForm({ onToggleMode }: RegisterFormProps) {
   };
 
   return (
-    <div className="auth-form auth-form--register skeu-panel skeu-panel--elevated">
+    <div className="auth-form auth-form--register skeu-panel skeu-panel--elevated auth-form--premium">
       <div className="auth-form__header">
         <h2 className="skeu-heading skeu-heading--md">Create Account</h2>
         <p>Join the CSE SUST community</p>
@@ -186,7 +186,7 @@ export default function RegisterForm({ onToggleMode }: RegisterFormProps) {
             <button 
               type="button" 
               onClick={onToggleMode}
-              className="text-accent hover:underline bg-transparent border-none p-0 cursor-pointer font-semibold"
+              className="auth-toggle-btn"
             >
               Login now
             </button>

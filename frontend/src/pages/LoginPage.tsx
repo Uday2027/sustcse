@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import LoginForm from '../components/auth/LoginForm';
 import RegisterForm from '../components/auth/RegisterForm';
@@ -13,106 +13,90 @@ export default function LoginPage() {
   );
   const containerRef = useRef<HTMLDivElement>(null);
   const formWrapperRef = useRef<HTMLDivElement>(null);
-  const brandingRef = useRef<HTMLDivElement>(null);
 
   const handleToggle = () => {
     const nextMode = mode === 'login' ? 'register' : 'login';
-    
-    // "Air-Blow" Animation
     const tl = gsap.timeline();
-    
-    // 1. Blow away current form to the right (since it's on the left)
+
     tl.to(formWrapperRef.current, {
-      x: 100,
-      scale: 1.2,
+      y: -30,
       opacity: 0,
-      filter: 'blur(15px)',
-      duration: 0.6,
-      ease: 'power2.inOut',
-      onComplete: () => {
-        setMode(nextMode);
-      }
+      filter: 'blur(12px)',
+      duration: 0.35,
+      ease: 'power3.in',
+      onComplete: () => setMode(nextMode),
     });
 
-    // 2. Subtle branding pulse
-    tl.to(brandingRef.current, {
-      opacity: 0.7,
-      x: 10,
-      duration: 0.3,
-      yoyo: true,
-      repeat: 1,
-      ease: 'sine.inOut'
-    }, "-=0.4");
-
-    // 3. New form drifts in from the left
-    tl.fromTo(formWrapperRef.current, 
-      { x: -100, scale: 0.8, opacity: 0, filter: 'blur(15px)' },
-      { x: 0, scale: 1, opacity: 1, filter: 'blur(0px)', duration: 0.9, ease: 'expo.out' }
+    tl.fromTo(formWrapperRef.current,
+      { y: 30, opacity: 0, filter: 'blur(12px)' },
+      { y: 0, opacity: 1, filter: 'blur(0px)', duration: 0.6, ease: 'expo.out' }
     );
   };
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // Entrance Animation
-      gsap.from(containerRef.current, {
-        scale: 1.1,
-        duration: 2,
-        ease: 'power2.out'
-      });
-
-      gsap.fromTo('.auth-page--animated__split', 
-        { x: '100%', opacity: 0 },
-        { x: '10%', opacity: 1, duration: 1.5, ease: 'power4.out', delay: 0.2 }
+      gsap.fromTo(containerRef.current,
+        { opacity: 0 },
+        { opacity: 1, duration: 0.5 }
       );
-
-      gsap.from('.auth-branding > *', {
-        opacity: 0,
-        x: -100,
-        stagger: 0.2,
-        duration: 1.2,
-        ease: 'power4.out',
-        delay: 0.5
-      });
-      
-      gsap.from(formWrapperRef.current, {
-        opacity: 0,
-        y: 50,
-        scale: 0.95,
-        duration: 1.2,
-        ease: 'power4.out',
-        delay: 0.8
-      });
+      gsap.fromTo(formWrapperRef.current,
+        { opacity: 0, y: 30, filter: 'blur(10px)' },
+        { opacity: 1, y: 0, filter: 'blur(0px)', duration: 0.8, ease: 'expo.out', delay: 0.15 }
+      );
     }, containerRef);
 
     return () => ctx.revert();
   }, []);
 
   return (
-    <div 
-      className="auth-page--animated" 
-      ref={containerRef}
-      style={{ backgroundImage: 'url("/images/login.png")' }}
-    >
-      <div className="auth-page--animated__split" />
-      
-      <div className="auth-page--animated__left">
-        <div ref={formWrapperRef} style={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
+    <div className="auth-page" ref={containerRef}>
+      <div className="auth-page__inner">
+
+        {/* Branding header */}
+        <div className="auth-page__header">
+          <p className="auth-page__tag">
+            {mode === 'login' ? '// authenticate' : '// new.identity'}
+          </p>
+          <h1 className="auth-page__title">
+            {mode === 'login' ? (
+              <>Welcome<br />Back.</>
+            ) : (
+              <>Create<br />Account.</>
+            )}
+          </h1>
+          <p className="auth-page__sub">
+            {mode === 'login'
+              ? 'Sign in to access the CSE portal and its full suite of academic resources.'
+              : 'Join the Department of Computer Science & Engineering, SUST.'
+            }
+          </p>
+        </div>
+
+        {/* Form Card */}
+        <div ref={formWrapperRef} className="auth-page__card">
           {mode === 'login' ? (
             <LoginForm onToggleMode={handleToggle} />
           ) : (
             <RegisterForm onToggleMode={handleToggle} />
           )}
         </div>
-      </div>
 
-      <div className="auth-page--animated__right">
-        <div className="auth-branding" ref={brandingRef}>
-          <p>{mode === 'login' ? 'Welcome Back' : 'Get Started'}</p>
-          <h1>{mode === 'login' ? 'Login' : 'Register'}<br />Page</h1>
-          <p style={{ color: 'white', opacity: 0.6, fontSize: '0.9rem', marginTop: '1rem', letterSpacing: '0.1em' }}>
-            {mode === 'login' ? 'Start your journey now' : 'Join our community today'}
-          </p>
+        {/* Bottom stats */}
+        <div className="auth-page__metrics">
+          <div className="auth-page__metric">
+            <span className="auth-page__metric-value">30+</span>
+            <span className="auth-page__metric-label">Years</span>
+          </div>
+          <div className="auth-page__metric">
+            <span className="auth-page__metric-value">2k+</span>
+            <span className="auth-page__metric-label">Alumni</span>
+          </div>
+          <div className="auth-page__metric">
+            <span className="auth-page__metric-value">100%</span>
+            <span className="auth-page__metric-label">Secure</span>
+          </div>
         </div>
+
       </div>
     </div>
   );

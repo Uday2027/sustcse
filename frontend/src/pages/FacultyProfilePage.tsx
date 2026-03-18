@@ -1,5 +1,5 @@
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { FiArrowLeft, FiMail, FiPhone, FiMapPin, FiGlobe, FiBook, FiAward, FiBriefcase, FiBookOpen, FiStar, FiMic, FiUser, FiActivity, FiArchive } from 'react-icons/fi';
+import { FiArrowLeft, FiMail, FiPhone, FiMapPin, FiGlobe, FiBook, FiAward, FiBriefcase, FiBookOpen, FiStar, FiMic, FiUser, FiActivity, FiArchive, FiExternalLink } from 'react-icons/fi';
 import { facultyData } from '../data/facultyData';
 import { useScrollReveal } from '../hooks/useGSAP';
 
@@ -26,109 +26,113 @@ export default function FacultyProfilePage() {
 
   return (
     <div className="page faculty-profile-page">
-      <section className="section">
+      <section className="section" style={{ paddingTop: '3rem' }}>
         <div className="container">
-          <button 
-            onClick={() => navigate('/faculty')} 
-            className="skeu-btn" 
-            style={{ marginBottom: '2rem', display: 'inline-flex', alignItems: 'center', gap: '0.5rem' }}
+
+          {/* Back button */}
+          <button
+            onClick={() => navigate('/faculty')}
+            className="fp-back-btn"
           >
-            <FiArrowLeft /> Back to Faculty
+            <FiArrowLeft /> Faculty Directory
           </button>
 
-          <div ref={contentRef} className="faculty-profile__grid">
-            {/* Left Column: Avatar & Quick Info */}
-            <div className="faculty-profile__sidebar">
-              <div className="bento-card faculty-profile__avatar-card">
-                <div className="faculty-profile__avatar">
+          <div ref={contentRef} className="fp-layout">
+
+            {/* ====== LEFT SIDEBAR ====== */}
+            <aside className="fp-sidebar">
+
+              {/* Portrait */}
+              <div className="fp-portrait">
+                {member.avatar_url ? (
                   <img src={member.avatar_url} alt={member.full_name} />
-                </div>
-                <h1 className="faculty-profile__name">{member.full_name}</h1>
-                <p className="faculty-profile__designation">{member.designation}</p>
+                ) : (
+                  <div className="fp-portrait__placeholder"><FiUser size={56} /></div>
+                )}
                 {member.is_on_leave && (
-                  <span className="badge badge--warning" style={{ marginTop: '0.5rem' }}>On Leave</span>
+                  <span className="fp-leave-badge">On Leave</span>
                 )}
               </div>
 
-              <div className="bento-card faculty-profile__contact-card">
-                <h3 className="card-title-sm">Contact Information</h3>
-                <div className="faculty-profile__contacts">
-                  {member.office_address && (
-                    <div className="contact-item">
-                      <FiMapPin className="contact-icon" />
-                      <p>{member.office_address}</p>
-                    </div>
-                  )}
-                  {member.email && (
-                    <div className="contact-item">
-                      <FiMail className="contact-icon" />
-                      <a href={`mailto:${member.email}`}>{member.email}</a>
-                    </div>
-                  )}
-                  {member.phone && (
-                    <div className="contact-item">
-                      <FiPhone className="contact-icon" />
-                      <p>{member.phone}</p>
-                    </div>
-                  )}
-                  {member.office_room && (
-                    <div className="contact-item">
-                      <FiMapPin className="contact-icon" />
-                      <p>Room: {member.office_room}</p>
-                    </div>
-                  )}
-                  {member.personal_website && (
-                    <div className="contact-item">
-                      <FiGlobe className="contact-icon" />
-                      <a href={member.personal_website} target="_blank" rel="noopener noreferrer">
-                        Personal Website
-                      </a>
-                    </div>
-                  )}
-                </div>
+              {/* Name & Title */}
+              <div className="fp-identity">
+                <h1 className="fp-identity__name">{member.full_name}</h1>
+                <p className="fp-identity__role">{member.designation}</p>
+                <p className="fp-identity__dept">Dept. of CSE, SUST</p>
               </div>
-            </div>
 
-            {/* Right Column: Detailed Info */}
-            <div className="faculty-profile__main">
+              {/* Divider */}
+              <div className="fp-divider" />
+
+              {/* Contact */}
+              <div className="fp-contacts">
+                {member.email && (
+                  <a href={`mailto:${member.email}`} className="fp-contact-item">
+                    <FiMail className="fp-contact-item__icon" />
+                    <span>{member.email}</span>
+                  </a>
+                )}
+                {member.phone && (
+                  <div className="fp-contact-item">
+                    <FiPhone className="fp-contact-item__icon" />
+                    <span>{member.phone}</span>
+                  </div>
+                )}
+                {member.office_address && (
+                  <div className="fp-contact-item">
+                    <FiMapPin className="fp-contact-item__icon" />
+                    <span>{member.office_address}</span>
+                  </div>
+                )}
+                {member.office_room && (
+                  <div className="fp-contact-item">
+                    <FiMapPin className="fp-contact-item__icon" />
+                    <span>Room {member.office_room}</span>
+                  </div>
+                )}
+                {member.personal_website && (
+                  <a href={member.personal_website} target="_blank" rel="noopener noreferrer" className="fp-contact-item">
+                    <FiGlobe className="fp-contact-item__icon" />
+                    <span>Personal Website <FiExternalLink size={12} style={{ verticalAlign: 'middle' }} /></span>
+                  </a>
+                )}
+              </div>
+            </aside>
+
+            {/* ====== RIGHT CONTENT ====== */}
+            <div className="fp-main">
+
               {/* Biography */}
               {member.biography && (
-                <div className="bento-card faculty-profile__section">
-                  <h2 className="section-title-sm">
-                    <FiUser style={{ color: 'var(--color-accent)' }} /> Biography
-                  </h2>
-                  <p style={{ color: 'var(--color-text-secondary)', lineHeight: 1.8, whiteSpace: 'pre-line' }}>
-                    {member.biography}
-                  </p>
+                <div className="fp-section">
+                  <h2 className="fp-section__title"><FiUser /> Biography</h2>
+                  <p className="fp-section__prose" style={{ whiteSpace: 'pre-line' }}>{member.biography}</p>
                 </div>
               )}
 
               {/* Research Areas */}
-              <div className="bento-card faculty-profile__section">
-                <h2 className="section-title-sm">
-                  <FiBriefcase style={{ color: 'var(--color-accent)' }} /> Research Areas
-                </h2>
-                <div className="faculty-profile__tags">
+              <div className="fp-section">
+                <h2 className="fp-section__title"><FiBriefcase /> Research Areas</h2>
+                <div className="fp-tags">
                   {member.research_areas.length > 0 ? (
                     member.research_areas.map((area, i) => (
-                      <span key={i} className="badge badge--accent">{area}</span>
+                      <span key={i} className="fp-tag">{area}</span>
                     ))
                   ) : (
-                    <p className="text-muted">Research areas details will be added soon.</p>
+                    <p className="fp-section__empty">Research areas will be added soon.</p>
                   )}
                 </div>
               </div>
 
               {/* Active Research */}
               {member.active_research && member.active_research.length > 0 && (
-                <div className="bento-card faculty-profile__section">
-                  <h2 className="section-title-sm">
-                    <FiActivity style={{ color: 'var(--color-accent)' }} /> Active Research Projects
-                  </h2>
-                  <div className="faculty-profile__list">
+                <div className="fp-section">
+                  <h2 className="fp-section__title"><FiActivity /> Active Research Projects</h2>
+                  <div className="fp-list">
                     {member.active_research.map((project, i) => (
-                      <div key={i} className="profile-list-item">
-                        <div className="profile-list-item__title">{i + 1}. {project}</div>
+                      <div key={i} className="fp-list-item">
+                        <span className="fp-list-item__num">{String(i + 1).padStart(2, '0')}</span>
+                        <span className="fp-list-item__text">{project}</span>
                       </div>
                     ))}
                   </div>
@@ -137,14 +141,13 @@ export default function FacultyProfilePage() {
 
               {/* Previous Research */}
               {member.previous_research && member.previous_research.length > 0 && (
-                <div className="bento-card faculty-profile__section">
-                  <h2 className="section-title-sm">
-                    <FiArchive style={{ color: 'var(--color-accent)' }} /> Previous Research Projects
-                  </h2>
-                  <div className="faculty-profile__list">
+                <div className="fp-section">
+                  <h2 className="fp-section__title"><FiArchive /> Previous Research Projects</h2>
+                  <div className="fp-list">
                     {member.previous_research.map((project, i) => (
-                      <div key={i} className="profile-list-item">
-                        <div className="profile-list-item__title">{i + 1}. {project}</div>
+                      <div key={i} className="fp-list-item">
+                        <span className="fp-list-item__num">{String(i + 1).padStart(2, '0')}</span>
+                        <span className="fp-list-item__text">{project}</span>
                       </div>
                     ))}
                   </div>
@@ -153,72 +156,67 @@ export default function FacultyProfilePage() {
 
               {/* External Affiliations */}
               {member.external_affiliations && member.external_affiliations.length > 0 && (
-                <div className="bento-card faculty-profile__section">
-                  <h2 className="section-title-sm">
-                    <FiGlobe style={{ color: 'var(--color-accent)' }} /> External Affiliations
-                  </h2>
-                  <div className="faculty-profile__tags">
+                <div className="fp-section">
+                  <h2 className="fp-section__title"><FiGlobe /> External Affiliations</h2>
+                  <div className="fp-tags">
                     {member.external_affiliations.map((affiliation, i) => (
-                      <span key={i} className="badge badge--accent">{affiliation}</span>
+                      <span key={i} className="fp-tag">{affiliation}</span>
                     ))}
                   </div>
                 </div>
               )}
 
               {/* Qualifications */}
-              <div className="bento-card faculty-profile__section">
-                <h2 className="section-title-sm">
-                  <FiAward style={{ color: 'var(--color-accent)' }} /> Education
-                </h2>
-                <div className="faculty-profile__list">
+              <div className="fp-section">
+                <h2 className="fp-section__title"><FiAward /> Education</h2>
+                <div className="fp-list">
                   {member.qualifications.length > 0 ? (
                     member.qualifications.map((q, i) => (
-                      <div key={i} className="profile-list-item">
-                        <div className="profile-list-item__title">{q.degree}</div>
-                        <div className="profile-list-item__sub">
-                          {q.institution}{q.year ? ` (${q.year})` : ''}
+                      <div key={i} className="fp-list-item">
+                        <span className="fp-list-item__num">{String(i + 1).padStart(2, '0')}</span>
+                        <div>
+                          <div className="fp-list-item__text">{q.degree}</div>
+                          <div className="fp-list-item__sub">{q.institution}{q.year ? ` — ${q.year}` : ''}</div>
                         </div>
                       </div>
                     ))
                   ) : (
-                    <p className="text-muted">Education details will be added soon.</p>
+                    <p className="fp-section__empty">Education details will be added soon.</p>
                   )}
                 </div>
               </div>
 
               {/* Publications */}
-              <div className="bento-card faculty-profile__section">
-                <h2 className="section-title-sm">
-                  <FiBook style={{ color: 'var(--color-accent)' }} /> Journal Publications
-                </h2>
-                <div className="faculty-profile__list">
+              <div className="fp-section">
+                <h2 className="fp-section__title"><FiBook /> Journal Publications</h2>
+                <div className="fp-list">
                   {member.publications.length > 0 ? (
                     member.publications.map((p, i) => (
-                      <div key={i} className="profile-list-item">
-                        <div className="profile-list-item__title">{i + 1}. {p.title}</div>
-                        <div className="profile-list-item__sub">
-                          {p.journal}{p.year ? ` (${p.year})` : ''}
+                      <div key={i} className="fp-list-item">
+                        <span className="fp-list-item__num">{String(i + 1).padStart(2, '0')}</span>
+                        <div>
+                          <div className="fp-list-item__text">{p.title}</div>
+                          <div className="fp-list-item__sub">{p.journal}{p.year ? ` — ${p.year}` : ''}</div>
                         </div>
                       </div>
                     ))
                   ) : (
-                    <p className="text-muted">Publications will be added soon.</p>
+                    <p className="fp-section__empty">Publications will be added soon.</p>
                   )}
                 </div>
               </div>
 
               {/* Conferences */}
               {member.conferences && member.conferences.length > 0 && (
-                <div className="bento-card faculty-profile__section">
-                  <h2 className="section-title-sm">
-                    <FiMic style={{ color: 'var(--color-accent)' }} /> Conference Papers
-                  </h2>
-                  <div className="faculty-profile__list">
+                <div className="fp-section">
+                  <h2 className="fp-section__title"><FiMic /> Conference Papers</h2>
+                  <div className="fp-list">
                     {member.conferences.map((c, i) => (
-                      <div key={i} className="profile-list-item">
-                        <div className="profile-list-item__title">{i + 1}. {c.title}</div>
-                        <div className="profile-list-item__sub">
-                          {c.venue}{c.year ? ` (${c.year})` : ''}
+                      <div key={i} className="fp-list-item">
+                        <span className="fp-list-item__num">{String(i + 1).padStart(2, '0')}</span>
+                        <div>
+                          <div className="fp-list-item__text">{c.title}</div>
+                          <div className="fp-list-item__sub">{c.venue}{c.year ? ` — ${c.year}` : ''}</div>
                         </div>
                       </div>
                     ))}
@@ -228,13 +226,11 @@ export default function FacultyProfilePage() {
 
               {/* Teaching */}
               {member.teaching && member.teaching.length > 0 && (
-                <div className="bento-card faculty-profile__section">
-                  <h2 className="section-title-sm">
-                    <FiBookOpen style={{ color: 'var(--color-accent)' }} /> Teaching
-                  </h2>
-                  <div className="faculty-profile__tags">
+                <div className="fp-section">
+                  <h2 className="fp-section__title"><FiBookOpen /> Teaching</h2>
+                  <div className="fp-tags">
                     {member.teaching.map((course, i) => (
-                      <span key={i} className="badge badge--accent">{course}</span>
+                      <span key={i} className="fp-tag">{course}</span>
                     ))}
                   </div>
                 </div>
@@ -242,14 +238,13 @@ export default function FacultyProfilePage() {
 
               {/* Awards */}
               {member.awards && member.awards.length > 0 && (
-                <div className="bento-card faculty-profile__section">
-                  <h2 className="section-title-sm">
-                    <FiStar style={{ color: 'var(--color-accent)' }} /> Awards & Recognition
-                  </h2>
-                  <div className="faculty-profile__list">
+                <div className="fp-section">
+                  <h2 className="fp-section__title"><FiStar /> Awards &amp; Recognition</h2>
+                  <div className="fp-list">
                     {member.awards.map((award, i) => (
-                      <div key={i} className="profile-list-item">
-                        <div className="profile-list-item__title">{award}</div>
+                      <div key={i} className="fp-list-item">
+                        <span className="fp-list-item__num">{String(i + 1).padStart(2, '0')}</span>
+                        <span className="fp-list-item__text">{award}</span>
                       </div>
                     ))}
                   </div>
@@ -258,19 +253,19 @@ export default function FacultyProfilePage() {
 
               {/* Graduate Supervision */}
               {member.graduate_supervision && member.graduate_supervision.length > 0 && (
-                <div className="bento-card faculty-profile__section">
-                  <h2 className="section-title-sm">
-                    <FiAward style={{ color: 'var(--color-accent)' }} /> Graduate Supervision
-                  </h2>
-                  <div className="faculty-profile__list">
+                <div className="fp-section">
+                  <h2 className="fp-section__title"><FiAward /> Graduate Supervision</h2>
+                  <div className="fp-list">
                     {member.graduate_supervision.map((item, i) => (
-                      <div key={i} className="profile-list-item">
-                        <div className="profile-list-item__title">{i + 1}. {item}</div>
+                      <div key={i} className="fp-list-item">
+                        <span className="fp-list-item__num">{String(i + 1).padStart(2, '0')}</span>
+                        <span className="fp-list-item__text">{item}</span>
                       </div>
                     ))}
                   </div>
                 </div>
               )}
+
             </div>
           </div>
         </div>
@@ -278,4 +273,3 @@ export default function FacultyProfilePage() {
     </div>
   );
 }
-

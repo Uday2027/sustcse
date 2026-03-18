@@ -2,16 +2,14 @@ import { useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { FiUsers, FiAward, FiBookOpen, FiUserCheck } from 'react-icons/fi';
-import { magneticHover } from '../../lib/animations';
 
 gsap.registerPlugin(ScrollTrigger);
 
 const links = [
-  { to: '/faculty', label: 'Faculty', icon: FiBookOpen, desc: 'Meet our professors' },
-  { to: '/alumni', label: 'Alumni', icon: FiAward, desc: 'Our graduates' },
-  { to: '/students', label: 'Student Portal', icon: FiUserCheck, desc: 'Login to access' },
-  { to: '/society', label: 'CSE Society', icon: FiUsers, desc: 'Activities & members' },
+  { to: '/faculty', label: 'Faculty Directory' },
+  { to: '/alumni', label: 'Alumni Network' },
+  { to: '/students', label: 'Student Portal' },
+  { to: '/society', label: 'CSE Society' },
 ];
 
 export default function QuickLinks() {
@@ -20,52 +18,42 @@ export default function QuickLinks() {
   useEffect(() => {
     if (!sectionRef.current) return;
 
-    const cleanups: (() => void)[] = [];
     const ctx = gsap.context(() => {
-      gsap.fromTo('.quick-link-card',
-        { opacity: 0, y: 30 },
+      // Links stagger from bottom
+      gsap.fromTo('.qlinks-premium__item',
+        { opacity: 0, y: 60, rotateX: 20 },
         {
-          opacity: 1, y: 0,
-          duration: 0.5, stagger: 0.1, ease: 'back.out(1.5)',
-          scrollTrigger: { trigger: '.quick-links__bento', start: 'top 85%' },
+          opacity: 1, y: 0, rotateX: 0,
+          duration: 1, stagger: 0.15, ease: 'expo.out',
+          scrollTrigger: { trigger: sectionRef.current, start: 'top 80%' },
         }
       );
-
-      // Magnetic hover on each card
-      const cards = sectionRef.current?.querySelectorAll('.quick-link-card');
-      cards?.forEach((card) => {
-        const cleanup = magneticHover(card as HTMLElement, 0.15);
-        cleanups.push(cleanup);
-      });
     }, sectionRef);
 
-    return () => {
-      ctx.revert();
-      cleanups.forEach((fn) => fn());
-    };
+    return () => ctx.revert();
   }, []);
 
   return (
-    <section ref={sectionRef} className="section quick-links">
+    <section ref={sectionRef} className="section qlinks-premium">
       <div className="container">
-        <div className="section__header">
-          <h2 className="section__title skeu-heading">Explore More</h2>
+        
+        <div className="qlinks-premium__header">
+          <p className="vm-premium__label">Directory</p>
+          <h2 className="dept-editorial__title">
+            Explore <span className="text-gradient">Further.</span>
+          </h2>
         </div>
 
-        <div className="quick-links__bento">
-          {links.map((link) => {
-            const Icon = link.icon;
-            return (
-              <Link key={link.to} to={link.to} className="quick-link-card skeu-card">
-                <div className="quick-link-card__icon">
-                  <Icon size={32} />
-                </div>
-                <h3 className="quick-link-card__label">{link.label}</h3>
-                <p className="quick-link-card__desc">{link.desc}</p>
-              </Link>
-            );
-          })}
-        </div>
+        <nav className="qlinks-premium__nav">
+          {links.map((link, i) => (
+            <Link key={link.to} to={link.to} className="qlinks-premium__item">
+              <span className="qlinks-premium__num">{(i + 1).toString().padStart(2, '0')}</span>
+              <span className="qlinks-premium__text">{link.label}</span>
+              <span className="qlinks-premium__arrow">→</span>
+            </Link>
+          ))}
+        </nav>
+
       </div>
     </section>
   );

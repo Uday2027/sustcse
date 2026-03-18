@@ -8,44 +8,54 @@ const services = [
     {
         title: 'Consultancy',
         desc: 'Expert advice and strategic solutions for complex technological challenges.',
-        icon: '💡'
+        num: '01'
     },
     {
         title: 'Training',
         desc: 'Comprehensive capacity building programs and specialized tech skill development.',
-        icon: '🎯'
+        num: '02'
     },
     {
         title: 'Social Outreach',
         desc: 'Empowering communities through technology and driving sustainable digital impact.',
-        icon: '🌍'
+        num: '03'
     }
 ];
 
 export default function DepartmentServices() {
     const sectionRef = useRef<HTMLElement>(null);
-    const cardsRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
-        if (!sectionRef.current || !cardsRef.current) return;
+        if (!sectionRef.current) return;
 
         const ctx = gsap.context(() => {
-            gsap.fromTo(
-                Array.from(cardsRef.current!.children),
+            // Watermark parallax
+            gsap.to('.services-premium__watermark', {
+                y: -100,
+                ease: 'none',
+                scrollTrigger: {
+                    trigger: sectionRef.current,
+                    start: 'top bottom',
+                    end: 'bottom top',
+                    scrub: 1,
+                }
+            });
+
+            // Title reveal
+            gsap.fromTo('.services-premium__title-block',
+                { opacity: 0, x: -50 },
                 {
-                    opacity: 0,
-                    y: 40
-                },
+                    opacity: 1, x: 0, duration: 1, ease: 'power3.out',
+                    scrollTrigger: { trigger: sectionRef.current, start: 'top 80%' }
+                }
+            );
+
+            // Services list stagger
+            gsap.fromTo('.services-premium__item',
+                { opacity: 0, x: 50 },
                 {
-                    opacity: 1,
-                    y: 0,
-                    duration: 0.8,
-                    stagger: 0.15,
-                    ease: 'power3.out',
-                    scrollTrigger: {
-                        trigger: sectionRef.current,
-                        start: 'top 80%',
-                    }
+                    opacity: 1, x: 0, duration: 0.8, stagger: 0.15, ease: 'power2.out',
+                    scrollTrigger: { trigger: '.services-premium__list', start: 'top 75%' }
                 }
             );
         }, sectionRef);
@@ -54,25 +64,32 @@ export default function DepartmentServices() {
     }, []);
 
     return (
-        <section ref={sectionRef} className="dept-services section">
+        <section ref={sectionRef} className="section services-premium">
             <div className="container">
-                <div className="section__header">
-                    <h2 className="section__title">Department <span className="text-accent">Service</span></h2>
-                    <p className="section__subtitle">
-                        Beyond academics, we actively contribute to industry and society through dedicated service channels.
-                    </p>
-                </div>
+                <div className="services-premium__watermark">IMPACT</div>
+                
+                <div className="services-premium__layout">
+                    <div className="services-premium__title-block">
+                        <h2 className="dept-editorial__title">
+                            Department<br />
+                            <span className="text-gradient">Services.</span>
+                        </h2>
+                        <p className="services-premium__lead">
+                            Beyond academics, we actively contribute to industry and society through dedicated service channels.
+                        </p>
+                    </div>
 
-                <div ref={cardsRef} className="dept-services__grid">
-                    {services.map((service, index) => (
-                        <div key={index} className="service-card">
-                            <div className="service-card__icon">{service.icon}</div>
-                            <h3 className="service-card__title">{service.title}</h3>
-                            <p className="service-card__desc">{service.desc}</p>
-
-                            <div className="service-card__border-glow" />
-                        </div>
-                    ))}
+                    <div className="services-premium__list">
+                        {services.map((service) => (
+                            <div key={service.num} className="services-premium__item">
+                                <span className="services-premium__num">{service.num}</span>
+                                <div className="services-premium__content">
+                                    <h3>{service.title}</h3>
+                                    <p>{service.desc}</p>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
                 </div>
             </div>
         </section>

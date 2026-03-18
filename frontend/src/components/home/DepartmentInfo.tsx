@@ -2,7 +2,6 @@ import { useRef, useEffect } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useCountUp } from '../../hooks/useGSAP';
-import { FiUsers, FiUser, FiAward, FiFileText, FiBookOpen } from 'react-icons/fi';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -15,14 +14,12 @@ const stats = [
   { label: 'Degrees Awarded', value: 1670 },
 ];
 
-function StatCounter({ label, value }: { label: string; value: number }) {
+function StatCounter({ label, value, index }: { label: string; value: number, index: number }) {
   const countRef = useCountUp(value);
   return (
-    <div className="dept-stats__item">
-      <div className="dept-stats__content">
-        <span ref={countRef} className="dept-stats__number">0</span>
-        <span className="dept-stats__label">{label}</span>
-      </div>
+    <div className={`dept-stats-raw__item dept-stats-raw__item--${index}`}>
+      <span ref={countRef} className="dept-stats-raw__number">0</span>
+      <span className="dept-stats-raw__label">{label}</span>
     </div>
   );
 }
@@ -33,11 +30,33 @@ export default function DepartmentInfo() {
   useEffect(() => {
     if (!sectionRef.current) return;
     const ctx = gsap.context(() => {
-      gsap.fromTo('.dept-info__about-card',
-        { opacity: 0, y: 40 },
+      // Massive text parallax
+      gsap.to('.dept-editorial__watermark', {
+        y: 100,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: 'top bottom',
+          end: 'bottom top',
+          scrub: 1,
+        }
+      });
+
+      // Text reveal
+      gsap.fromTo('.dept-editorial__lead',
+        { opacity: 0, y: 30 },
         {
-          opacity: 1, y: 0, duration: 0.8, ease: 'power3.out',
-          scrollTrigger: { trigger: '.dept-info__about-card', start: 'top 85%' },
+          opacity: 1, y: 0, duration: 1, ease: 'power3.out',
+          scrollTrigger: { trigger: '.dept-editorial__lead', start: 'top 80%' },
+        }
+      );
+
+      // Stats stagger
+      gsap.fromTo('.dept-stats-raw__item',
+        { opacity: 0, y: 30 },
+        {
+          opacity: 1, y: 0, duration: 0.8, stagger: 0.1, ease: 'power2.out',
+          scrollTrigger: { trigger: '.dept-editorial__stats', start: 'top 85%' },
         }
       );
     }, sectionRef);
@@ -45,39 +64,38 @@ export default function DepartmentInfo() {
   }, []);
 
   return (
-    <section ref={sectionRef} className="section dept-info">
+    <section ref={sectionRef} className="section dept-editorial">
       <div className="container">
-        <div className="section__header">
-          <h2 className="section__title skeu-heading">About the Department</h2>
-          <p className="section__subtitle">Pioneering Computer Science Education Since 1992</p>
-        </div>
-
-        <div className="dept-info__bento">
-          <div className="dept-info__about-card skeu-card">
-            <p>
-              Department of Computer Science & Engineering began its journey in 1992. Over the decades, 
-              it has produced world-class graduates who are leading the IT industry globally.
-            </p>
-            <p>
-              Under the leadership of <strong>Prof. Dr. Md. Forhad Rabbi</strong>, the department 
-              offers a balance of theory and practical skills, preparing students for highly competitive 
-              global workplaces while fostering innovation in research areas like AI and NLP.
+        
+        <div className="dept-editorial__grid">
+          {/* Left Column: Big Statement */}
+          <div className="dept-editorial__left">
+            <div className="dept-editorial__watermark">1992</div>
+            <h2 className="dept-editorial__title">
+              Pioneering<br />
+              <span className="text-gradient">Excellence.</span>
+            </h2>
+            <p className="dept-editorial__lead">
+              Since 1992, the Department of Computer Science & Engineering has been at the forefront of technological innovation and rigorous academic excellence. Under the leadership of Prof. Dr. Md. Forhad Rabbi, we shape world-class engineers destined to lead the global tech industry.
             </p>
             <button 
               onClick={() => window.location.href = '/about'}
-              className="skeu-btn skeu-btn--small" 
-              style={{ marginTop: '1rem' }}
+              className="dept-editorial__btn" 
             >
-              See more
+              Explore Our History →
             </button>
           </div>
 
-          <div className="dept-stats">
-            {stats.map((stat) => (
-              <StatCounter key={stat.label} label={stat.label} value={stat.value} />
-            ))}
+          {/* Right Column: Clean Numbers */}
+          <div className="dept-editorial__right">
+            <div className="dept-editorial__stats">
+              {stats.map((stat, i) => (
+                <StatCounter key={stat.label} label={stat.label} value={stat.value} index={i} />
+              ))}
+            </div>
           </div>
         </div>
+
       </div>
     </section>
   );

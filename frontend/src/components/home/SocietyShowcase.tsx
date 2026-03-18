@@ -16,7 +16,6 @@ export default function SocietyShowcase() {
         const { data } = await api.get('/society-members?status=current&limit=8');
         setMembers(data.data || []);
       } catch {
-        // Use placeholder data if API not ready
         setMembers([]);
       }
     };
@@ -26,12 +25,22 @@ export default function SocietyShowcase() {
   useEffect(() => {
     if (!sectionRef.current || members.length === 0) return;
     const ctx = gsap.context(() => {
-      gsap.fromTo('.society-member-card',
-        { opacity: 0, scale: 0.9, y: 30 },
+      // Title reveal
+      gsap.fromTo('.society-premium__header',
+        { opacity: 0, y: 50 },
         {
-          opacity: 1, scale: 1, y: 0,
-          duration: 0.5, stagger: 0.1, ease: 'back.out(1.5)',
-          scrollTrigger: { trigger: '.society-showcase__bento', start: 'top 85%' },
+          opacity: 1, y: 0, duration: 1, ease: 'power3.out',
+          scrollTrigger: { trigger: sectionRef.current, start: 'top 80%' },
+        }
+      );
+
+      // Members stagger
+      gsap.fromTo('.society-premium__member',
+        { opacity: 0, y: 40, filter: 'grayscale(100%)' },
+        {
+          opacity: 1, y: 0, filter: 'grayscale(0%)',
+          duration: 0.8, stagger: 0.1, ease: 'power2.out',
+          scrollTrigger: { trigger: '.society-premium__grid', start: 'top 75%' },
         }
       );
     }, sectionRef);
@@ -39,36 +48,42 @@ export default function SocietyShowcase() {
   }, [members]);
 
   return (
-    <section ref={sectionRef} className="section society-showcase">
+    <section ref={sectionRef} className="section society-premium">
       <div className="container">
-        <div className="section__header">
-          <h2 className="section__title skeu-heading">CSE Society</h2>
-          <p className="section__subtitle">Current Committee Members</p>
+        
+        <div className="society-premium__header">
+          <h2 className="dept-editorial__title" style={{ marginBottom: '1rem', textAlign: 'center' }}>
+            CSE<br />
+            <span className="text-gradient">Society.</span>
+          </h2>
+          <p className="vm-premium__label vm-premium__label--center">Current Committee</p>
         </div>
 
         {members.length > 0 ? (
-          <div className="society-showcase__bento">
+          <div className="society-premium__grid">
             {members.map((member) => (
-              <div key={member.id} className="society-member-card skeu-card">
-                <div className="society-member-card__avatar">
+              <div key={member.id} className="society-premium__member">
+                <div className="society-premium__avatar">
                   {member.avatar_url ? (
                     <img src={member.avatar_url} alt={member.full_name} />
                   ) : (
-                    <div className="society-member-card__avatar-placeholder">
+                    <div className="society-premium__avatar-fallback">
                       {member.full_name.charAt(0)}
                     </div>
                   )}
                 </div>
-                <h4 className="society-member-card__name">{member.full_name}</h4>
-                <p className="society-member-card__position">{member.position}</p>
+                <div className="society-premium__info">
+                  <h4 className="society-premium__name">{member.full_name}</h4>
+                  <p className="society-premium__position">{member.position}</p>
+                </div>
               </div>
             ))}
           </div>
         ) : (
-          <div className="society-showcase__empty skeu-panel" style={{ textAlign: 'center', padding: '3rem' }}>
+          <div className="society-premium__empty">
             <p>CSE Society members will be showcased here.</p>
-            <a href="/society" className="skeu-btn skeu-btn--primary" style={{ marginTop: '1rem' }}>
-              View Society Page
+            <a href="/society" className="dept-editorial__btn" style={{ marginTop: '2rem' }}>
+              View Society Page →
             </a>
           </div>
         )}

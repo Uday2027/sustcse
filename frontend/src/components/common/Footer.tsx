@@ -33,6 +33,15 @@ export default function Footer() {
             <p><FiMail /> cse@sust.edu</p>
           </div>
         </div>
+        <div className="footer__section">
+          <h3 className="footer__title">Join Us</h3>
+          <p className="footer__text" style={{ marginBottom: '1rem' }}>
+            Become a part of the CSE SUST community.
+          </p>
+          <Link to="/auth" className="skeu-btn skeu-btn--primary skeu-btn--sm" style={{ display: 'inline-flex' }}>
+            Register Now
+          </Link>
+        </div>
       </div>
 
       <div className="footer__bottom">

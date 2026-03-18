@@ -58,16 +58,21 @@ export default function ResearchAreas() {
         <section ref={sectionRef} className="research section">
             <div className="container research__container">
                 <div className="research__content">
-                    <h2 className="section__title">
-                        <span className="text-accent">Research</span> <span style={{ color: '#FDFBD4' }}>Innovation</span>
+                    <p className="vm-premium__label" style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '2rem' }}>
+                        <span style={{ display: 'block', width: 28, height: 1, background: 'var(--color-accent)' }} />
+                        <span>Research Areas</span>
+                    </p>
+                    <h2 className="dept-editorial__title">
+                        Research &amp;<br />
+                        <span className="text-gradient">Innovation.</span>
                     </h2>
                     <p className="research__desc">
-                        SUST CSE's research strength lies in bridging theoretical depth with practical application. 
-                        We are pioneers in NLP, HCI, and AI, engineering solutions that address the critical 
+                        SUST CSE's research strength lies in bridging theoretical depth with practical application.
+                        We are pioneers in NLP, HCI, and AI, engineering solutions that address the critical
                         challenges of the Fourth Industrial Revolution.
                     </p>
-                    <a href="/research" className="research__btn">
-                        Explore Our Pillars
+                    <a href="/research" className="dept-editorial__btn">
+                        Explore Our Pillars →
                     </a>
                 </div>
 
@@ -75,11 +80,9 @@ export default function ResearchAreas() {
                     <div className="research__slider">
                         {[...researchAreas, ...researchAreas, ...researchAreas].map((area, index) => (
                             <div key={index} className="research-card">
-                                <div className="research-card__inner">
-                                    <div className="research-card__icon">{area.icon}</div>
-                                    <h3 className="research-card__title">{area.title}</h3>
-                                    <p className="research-card__text">{area.description}</p>
-                                </div>
+                                <div className="research-card__icon">{area.icon}</div>
+                                <h3 className="research-card__title">{area.title}</h3>
+                                <p className="research-card__text">{area.description}</p>
                             </div>
                         ))}
                     </div>
