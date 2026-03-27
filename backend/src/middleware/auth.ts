@@ -38,7 +38,7 @@ export const auth = async (req: AuthRequest, res: Response, next: NextFunction) 
       throw createError(403, 'Account is deactivated');
     }
 
-    if (profile.approval_status !== 'approved') {
+    if (process.env.NODE_ENV !== 'development' && profile.approval_status !== 'approved') {
       throw createError(403, 'Account is not yet approved');
     }
 

@@ -11,6 +11,7 @@ interface NoticeForm {
   category: string;
   is_pinned: boolean;
   email_toggle: boolean;
+  attachment_urls: string[];
 }
 
 const emptyForm: NoticeForm = {
@@ -19,6 +20,7 @@ const emptyForm: NoticeForm = {
   category: '',
   is_pinned: false,
   email_toggle: false,
+  attachment_urls: [],
 };
 
 export default function NoticeManagement() {
@@ -30,6 +32,7 @@ export default function NoticeManagement() {
   const [showForm, setShowForm] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [form, setForm] = useState<NoticeForm>(emptyForm);
+  const [newAttachments, setNewAttachments] = useState<File[]>([]);
   const [submitting, setSubmitting] = useState(false);
 
   const fetchNotices = async () => {
@@ -69,7 +72,9 @@ export default function NoticeManagement() {
       category: notice.category || '',
       is_pinned: notice.is_pinned,
       email_toggle: notice.email_toggle,
+      attachment_urls: notice.attachment_urls || [],
     });
+    setNewAttachments([]);
     setShowForm(true);
   };
 
@@ -77,6 +82,7 @@ export default function NoticeManagement() {
     setShowForm(false);
     setEditingId(null);
     setForm(emptyForm);
+    setNewAttachments([]);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -87,11 +93,30 @@ export default function NoticeManagement() {
     }
     setSubmitting(true);
     try {
+      const formData = new FormData();
+      formData.append('title', form.title);
+      formData.append('content', form.content);
+      formData.append('category', form.category);
+      formData.append('is_pinned', String(form.is_pinned));
+      formData.append('email_toggle', String(form.email_toggle));
+      
+      // Handle existing attachment URLs
+      formData.append('attachment_urls', JSON.stringify(form.attachment_urls));
+
+      // Handle new files
+      newAttachments.forEach((file) => {
+        formData.append('attachments', file);
+      });
+
       if (editingId) {
-        await api.patch(`/notices/${editingId}`, form);
+        await api.patch(`/notices/${editingId}`, formData, {
+          headers: { 'Content-Type': 'multipart/form-data' }
+        });
         toast.success('Notice updated');
       } else {
-        await api.post('/notices', form);
+        await api.post('/notices', formData, {
+          headers: { 'Content-Type': 'multipart/form-data' }
+        });
         toast.success('Notice published');
       }
       closeForm();
@@ -177,6 +202,46 @@ export default function NoticeManagement() {
                     <input type="checkbox" checked={form.email_toggle} onChange={(e) => setForm({ ...form, email_toggle: e.target.checked })} />
                     Send email notification
                   </label>
+                </div>
+
+                <div className="skeu-input-group" style={{ marginBottom: 0 }}>
+                  <label>Attachments (PDF/Image)</label>
+                  
+                  {/* Existing Attachments */}
+                  {form.attachment_urls.length > 0 && (
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', marginBottom: '0.5rem' }}>
+                      {form.attachment_urls.map((url, i) => (
+                        <div key={i} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0.4rem 0.75rem', borderRadius: '6px', background: 'var(--color-surface-alt, #f7f7f7)', fontSize: '0.8rem' }}>
+                          <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: '300px' }}>{url.split('/').pop()}</span>
+                          <button type="button" onClick={() => setForm({ ...form, attachment_urls: form.attachment_urls.filter((_, idx) => idx !== i) })} style={{ color: 'var(--color-danger)', border: 'none', background: 'transparent', cursor: 'pointer' }}><FiX size={14} /></button>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
+                  <input
+                    type="file"
+                    multiple
+                    accept="image/*,application/pdf"
+                    className="skeu-input"
+                    onChange={(e) => {
+                      if (e.target.files) {
+                        setNewAttachments([...newAttachments, ...Array.from(e.target.files)]);
+                      }
+                    }}
+                  />
+                  
+                  {/* New files preview */}
+                  {newAttachments.length > 0 && (
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', marginTop: '0.5rem' }}>
+                      {newAttachments.map((file, i) => (
+                        <div key={i} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0.4rem 0.75rem', borderRadius: '6px', background: 'var(--color-accent-soft, #f0f7ff)', fontSize: '0.8rem' }}>
+                          <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: '300px' }}>{file.name}</span>
+                          <button type="button" onClick={() => setNewAttachments(newAttachments.filter((_, idx) => idx !== i))} style={{ color: 'var(--color-danger)', border: 'none', background: 'transparent', cursor: 'pointer' }}><FiX size={14} /></button>
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </div>
               </div>
               <div className="skeu-modal__footer">

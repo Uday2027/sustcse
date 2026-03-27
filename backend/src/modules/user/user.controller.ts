@@ -80,6 +80,69 @@ export const uploadAvatar = async (req: AuthRequest, res: Response, next: NextFu
 };
 
 /**
+ * POST /api/users/me/signature
+ * Upload a signature image.
+ */
+export const uploadSignature = async (req: AuthRequest, res: Response, next: NextFunction) => {
+  try {
+    if (!req.user) throw createError(401, 'Authentication required');
+    if (!req.file) throw createError(400, 'No signature file provided');
+
+    const result = await cloudinaryService.uploadImage(req.file.buffer, CLOUDINARY_FOLDERS.SIGNATURES);
+    await userService.updateUser(req.user.id, { signature_url: result.secure_url });
+
+    res.json({ success: true, message: 'Signature uploaded', data: { signature_url: result.secure_url } });
+  } catch (error) {
+    next(error);
+  }
+};
+
+/**
+ * POST /api/users/me/seal
+ * Upload a seal/stamp image.
+ */
+export const uploadSeal = async (req: AuthRequest, res: Response, next: NextFunction) => {
+  try {
+    if (!req.user) throw createError(401, 'Authentication required');
+    if (!req.file) throw createError(400, 'No seal file provided');
+
+    const result = await cloudinaryService.uploadImage(req.file.buffer, CLOUDINARY_FOLDERS.SEALS);
+    await userService.updateUser(req.user.id, { seal_url: result.secure_url });
+
+    res.json({ success: true, message: 'Seal uploaded', data: { seal_url: result.secure_url } });
+  } catch (error) {
+    next(error);
+  }
+};
+
+/**
+ * GET /api/users/teachers
+ *
+ * List all teachers (for dropdown selection). Accessible to any authenticated user.
+ */
+export const getTeachers = async (req: AuthRequest, res: Response, next: NextFunction) => {
+  try {
+    const result = await userService.getUsers({
+      limit: 200,
+      role: 'teacher',
+      approval_status: 'approved',
+      is_active: true,
+    });
+
+    res.json({
+      success: true,
+      data: result.data.map((u: any) => ({
+        id: u.id,
+        full_name: u.full_name,
+        designation: u.designation,
+      })),
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+/**
  * GET /api/users
  *
  * List all users with pagination and filters. Admin only.

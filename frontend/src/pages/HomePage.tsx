@@ -75,9 +75,6 @@ export default function HomePage() {
           <ResearchAreas />
         </div>
       </div>
-
-
-
       <div className="parallax-section">
         <div className="parallax-inner">
           <VisionMission />

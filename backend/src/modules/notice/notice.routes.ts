@@ -22,6 +22,15 @@ router.post(
   async (req: AuthRequest, res: Response, next: NextFunction) => {
     try {
       const files = req.files as Record<string, Express.Multer.File[]> | undefined;
+      let attachment_urls: string[] = [];
+
+      if (req.body.attachment_urls) {
+        try {
+          attachment_urls = JSON.parse(req.body.attachment_urls);
+        } catch (e) {
+          attachment_urls = [];
+        }
+      }
 
       if (files?.attachments?.length) {
         const uploaded = await Promise.all(
@@ -31,11 +40,12 @@ router.post(
               'notices/attachments',
               file.originalname
             );
-            return { name: file.originalname, url: result.secure_url, type: file.mimetype };
+            return result.secure_url;
           })
         );
-        req.body.attachments = uploaded;
+        attachment_urls = [...attachment_urls, ...uploaded];
       }
+      req.body.attachment_urls = attachment_urls;
 
       return noticeController.create(req, res, next);
     } catch (error) {
@@ -53,6 +63,15 @@ router.patch(
   async (req: AuthRequest, res: Response, next: NextFunction) => {
     try {
       const files = req.files as Record<string, Express.Multer.File[]> | undefined;
+      let attachment_urls: string[] = [];
+
+      if (req.body.attachment_urls) {
+        try {
+          attachment_urls = JSON.parse(req.body.attachment_urls);
+        } catch (e) {
+          attachment_urls = [];
+        }
+      }
 
       if (files?.attachments?.length) {
         const uploaded = await Promise.all(
@@ -62,11 +81,12 @@ router.patch(
               'notices/attachments',
               file.originalname
             );
-            return { name: file.originalname, url: result.secure_url, type: file.mimetype };
+            return result.secure_url;
           })
         );
-        req.body.attachments = uploaded;
+        attachment_urls = [...attachment_urls, ...uploaded];
       }
+      req.body.attachment_urls = attachment_urls;
 
       return noticeController.update(req, res, next);
     } catch (error) {
@@ -84,4 +104,3 @@ router.delete(
 );
 
 export default router;
-

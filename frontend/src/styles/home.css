@@ -556,7 +556,7 @@
 
 /* ===== Department Editorial (Premium) ===== */
 .dept-editorial {
-  padding: 5rem 0;
+  padding: 3rem 0;
   position: relative;
   background: transparent;
   overflow: hidden;
@@ -766,7 +766,7 @@
 
 /* ===== Society Showcase (Premium) ===== */
 .society-premium {
-  padding: 5rem 0;
+  padding: 3rem 0;
   background: transparent;
 }
 
@@ -1327,10 +1327,7 @@
 }
 
 .research__container {
-  display: grid;
-  grid-template-columns: 1fr 1.5fr;
-  gap: 4rem;
-  align-items: center;
+  max-width: 650px;
 }
 
 .research__desc {
@@ -1362,6 +1359,7 @@
   width: 100%;
   overflow: hidden;
   padding: 2rem 0;
+  margin-top: 3rem;
   mask-image: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%);
   -webkit-mask-image: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%);
 }
@@ -1434,6 +1432,17 @@
   color: var(--color-text-secondary);
 }
 
+@media (max-width: 600px) {
+  .research-card {
+    width: 260px;
+    padding: 2rem 1.5rem;
+  }
+
+  .research__desc {
+    font-size: 0.95rem;
+  }
+}
+
 /* ===== Department Services ===== */
 .dept-services__grid {
   display: grid;
@@ -1504,7 +1513,7 @@
 
 /* ===== Message From Head - Premium Editorial ===== */
 .msg-premium {
-  padding: 5rem 0;
+  padding: 3rem 0;
   position: relative;
   overflow: hidden;
   background: linear-gradient(to bottom, transparent, rgba(240, 248, 255, 0.4), transparent);
@@ -1621,7 +1630,7 @@
 
 /* ===== Alumni Showcase - Premium Editorial ===== */
 .alumni-premium {
-  padding: 5rem 0;
+  padding: 3rem 0;
   background: transparent;
   position: relative;
 }

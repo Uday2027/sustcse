@@ -41,7 +41,7 @@ export const noticeSchema = z.object({
 export const eventSchema = z.object({
   title: z.string().min(1, 'Title is required'),
   description: z.string().min(1, 'Description is required'),
-  event_type: z.enum(['workshop', 'seminar', 'competition', 'meetup', 'other']).optional(),
+  type: z.enum(['workshop', 'seminar', 'competition', 'cultural', 'sports', 'meetup', 'other']).optional(),
   venue: z.string().optional(),
   start_date: z.string().min(1, 'Start date is required'),
   end_date: z.string().optional(),

@@ -2,7 +2,7 @@ export interface Event {
   id: string;
   title: string;
   description: string;
-  event_type?: string;
+  type?: string;
   venue?: string;
   start_date: string;
   end_date?: string;

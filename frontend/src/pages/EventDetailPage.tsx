@@ -53,128 +53,104 @@ export default function EventDetailPage() {
   return (
     <div className="page event-detail-page">
       <section className="section">
-        <div className="container" style={{ maxWidth: '900px', margin: '0 auto' }}>
-          <Link to="/events" className="skeu-btn" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', marginBottom: '2rem' }}>
+        <div className="container" style={{ maxWidth: '1300px', margin: '0 auto' }}>
+          <Link to="/events" className="hero__btn hero__btn--secondary" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', marginBottom: '3rem', padding: '0.6rem 1.2rem' }}>
             <FiArrowLeft /> Back to Events
           </Link>
 
-          <div ref={contentRef}>
-            {/* Cover Image */}
-            {event.cover_image_url && (
-              <div className="skeu-card" style={{ overflow: 'hidden', marginBottom: '1.5rem', padding: 0 }}>
-                <img
-                  src={event.cover_image_url}
-                  alt={event.title}
-                  style={{ width: '100%', maxHeight: '400px', objectFit: 'cover', display: 'block' }}
-                />
-              </div>
+          <div ref={contentRef} className="event-detail-header">
+            {event.type && (
+              <span className="event-detail-type">{event.type}</span>
             )}
+            <h1 className="event-detail-title">{event.title}</h1>
+          </div>
 
-            <div className="skeu-card" style={{ padding: '2rem' }}>
-              {/* Badges */}
-              <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1rem', flexWrap: 'wrap' }}>
-                {event.event_type && (
-                  <span style={{
-                    padding: '0.2rem 0.6rem', borderRadius: '9999px',
-                    background: 'var(--color-primary)', color: '#fff', fontSize: '0.75rem', fontWeight: 600,
-                  }}>
-                    {event.event_type}
-                  </span>
-                )}
-              </div>
+          <div className="event-detail-layout">
+            <aside className="event-detail-left">
+              <div className="event-sidebar-card">
+                <span className="event-sidebar-label">Global Details</span>
+                
+                <div className="event-meta-item">
+                  <div className="event-meta-icon"><FiCalendar /></div>
+                  <div className="event-meta-content">
+                    <h4>Timeline</h4>
+                    <p>{formatDateTime(event.start_date)}</p>
+                    {event.end_date && <p style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)', marginTop: '2px' }}>to {formatDateTime(event.end_date)}</p>}
+                  </div>
+                </div>
 
-              {/* Title */}
-              <h1 style={{ margin: '0 0 1.5rem', fontSize: '1.75rem', lineHeight: 1.3 }}>{event.title}</h1>
-
-              {/* Meta Grid */}
-              <div className="skeu-panel" style={{ padding: '1.25rem', marginBottom: '2rem' }}>
-                <div className="grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                    <FiCalendar size={20} style={{ color: 'var(--color-primary)', flexShrink: 0 }} />
-                    <div>
-                      <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', textTransform: 'uppercase', fontWeight: 600 }}>Start Date</div>
-                      <div style={{ fontWeight: 500 }}>{formatDateTime(event.start_date)}</div>
+                {event.venue && (
+                  <div className="event-meta-item">
+                    <div className="event-meta-icon"><FiMapPin /></div>
+                    <div className="event-meta-content">
+                      <h4>Location</h4>
+                      <p>{event.venue}</p>
                     </div>
                   </div>
-                  {event.end_date && (
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                      <FiClock size={20} style={{ color: 'var(--color-primary)', flexShrink: 0 }} />
-                      <div>
-                        <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', textTransform: 'uppercase', fontWeight: 600 }}>End Date</div>
-                        <div style={{ fontWeight: 500 }}>{formatDateTime(event.end_date)}</div>
-                      </div>
-                    </div>
-                  )}
-                  {event.venue && (
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                      <FiMapPin size={20} style={{ color: 'var(--color-primary)', flexShrink: 0 }} />
-                      <div>
-                        <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', textTransform: 'uppercase', fontWeight: 600 }}>Venue</div>
-                        <div style={{ fontWeight: 500 }}>{event.venue}</div>
-                      </div>
-                    </div>
-                  )}
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                    <FiUsers size={20} style={{ color: 'var(--color-primary)', flexShrink: 0 }} />
-                    <div>
-                      <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', textTransform: 'uppercase', fontWeight: 600 }}>Organized by</div>
-                      <div style={{ fontWeight: 500 }}>{event.organized_by}</div>
-                    </div>
+                )}
+
+                <div className="event-meta-item">
+                  <div className="event-meta-icon"><FiUsers /></div>
+                  <div className="event-meta-content">
+                    <h4>Host</h4>
+                    <p>{event.organized_by}</p>
                   </div>
                 </div>
               </div>
+            </aside>
 
-              {/* Description */}
-              <div style={{ lineHeight: 1.8, whiteSpace: 'pre-wrap', marginBottom: '2rem' }}>
-                {event.description}
-              </div>
-
-              {/* Registration Link */}
-              {event.registration_url && (
-                <div style={{ marginBottom: '2rem' }}>
-                  <a
-                    href={event.registration_url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="skeu-btn"
-                    style={{
-                      display: 'inline-flex', alignItems: 'center', gap: '0.5rem',
-                      background: 'var(--color-primary)', color: '#fff', padding: '0.75rem 1.5rem',
-                      textDecoration: 'none', fontSize: '1rem', fontWeight: 600,
-                    }}
-                  >
-                    <FiExternalLink /> Register Now
-                  </a>
+            <main className="event-detail-main">
+              {event.cover_image_url && (
+                <div className="event-detail-image-box">
+                  <img src={event.cover_image_url} alt={event.title} />
                 </div>
               )}
 
-              {/* Attachments */}
+              <div className="event-detail-content">
+                {event.description}
+              </div>
+            </main>
+
+            <aside className="event-detail-right">
+              {event.registration_url && (
+                <div className="event-sidebar-card" style={{ background: 'var(--color-bg-secondary)', border: 'none' }}>
+                  <span className="event-sidebar-label">Action</span>
+                  <a href={event.registration_url} target="_blank" rel="noopener noreferrer" className="event-reg-btn">
+                    Register Now <FiExternalLink />
+                  </a>
+                  <p style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)', textAlign: 'center' }}>
+                    Join this conversation.
+                  </p>
+                </div>
+              )}
+
               {event.attachment_urls.length > 0 && (
-                <div style={{ marginTop: '1rem' }}>
-                  <hr style={{ border: 'none', borderTop: '1px solid var(--border-color, #e0e0e0)', margin: '0 0 1.5rem' }} />
-                  <h3 style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem' }}>
-                    <FiPaperclip /> Attachments
-                  </h3>
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                <div className="event-sidebar-card">
+                  <span className="event-sidebar-label">Resources</span>
+                  <div className="event-attachments-list" style={{ marginTop: '0' }}>
                     {event.attachment_urls.map((url, i) => {
-                      const filename = url.split('/').pop() || `Attachment ${i + 1}`;
+                      const rawFilename = url.split('/').pop() || `Resource ${i + 1}`;
+                      const filename = decodeURIComponent(rawFilename);
                       return (
-                        <a
-                          key={i}
-                          href={url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="skeu-btn"
-                          style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', textDecoration: 'none', width: 'fit-content' }}
+                        <a 
+                          key={i} 
+                          href={url} 
+                          target="_blank" 
+                          rel="noopener noreferrer" 
+                          className="event-attachment-item"
+                          download={filename}
+                          title={filename}
                         >
-                          <FiDownload size={14} /> {filename}
+                          <FiPaperclip size={16} style={{ flexShrink: 0 }} />
+                          <span className="event-attachment-name">{filename}</span>
+                          <FiDownload size={14} style={{ flexShrink: 0, opacity: 0.6 }} />
                         </a>
                       );
                     })}
                   </div>
                 </div>
               )}
-            </div>
+            </aside>
           </div>
         </div>
       </section>

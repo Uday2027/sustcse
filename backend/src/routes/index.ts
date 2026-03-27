@@ -12,6 +12,7 @@ import financeRoutes from '../modules/finance/finance.routes';
 import importantDataRoutes from '../modules/importantData/importantData.routes';
 import workAssignmentRoutes from '../modules/workAssignment/workAssignment.routes';
 import adminRoutes from '../modules/admin/admin.routes';
+import applicationRoutes from '../modules/application/application.routes';
 
 const router = Router();
 
@@ -28,6 +29,7 @@ router.use('/finance', financeRoutes);
 router.use('/important-data', importantDataRoutes);
 router.use('/work-assignments', workAssignmentRoutes);
 router.use('/admin', adminRoutes);
+router.use('/applications', applicationRoutes);
 
 // Deprecated upload route (if the standalone upload routes file still exists).
 // The individual modules now handle their own uploads.

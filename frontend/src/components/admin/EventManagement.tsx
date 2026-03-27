@@ -8,7 +8,7 @@ import type { Event } from '../../types';
 interface EventForm {
   title: string;
   description: string;
-  event_type: string;
+  type: string;
   venue: string;
   start_date: string;
   end_date: string;
@@ -16,12 +16,14 @@ interface EventForm {
   organized_by: string;
   email_toggle: boolean;
   is_published: boolean;
+  cover_image_url: string;
+  attachment_urls: string[];
 }
 
 const emptyForm: EventForm = {
   title: '',
   description: '',
-  event_type: '',
+  type: '',
   venue: '',
   start_date: '',
   end_date: '',
@@ -29,6 +31,8 @@ const emptyForm: EventForm = {
   organized_by: 'CSE Society',
   email_toggle: false,
   is_published: true,
+  cover_image_url: '',
+  attachment_urls: [],
 };
 
 export default function EventManagement() {
@@ -41,6 +45,8 @@ export default function EventManagement() {
   const [showForm, setShowForm] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [form, setForm] = useState<EventForm>(emptyForm);
+  const [newImage, setNewImage] = useState<File | null>(null);
+  const [newAttachments, setNewAttachments] = useState<File[]>([]);
   const [submitting, setSubmitting] = useState(false);
 
   const fetchEvents = async () => {
@@ -71,7 +77,7 @@ export default function EventManagement() {
     setForm({
       title: event.title,
       description: event.description,
-      event_type: event.event_type || '',
+      type: event.type || '',
       venue: event.venue || '',
       start_date: event.start_date ? event.start_date.slice(0, 16) : '',
       end_date: event.end_date ? event.end_date.slice(0, 16) : '',
@@ -79,7 +85,11 @@ export default function EventManagement() {
       organized_by: event.organized_by || 'CSE Society',
       email_toggle: event.email_toggle,
       is_published: event.is_published,
+      cover_image_url: event.cover_image_url || '',
+      attachment_urls: event.attachment_urls || [],
     });
+    setNewImage(null);
+    setNewAttachments([]);
     setShowForm(true);
   };
 
@@ -87,6 +97,8 @@ export default function EventManagement() {
     setShowForm(false);
     setEditingId(null);
     setForm(emptyForm);
+    setNewImage(null);
+    setNewAttachments([]);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -97,16 +109,32 @@ export default function EventManagement() {
     }
     setSubmitting(true);
     try {
-      const payload = {
-        ...form,
-        end_date: form.end_date || undefined,
-        registration_url: form.registration_url || undefined,
-      };
+      const formData = new FormData();
+      Object.entries(form).forEach(([key, value]) => {
+        if (key === 'attachment_urls') {
+          formData.append(key, JSON.stringify(value));
+        } else if (value !== undefined && value !== null) {
+          formData.append(key, String(value));
+        }
+      });
+
+      if (newImage) {
+        formData.append('image', newImage);
+      }
+
+      newAttachments.forEach((file) => {
+        formData.append('attachments', file);
+      });
+
       if (editingId) {
-        await api.patch(`/events/${editingId}`, payload);
+        await api.patch(`/events/${editingId}`, formData, {
+          headers: { 'Content-Type': 'multipart/form-data' }
+        });
         toast.success('Event updated');
       } else {
-        await api.post('/events', payload);
+        await api.post('/events', formData, {
+          headers: { 'Content-Type': 'multipart/form-data' }
+        });
         toast.success('Event created');
       }
       closeForm();
@@ -173,7 +201,7 @@ export default function EventManagement() {
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
                   <div className="skeu-input-group" style={{ marginBottom: 0 }}>
                     <label>Type</label>
-                    <select className="skeu-select" value={form.event_type} onChange={(e) => setForm({ ...form, event_type: e.target.value })}>
+                    <select className="skeu-select" value={form.type} onChange={(e) => setForm({ ...form, type: e.target.value })}>
                       <option value="">Select type</option>
                       <option value="seminar">Seminar</option>
                       <option value="workshop">Workshop</option>
@@ -222,6 +250,67 @@ export default function EventManagement() {
                     Send email notification
                   </label>
                 </div>
+
+                <div className="skeu-input-group" style={{ marginBottom: 0 }}>
+                  <label>Event Photo (Image)</label>
+                  {form.cover_image_url && !newImage && (
+                    <div style={{ marginBottom: '0.5rem', position: 'relative', width: 'fit-content' }}>
+                      <img src={form.cover_image_url} alt="Cover" style={{ width: '120px', height: '80px', objectFit: 'cover', borderRadius: '4px' }} />
+                      <button type="button" onClick={() => setForm({ ...form, cover_image_url: '' })} style={{ position: 'absolute', top: '-8px', right: '-8px', background: 'var(--color-danger)', color: 'white', border: 'none', borderRadius: '50%', width: '20px', height: '20px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><FiX size={12} /></button>
+                    </div>
+                  )}
+                  <input
+                    type="file"
+                    accept="image/*"
+                    className="skeu-input"
+                    onChange={(e) => {
+                      if (e.target.files?.[0]) {
+                        setNewImage(e.target.files[0]);
+                      }
+                    }}
+                  />
+                  {newImage && (
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginTop: '0.5rem', fontSize: '0.8rem', color: 'var(--color-primary)' }}>
+                      <span>Selected: {newImage.name}</span>
+                      <button type="button" onClick={() => setNewImage(null)} style={{ color: 'var(--color-danger)', border: 'none', background: 'transparent', cursor: 'pointer' }}><FiX size={14} /></button>
+                    </div>
+                  )}
+                </div>
+
+                <div className="skeu-input-group" style={{ marginBottom: 0 }}>
+                  <label>Attachments (PDF/Image)</label>
+                  {form.attachment_urls.length > 0 && (
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', marginBottom: '0.5rem' }}>
+                      {form.attachment_urls.map((url, i) => (
+                        <div key={i} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0.4rem 0.75rem', borderRadius: '6px', background: 'var(--color-surface-alt, #f7f7f7)', fontSize: '0.8rem' }}>
+                          <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: '300px' }}>{url.split('/').pop()}</span>
+                          <button type="button" onClick={() => setForm({ ...form, attachment_urls: form.attachment_urls.filter((_, idx) => idx !== i) })} style={{ color: 'var(--color-danger)', border: 'none', background: 'transparent', cursor: 'pointer' }}><FiX size={14} /></button>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                  <input
+                    type="file"
+                    multiple
+                    accept="image/*,application/pdf"
+                    className="skeu-input"
+                    onChange={(e) => {
+                      if (e.target.files) {
+                        setNewAttachments([...newAttachments, ...Array.from(e.target.files)]);
+                      }
+                    }}
+                  />
+                  {newAttachments.length > 0 && (
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', marginTop: '0.5rem' }}>
+                      {newAttachments.map((file, i) => (
+                        <div key={i} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0.4rem 0.75rem', borderRadius: '6px', background: 'var(--color-accent-soft, #f0f7ff)', fontSize: '0.8rem' }}>
+                          <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: '300px' }}>{file.name}</span>
+                          <button type="button" onClick={() => setNewAttachments(newAttachments.filter((_, idx) => idx !== i))} style={{ color: 'var(--color-danger)', border: 'none', background: 'transparent', cursor: 'pointer' }}><FiX size={14} /></button>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
               </div>
               <div className="skeu-modal__footer">
                 <button type="button" className="skeu-btn" onClick={closeForm}>Cancel</button>
@@ -256,8 +345,8 @@ export default function EventManagement() {
               <tr key={event.id}>
                 <td style={{ fontWeight: 600, color: 'var(--color-text-heading)', maxWidth: '250px' }}>{event.title}</td>
                 <td>
-                  {event.event_type ? (
-                    <span className="skeu-card__badge skeu-card__badge--general">{event.event_type}</span>
+                  {event.type ? (
+                    <span className="skeu-card__badge skeu-card__badge--general">{event.type}</span>
                   ) : '—'}
                 </td>
                 <td style={{ fontSize: '0.85rem' }}>{event.venue || '—'}</td>

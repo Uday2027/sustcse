@@ -41,7 +41,7 @@ export const getById = async (req: Request, res: Response, next: NextFunction) =
  */
 export const create = async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
-    const data = await eventService.createEvent(req.body);
+    const data = await eventService.createEvent(req.body, req.user!.id);
 
     res.status(201).json({ success: true, data });
   } catch (error) {

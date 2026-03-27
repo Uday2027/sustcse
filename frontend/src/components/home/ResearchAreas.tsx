@@ -75,17 +75,18 @@ export default function ResearchAreas() {
                         Explore Our Pillars →
                     </a>
                 </div>
+            </div>
 
-                <div className="research__slider-wrapper">
-                    <div className="research__slider">
-                        {[...researchAreas, ...researchAreas, ...researchAreas].map((area, index) => (
-                            <div key={index} className="research-card">
-                                <div className="research-card__icon">{area.icon}</div>
-                                <h3 className="research-card__title">{area.title}</h3>
-                                <p className="research-card__text">{area.description}</p>
-                            </div>
-                        ))}
-                    </div>
+            {/* Slider sits outside container for full-width scroll on all devices */}
+            <div className="research__slider-wrapper">
+                <div className="research__slider">
+                    {[...researchAreas, ...researchAreas, ...researchAreas].map((area, index) => (
+                        <div key={index} className="research-card">
+                            <div className="research-card__icon">{area.icon}</div>
+                            <h3 className="research-card__title">{area.title}</h3>
+                            <p className="research-card__text">{area.description}</p>
+                        </div>
+                    ))}
                 </div>
             </div>
         </section>

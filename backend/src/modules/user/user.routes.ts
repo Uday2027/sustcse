@@ -9,7 +9,11 @@ const router = Router();
 // ── Own profile ─────────────────────────────────────────────────────────────
 router.get('/me', auth, userController.getMe);
 router.patch('/me', auth, userController.updateMe);
-router.post('/me/avatar', auth, upload.single('avatar'), userController.uploadAvatar);
+router.post('/me/avatar', upload.single('avatar'), userController.uploadAvatar);
+router.post('/me/signature', upload.single('signature'), userController.uploadSignature);
+router.post('/me/seal', upload.single('seal'), userController.uploadSeal);
+// ── Public Directory ─────────────────────────────────────────────────────────
+router.get('/teachers', auth, userController.getTeachers);
 
 // ── Admin — user management ─────────────────────────────────────────────────
 router.get('/', auth, rbac('admin', 'super_admin'), userController.getAll);

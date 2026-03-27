@@ -57,10 +57,9 @@ export const getStudentById = async (id: string) => {
   const { data, error } = await supabaseAdmin
     .from('profiles')
     .select(
-      '*, student_profile:student_profiles!student_profiles_user_id_fkey(*)'
+      '*, student_profile:student_profiles(skills, is_job_seeking, job_preferences, experience, projects, education, certifications, languages)'
     )
     .eq('id', id)
-    .eq('role', 'student')
     .single();
 
   if (error) {

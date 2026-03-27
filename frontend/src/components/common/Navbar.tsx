@@ -22,14 +22,6 @@ const publicLinks = [
     ]
   },
   { path: '/alumni', label: 'Alumni' },
-  { path: '/society', label: 'Society' },
-];
-
-const authLinks = [
-  { path: '/students', label: 'Students' },
-  { path: '/finance', label: 'Finance' },
-  { path: '/important-data', label: 'Data' },
-  { path: '/work-assignments', label: 'Tasks' },
 ];
 
 export default function Navbar() {
@@ -102,22 +94,13 @@ export default function Navbar() {
             );
           })}
 
-          {user && authLinks.map((link) => (
-            <Link
-              key={link.path}
-              to={link.path}
-              className={`navbar__link ${location.pathname === link.path ? 'navbar__link--active' : ''}`}
-            >
-              {link.label}
-            </Link>
-          ))}
-
           {user ? (
             <div className="navbar__user-menu">
               <button className="navbar__user-btn">
                 {user.full_name.split(' ')[0]} <FiChevronDown />
               </button>
               <div className="navbar__dropdown">
+                <Link to="/dashboard" className="navbar__dropdown-item" style={{ fontWeight: 'bold' }}>Dashboard</Link>
                 <Link to="/profile" className="navbar__dropdown-item">Profile</Link>
                 {(user.role === 'admin' || user.role === 'super_admin') && (
                   <Link to="/admin" className="navbar__dropdown-item">Admin Panel</Link>

@@ -26,6 +26,15 @@ router.post(
   async (req: AuthRequest, res: Response, next: NextFunction) => {
     try {
       const files = req.files as Record<string, Express.Multer.File[]> | undefined;
+      let attachment_urls: string[] = [];
+
+      if (req.body.attachment_urls) {
+        try {
+          attachment_urls = JSON.parse(req.body.attachment_urls);
+        } catch (e) {
+          attachment_urls = [];
+        }
+      }
 
       // Upload event image to Cloudinary
       if (files?.image?.[0]) {
@@ -33,7 +42,7 @@ router.post(
           files.image[0].buffer,
           'events/images'
         );
-        req.body.image_url = result.secure_url;
+        req.body.cover_image_url = result.secure_url;
       }
 
       // Upload PDF / other attachments
@@ -41,11 +50,12 @@ router.post(
         const uploaded = await Promise.all(
           files.attachments.map(async (file) => {
             const result = await cloudinaryService.uploadFile(file.buffer, 'events/attachments', file.originalname);
-            return { name: file.originalname, url: result.secure_url, type: file.mimetype };
+            return result.secure_url;
           })
         );
-        req.body.attachments = uploaded;
+        attachment_urls = [...attachment_urls, ...uploaded];
       }
+      req.body.attachment_urls = attachment_urls;
 
       return eventController.create(req, res, next);
     } catch (error) {
@@ -67,24 +77,34 @@ router.patch(
   async (req: AuthRequest, res: Response, next: NextFunction) => {
     try {
       const files = req.files as Record<string, Express.Multer.File[]> | undefined;
+      let attachment_urls: string[] = [];
+
+      if (req.body.attachment_urls) {
+        try {
+          attachment_urls = JSON.parse(req.body.attachment_urls);
+        } catch (e) {
+          attachment_urls = [];
+        }
+      }
 
       if (files?.image?.[0]) {
         const result = await cloudinaryService.uploadImage(
           files.image[0].buffer,
           'events/images'
         );
-        req.body.image_url = result.secure_url;
+        req.body.cover_image_url = result.secure_url;
       }
 
       if (files?.attachments?.length) {
         const uploaded = await Promise.all(
           files.attachments.map(async (file) => {
             const result = await cloudinaryService.uploadFile(file.buffer, 'events/attachments', file.originalname);
-            return { name: file.originalname, url: result.secure_url, type: file.mimetype };
+            return result.secure_url;
           })
         );
-        req.body.attachments = uploaded;
+        attachment_urls = [...attachment_urls, ...uploaded];
       }
+      req.body.attachment_urls = attachment_urls;
 
       return eventController.update(req, res, next);
     } catch (error) {
@@ -103,4 +123,3 @@ router.delete(
 );
 
 export default router;
-

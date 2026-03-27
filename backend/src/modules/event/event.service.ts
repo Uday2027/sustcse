@@ -57,10 +57,13 @@ export const getEventById = async (id: string) => {
 /**
  * Create a new event and return the created record.
  */
-export const createEvent = async (data: Record<string, unknown>) => {
+export const createEvent = async (data: Record<string, unknown>, userId: string) => {
   const { data: event, error } = await supabaseAdmin
     .from('events')
-    .insert(data)
+    .insert({
+      ...data,
+      created_by: userId,
+    })
     .select()
     .single();
 

@@ -1697,3 +1697,32 @@
     grid-template-columns: 1fr !important;
   }
 }
+/* ===== Event Detail Layout ===== */
+.event-detail-layout {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: 3rem;
+  align-items: start;
+}
+
+@media (max-width: 1024px) {
+  .event-detail-layout {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .event-sidebar .skeu-card {
+    position: static !important;
+  }
+}
+
+.editorial-content {
+  font-family: var(--font-sans);
+  font-size: 1.15rem;
+  line-height: 1.8;
+  color: var(--color-text-secondary);
+}
+
+.editorial-content p {
+  margin-bottom: 1.5rem;
+}

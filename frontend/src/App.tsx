@@ -34,6 +34,8 @@ const ProfilePage = lazy(() => import('./pages/ProfilePage'));
 const FinancePage = lazy(() => import('./pages/FinancePage'));
 const ImportantDataPage = lazy(() => import('./pages/ImportantDataPage'));
 const WorkAssignmentsPage = lazy(() => import('./pages/WorkAssignmentsPage'));
+const ApplicationsPage = lazy(() => import('./pages/ApplicationsPage'));
+const DashboardPage = lazy(() => import('./pages/DashboardPage'));
 const AdminPage = lazy(() => import('./pages/AdminPage'));
 const VerifyEmailPage = lazy(() => import('./pages/VerifyEmailPage'));
 const ForgotPasswordPage = lazy(() => import('./pages/ForgotPasswordPage'));
@@ -77,14 +79,17 @@ function App() {
 
             {/* Guest only */}
             <Route path="/auth" element={<LoginPage />} />
-          <Route path="/login" element={<Navigate to="/auth" replace />} />
-          <Route path="/register" element={<Navigate to="/auth" replace />} />
+            <Route path="/login" element={<Navigate to="/auth" replace />} />
+            <Route path="/register" element={<Navigate to="/auth" replace />} />
             <Route path="/verify-email" element={<VerifyEmailPage />} />
             <Route path="/forgot-password" element={<ForgotPasswordPage />} />
             <Route path="/reset-password" element={<ResetPasswordPage />} />
 
             {/* Protected routes */}
             <Route element={<ProtectedRoute />}>
+              <Route path="/dashboard" element={<DashboardPage />} />
+              <Route path="/applications" element={<ApplicationsPage />} />
+              <Route path="/applications/:id" element={<ApplicationsPage />} />
               <Route path="/students" element={<StudentsPage />} />
               <Route path="/students/:id" element={<StudentProfilePage />} />
               <Route path="/profile" element={<ProfilePage />} />

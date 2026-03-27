@@ -27,6 +27,19 @@ export const getAll = async (req: AuthRequest, res: Response, next: NextFunction
 };
 
 /**
+ * GET /api/students/profile
+ * Retrieve the authenticated user's student profile.
+ */
+export const getProfile = async (req: AuthRequest, res: Response, next: NextFunction) => {
+  try {
+    const data = await studentService.getStudentById(req.user!.id);
+    res.json({ success: true, data });
+  } catch (error) {
+    next(error);
+  }
+};
+
+/**
  * GET /api/students/:id
  * Retrieve a single student profile by ID.
  */

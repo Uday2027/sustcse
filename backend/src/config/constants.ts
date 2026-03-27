@@ -8,4 +8,6 @@ export const CLOUDINARY_FOLDERS = {
   FINANCE: 'sust-cse/finance',
   IMPORTANT_DATA: 'sust-cse/important-data',
   RESUMES: 'sust-cse/resumes',
+  SIGNATURES: 'sust-cse/signatures',
+  SEALS: 'sust-cse/seals',
 } as const;

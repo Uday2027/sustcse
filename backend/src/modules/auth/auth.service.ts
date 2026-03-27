@@ -70,7 +70,8 @@ export const register = async (data: RegisterData): Promise<RegisterResult> => {
   }
 
   const userId = authData.user.id;
-  const approvalStatus = isSustEmail ? 'approved' : 'pending';
+  // In development, auto-approve all accounts. In production, only SUST emails.
+  const approvalStatus = (env.NODE_ENV === 'development' || isSustEmail) ? 'approved' : 'pending';
 
   // Create the profile record directly (no trigger dependency)
   const { error: profileError } = await supabaseAdmin
@@ -194,7 +195,7 @@ export const login = async (
     throw createError(403, 'Your account has been deactivated. Please contact an administrator.');
   }
 
-  if (profile.approval_status === 'pending') {
+  if (env.NODE_ENV !== 'development' && profile.approval_status === 'pending') {
     throw createError(403, 'Your account is pending approval. Please wait for an administrator to approve your registration.');
   }
 
