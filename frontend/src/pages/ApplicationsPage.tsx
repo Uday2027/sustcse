@@ -16,7 +16,7 @@ const ApplicationsPage: React.FC = () => {
   if (!user) return null;
 
   return (
-    <div className="page" style={{ minHeight: 'calc(100vh - 80px)', background: 'var(--color-bg, #F8FAFC)' }}>
+    <div className="page" style={{ minHeight: 'calc(100vh - 80px)' }}>
       <section className="section" style={{ paddingTop: '2rem' }}>
         <div className="container" style={{ maxWidth: '1100px', margin: '0 auto' }}>
 
@@ -27,7 +27,7 @@ const ApplicationsPage: React.FC = () => {
                 <h1 className="skeu-heading skeu-heading--lg" style={{ marginBottom: '0.2rem' }}>
                   {user.role === 'student' ? 'My Applications' : user.role === 'teacher' ? 'Pending Signatures' : 'All Applications'}
                 </h1>
-                <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>
+                <p style={{ color: 'var(--color-text-secondary)', fontSize: '0.9rem' }}>
                   {user.role === 'student' && 'Submit and track your official university requests.'}
                   {user.role === 'teacher' && 'Applications awaiting your digital signature and approval.'}
                   {user.role === 'admin' && 'Review pending submissions and assign approval chains.'}

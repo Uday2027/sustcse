@@ -23,8 +23,12 @@ const AdminReviewPanel: React.FC<{ applicationId: string, onComplete: () => void
 
   useEffect(() => {
     const fetchTeachers = async () => {
-      const response = await api.get('/users?role=teacher&approval_status=approved');
-      setTeachers(response.data.data);
+      try {
+        const response = await api.get('/users/teachers');
+        setTeachers(response.data.data);
+      } catch (err: any) {
+        toast.error(err?.response?.data?.message || 'Could not load teacher list');
+      }
     };
     fetchTeachers();
   }, []);
@@ -54,10 +58,11 @@ const AdminReviewPanel: React.FC<{ applicationId: string, onComplete: () => void
         comment,
         approver_chain: status === 'approved' ? chain.map(c => ({ approver_id: c.approver_id, step_order: c.step_order })) : []
       });
-      toast.success(status === 'approved' ? 'Chain assigned and forwarded' : 'Application rejected');
+      toast.success(status === 'approved' ? 'Approval chain assigned and application forwarded to approvers' : 'Application has been rejected and student notified');
       onComplete();
-    } catch (error) {
-      toast.error('Failed to process review');
+    } catch (error: any) {
+      const msg = error?.response?.data?.message || `Failed to ${status === 'approved' ? 'assign chain' : 'reject application'}: server error`;
+      toast.error(msg);
     } finally {
       setSubmitting(false);
     }

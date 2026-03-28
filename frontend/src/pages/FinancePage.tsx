@@ -162,9 +162,9 @@ export default function FinancePage() {
     <div className="page finance-page">
       <section className="section">
         <div className="container">
-          <div ref={headerRef} className="page-header">
-            <h1 className="page-title">Finance Dashboard</h1>
-            <p className="page-subtitle">
+          <div ref={headerRef} className="page-header" style={{ marginBottom: '2rem' }}>
+            <h1 className="page-title" style={{ color: 'var(--color-text-heading)' }}>Finance Dashboard</h1>
+            <p className="page-subtitle" style={{ color: 'var(--color-text-secondary)' }}>
               Manage fiscal year budgets, bank statements, and cost requests.
             </p>
           </div>
@@ -172,8 +172,8 @@ export default function FinancePage() {
           {/* Fiscal Year Selector */}
           <div className="skeu-panel" style={{ marginBottom: '2rem', padding: '1.25rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1rem' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-              <FiFilter size={18} />
-              <label style={{ fontWeight: 600 }}>Fiscal Year:</label>
+              <FiFilter size={18} style={{ color: 'var(--color-text-muted)' }} />
+              <label style={{ fontWeight: 600, color: 'var(--color-text-primary)' }}>Fiscal Year:</label>
               <select
                 className="skeu-input"
                 value={selectedFY}
@@ -190,7 +190,7 @@ export default function FinancePage() {
             <button
               className="skeu-btn"
               onClick={() => { setShowNewForm(true); setActiveTab('costs'); }}
-              style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', background: 'var(--color-primary)', color: '#fff', padding: '0.5rem 1rem', fontWeight: 600 }}
+              style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', background: 'var(--color-accent)', color: '#fff', padding: '0.5rem 1rem', fontWeight: 600 }}
             >
               <FiPlus size={16} /> New Cost Request
             </button>
@@ -204,7 +204,7 @@ export default function FinancePage() {
           {!loading && !error && (
             <>
               {/* Tab Navigation */}
-              <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1.5rem', borderBottom: '2px solid var(--border-color, #e0e0e0)', paddingBottom: '0' }}>
+              <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1.5rem', borderBottom: '2px solid var(--color-border)', paddingBottom: '0' }}>
                 {(['overview', 'statements', 'costs'] as const).map((tab) => (
                   <button
                     key={tab}
@@ -212,12 +212,13 @@ export default function FinancePage() {
                     onClick={() => setActiveTab(tab)}
                     style={{
                       borderRadius: '8px 8px 0 0',
-                      background: activeTab === tab ? 'var(--color-primary)' : 'transparent',
-                      color: activeTab === tab ? '#fff' : 'var(--text-secondary)',
+                      background: activeTab === tab ? 'var(--color-accent)' : 'transparent',
+                      color: activeTab === tab ? '#fff' : 'var(--color-text-secondary)',
                       padding: '0.6rem 1.25rem',
                       fontWeight: 600,
                       textTransform: 'capitalize',
                       border: 'none',
+                      fontSize: '0.875rem',
                     }}
                   >
                     {tab === 'overview' && <FiDollarSign style={{ marginRight: '0.35rem' }} />}
@@ -231,32 +232,25 @@ export default function FinancePage() {
               {/* Overview Tab */}
               {activeTab === 'overview' && currentFY && (
                 <div>
-                  <div className="grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1.5rem', marginBottom: '2rem' }}>
-                    <div className="skeu-card" style={{ padding: '1.5rem', textAlign: 'center' }}>
-                      <FiDollarSign size={28} style={{ color: 'var(--color-primary)', marginBottom: '0.5rem' }} />
-                      <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', textTransform: 'uppercase', fontWeight: 600, marginBottom: '0.25rem' }}>Opening Balance</div>
-                      <div style={{ fontSize: '1.5rem', fontWeight: 700 }}>{formatCurrency(currentFY.opening_balance)}</div>
-                    </div>
-                    <div className="skeu-card" style={{ padding: '1.5rem', textAlign: 'center' }}>
-                      <FiClock size={28} style={{ color: '#d97706', marginBottom: '0.5rem' }} />
-                      <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', textTransform: 'uppercase', fontWeight: 600, marginBottom: '0.25rem' }}>Total Requested</div>
-                      <div style={{ fontSize: '1.5rem', fontWeight: 700 }}>{formatCurrency(totalCosts)}</div>
-                    </div>
-                    <div className="skeu-card" style={{ padding: '1.5rem', textAlign: 'center' }}>
-                      <FiCheckCircle size={28} style={{ color: '#059669', marginBottom: '0.5rem' }} />
-                      <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', textTransform: 'uppercase', fontWeight: 600, marginBottom: '0.25rem' }}>Approved Costs</div>
-                      <div style={{ fontSize: '1.5rem', fontWeight: 700 }}>{formatCurrency(approvedCosts)}</div>
-                    </div>
-                    <div className="skeu-card" style={{ padding: '1.5rem', textAlign: 'center' }}>
-                      <FiDollarSign size={28} style={{ color: '#2563eb', marginBottom: '0.5rem' }} />
-                      <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', textTransform: 'uppercase', fontWeight: 600, marginBottom: '0.25rem' }}>Remaining Balance</div>
-                      <div style={{ fontSize: '1.5rem', fontWeight: 700 }}>{formatCurrency(currentFY.opening_balance - approvedCosts)}</div>
-                    </div>
+                  {/* Stat Cards */}
+                  <div className="grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1.25rem', marginBottom: '2rem' }}>
+                    {[
+                      { label: 'Opening Balance', value: formatCurrency(currentFY.opening_balance), icon: <FiDollarSign size={24} />, color: 'var(--color-accent)' },
+                      { label: 'Total Requested', value: formatCurrency(totalCosts), icon: <FiClock size={24} />, color: '#d97706' },
+                      { label: 'Approved Costs', value: formatCurrency(approvedCosts), icon: <FiCheckCircle size={24} />, color: '#059669' },
+                      { label: 'Remaining Balance', value: formatCurrency(currentFY.opening_balance - approvedCosts), icon: <FiDollarSign size={24} />, color: '#2563eb' },
+                    ].map(({ label, value, icon, color }) => (
+                      <div key={label} className="skeu-card" style={{ padding: '1.5rem', borderTop: `3px solid ${color}` }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.75rem', color }}>{icon}</div>
+                        <div style={{ fontSize: '0.7rem', color: 'var(--color-text-muted)', textTransform: 'uppercase', fontWeight: 700, letterSpacing: '0.06em', marginBottom: '0.3rem' }}>{label}</div>
+                        <div style={{ fontSize: '1.5rem', fontWeight: 800, color: 'var(--color-text-primary)' }}>{value}</div>
+                      </div>
+                    ))}
                   </div>
                   <div className="skeu-panel" style={{ padding: '1rem' }}>
-                    <p style={{ margin: 0, fontSize: '0.875rem', color: 'var(--text-muted)' }}>
+                    <p style={{ margin: 0, fontSize: '0.875rem', color: 'var(--color-text-muted)' }}>
                       Fiscal period: {formatDate(currentFY.start_date)} to {formatDate(currentFY.end_date)}
-                      &nbsp;&middot;&nbsp;Status: <strong>{currentFY.status}</strong>
+                      &nbsp;&middot;&nbsp;Status: <strong style={{ color: currentFY.status === 'active' ? '#059669' : 'var(--color-text-secondary)' }}>{currentFY.status}</strong>
                     </p>
                   </div>
                 </div>
@@ -339,7 +333,7 @@ export default function FinancePage() {
                           className="skeu-btn"
                           onClick={handleSubmitCost}
                           disabled={submitting}
-                          style={{ background: 'var(--color-primary)', color: '#fff', display: 'flex', alignItems: 'center', gap: '0.35rem' }}
+                          style={{ background: 'var(--color-accent)', color: '#fff', display: 'flex', alignItems: 'center', gap: '0.35rem' }}
                         >
                           {submitting ? <FiLoader className="spin" size={14} /> : <FiUpload size={14} />}
                           {submitting ? 'Submitting...' : 'Submit Request'}
@@ -351,9 +345,9 @@ export default function FinancePage() {
                   {/* Cost Requests List */}
                   {costRequests.length === 0 && !showNewForm ? (
                     <div className="skeu-card" style={{ padding: '3rem', textAlign: 'center' }}>
-                      <FiDollarSign size={48} style={{ marginBottom: '1rem', color: 'var(--text-muted)' }} />
+                      <FiDollarSign size={48} style={{ marginBottom: '1rem', color: 'var(--color-text-muted)' }} />
                       <h3>No Cost Requests</h3>
-                      <p style={{ color: 'var(--text-muted)' }}>No cost requests have been submitted for this fiscal year.</p>
+                      <p style={{ color: 'var(--color-text-muted)' }}>No cost requests have been submitted for this fiscal year.</p>
                     </div>
                   ) : (
                     <div style={{ overflowX: 'auto' }}>
@@ -433,7 +427,7 @@ function CostRequestRow({
 
   return (
     <>
-      <tr style={{ cursor: 'pointer', borderBottom: '1px solid var(--border-color, #e0e0e0)' }} onClick={() => setExpanded(!expanded)}>
+      <tr style={{ cursor: 'pointer', borderBottom: '1px solid var(--color-border)' }} onClick={() => setExpanded(!expanded)}>
         <td style={{ padding: '0.75rem', fontWeight: 500 }}>{cr.title}</td>
         <td style={{ padding: '0.75rem' }}>{formatCurrency(cr.amount)}</td>
         <td style={{ padding: '0.75rem' }}>{cr.category || '-'}</td>
@@ -453,7 +447,7 @@ function CostRequestRow({
       </tr>
       {expanded && (
         <tr>
-          <td colSpan={7} style={{ padding: '1rem 0.75rem', background: 'var(--color-surface-alt, #f9f9f9)' }}>
+          <td colSpan={7} style={{ padding: '1rem 0.75rem', background: 'var(--color-bg-secondary)' }}>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
               {cr.description && <p style={{ margin: 0, fontSize: '0.875rem' }}>{cr.description}</p>}
 
@@ -557,7 +551,7 @@ function CostRequestRow({
                     className="skeu-btn"
                     onClick={(e) => { e.stopPropagation(); onAddCheck(cr.id); }}
                     disabled={isLoading}
-                    style={{ background: 'var(--color-primary)', color: '#fff', display: 'flex', alignItems: 'center', gap: '0.25rem', fontSize: '0.85rem' }}
+                    style={{ background: 'var(--color-accent)', color: '#fff', display: 'flex', alignItems: 'center', gap: '0.25rem', fontSize: '0.85rem' }}
                   >
                     {isLoading ? <FiLoader className="spin" size={12} /> : <FiCheckCircle size={12} />} Add Check
                   </button>

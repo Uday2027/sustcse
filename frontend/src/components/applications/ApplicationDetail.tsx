@@ -1,19 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
-import { Document, Page, pdfjs } from 'react-pdf';
 import api from '../../lib/api';
 import { useAuth } from '../../context/AuthContext';
 import AdminReviewPanel from './AdminReviewPanel';
 import TeacherActionPanel from './TeacherActionPanel';
 
-pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
-
-const STATUS_CONFIG: Record<string, { label: string; color: string; bg: string }> = {
-  pending:      { label: 'Pending Review',   color: '#92400e', bg: '#fef3c7' },
-  under_review: { label: 'Under Review',     color: '#1d4ed8', bg: '#dbeafe' },
-  approved:     { label: 'Fully Approved',   color: '#15803d', bg: '#dcfce7' },
-  rejected:     { label: 'Rejected',         color: '#b91c1c', bg: '#fee2e2' },
+const STATUS_CONFIG: Record<string, { label: string; color: string; bg: string; border: string }> = {
+  pending:      { label: 'Pending Review',  color: '#92400e', bg: '#fef3c7', border: '#fde68a' },
+  under_review: { label: 'Under Review',    color: '#1d4ed8', bg: '#dbeafe', border: '#bfdbfe' },
+  approved:     { label: 'Fully Approved',  color: '#15803d', bg: '#dcfce7', border: '#bbf7d0' },
+  rejected:     { label: 'Rejected',        color: '#b91c1c', bg: '#fee2e2', border: '#fecaca' },
 };
 
 const ApplicationDetail: React.FC = () => {
@@ -21,14 +18,25 @@ const ApplicationDetail: React.FC = () => {
   const { user } = useAuth();
   const [app, setApp] = useState<any>(null);
   const [loading, setLoading] = useState(true);
-  const [pdfPages, setPdfPages] = useState(1);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
   const fetchDetail = async () => {
+    setLoading(true);
+    setErrorMsg(null);
     try {
       const res = await api.get(`/applications/${id}`);
       setApp(res.data.data);
-    } catch {
-      toast.error('Failed to load application');
+    } catch (err: any) {
+      const serverMsg = err?.response?.data?.message;
+      const status = err?.response?.status;
+      let msg = 'Could not load application.';
+      if (status === 404) msg = `Application with ID "${id}" was not found. It may have been deleted.`;
+      else if (status === 403) msg = 'You do not have permission to view this application.';
+      else if (status === 401) msg = 'You are not logged in. Please sign in and try again.';
+      else if (serverMsg) msg = serverMsg;
+      else if (!navigator.onLine) msg = 'No internet connection. Please check your network.';
+      setErrorMsg(msg);
+      toast.error(msg);
     } finally {
       setLoading(false);
     }
@@ -37,139 +45,132 @@ const ApplicationDetail: React.FC = () => {
   useEffect(() => { if (id) fetchDetail(); }, [id]);
 
   if (loading) return (
-    <div style={{ padding: '3rem', textAlign: 'center', color: 'var(--text-muted)' }}>Loading...</div>
+    <div style={{ padding: '4rem', textAlign: 'center' }}>
+      <div style={{ width: '40px', height: '40px', border: '3px solid #e2e8f0', borderTopColor: 'var(--color-accent)', borderRadius: '50%', animation: 'spin 0.8s linear infinite', margin: '0 auto 1rem' }} />
+      <p style={{ color: 'var(--color-text-muted)' }}>Loading application...</p>
+    </div>
   );
-  if (!app) return (
-    <div style={{ padding: '3rem', textAlign: 'center', color: 'var(--color-error)' }}>Application not found.</div>
+
+  if (errorMsg || !app) return (
+    <div style={{ padding: '3rem', textAlign: 'center', maxWidth: '500px', margin: '0 auto' }}>
+      <div style={{ width: '56px', height: '56px', borderRadius: '50%', background: '#fee2e2', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1rem', fontSize: '1.5rem' }}>⚠️</div>
+      <h2 style={{ fontSize: '1.2rem', fontWeight: 700, color: 'var(--color-text-primary)', marginBottom: '0.5rem' }}>Unable to Load Application</h2>
+      <p style={{ color: 'var(--color-text-secondary)', fontSize: '0.9rem', lineHeight: 1.6, marginBottom: '1.5rem' }}>{errorMsg || 'An unknown error occurred.'}</p>
+      <div style={{ display: 'flex', gap: '0.75rem', justifyContent: 'center' }}>
+        <button onClick={fetchDetail} className="skeu-btn skeu-btn--primary">Try Again</button>
+        <Link to="/applications" className="skeu-btn" style={{ textDecoration: 'none' }}>Back to List</Link>
+      </div>
+    </div>
   );
 
   const statusCfg = STATUS_CONFIG[app.status] || STATUS_CONFIG.pending;
   const activePdfUrl = app.final_pdf_url || app.original_pdf_url;
 
-  // Find current teacher's pending step
   const myPendingStep = app.approval_steps?.find(
     (s: any) => s.approver_id === user?.id && s.status === 'pending'
   );
 
+  const isAdmin = user?.role === 'admin' || user?.role === 'super_admin';
+
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
 
-      {/* ── Header ─────────────────────────────────────────────────────── */}
+      {/* ── Header ───────────────────────────────────────────────────── */}
       <div className="skeu-card" style={{ padding: '1.5rem 2rem' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '1rem' }}>
           <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.5rem' }}>
-              <span style={{ fontSize: '0.75rem', fontWeight: 700, padding: '0.2rem 0.6rem', borderRadius: '6px', background: '#e0e7ff', color: '#3730a3', fontFamily: 'monospace', letterSpacing: '0.05em' }}>
-                {app.serial_number || 'APP-PENDING'}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.5rem', flexWrap: 'wrap' }}>
+              <span style={{ fontSize: '0.72rem', fontWeight: 700, padding: '0.2rem 0.6rem', borderRadius: '6px', background: '#e0e7ff', color: '#3730a3', fontFamily: 'monospace', letterSpacing: '0.05em' }}>
+                {app.serial_number || 'Pending Serial'}
               </span>
-              <span style={{ fontSize: '0.75rem', fontWeight: 700, padding: '0.2rem 0.75rem', borderRadius: '9999px', color: statusCfg.color, background: statusCfg.bg }}>
+              <span style={{ fontSize: '0.75rem', fontWeight: 700, padding: '0.2rem 0.75rem', borderRadius: '9999px', color: statusCfg.color, background: statusCfg.bg, border: `1px solid ${statusCfg.border}` }}>
                 {statusCfg.label}
               </span>
             </div>
-            <h1 style={{ fontSize: '1.4rem', margin: 0, color: 'var(--text-primary)' }}>{app.title}</h1>
-            <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', margin: '0.25rem 0 0' }}>
-              By {app.student?.full_name} · Submitted {new Date(app.created_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}
+            <h1 style={{ fontSize: '1.35rem', margin: '0 0 0.25rem', color: 'var(--color-text-primary)', fontWeight: 700 }}>{app.title}</h1>
+            <p style={{ color: 'var(--color-text-secondary)', fontSize: '0.85rem', margin: 0 }}>
+              Submitted by <strong>{app.student?.full_name}</strong> · {new Date(app.created_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}
             </p>
           </div>
 
-          <div style={{ display: 'flex', gap: '0.5rem' }}>
+          <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
             {activePdfUrl && (
               <a href={activePdfUrl} target="_blank" rel="noreferrer" className="skeu-btn" style={{ fontSize: '0.85rem', textDecoration: 'none' }}>
                 ↓ Download PDF
               </a>
             )}
-            <Link to="/applications" className="skeu-btn" style={{ fontSize: '0.85rem', textDecoration: 'none' }}>
-              ← Back
-            </Link>
+            <Link to="/applications" className="skeu-btn" style={{ fontSize: '0.85rem', textDecoration: 'none' }}>← Back</Link>
           </div>
         </div>
       </div>
 
-      {/* ── Teacher Action Panel ────────────────────────────────────────── */}
+      {/* ── Teacher Action Panel ────────────────────────────────────── */}
       {myPendingStep && (
         <TeacherActionPanel
           applicationId={id!}
           stepId={myPendingStep.id}
           stepLabel={myPendingStep.approver?.designation}
-          onComplete={() => { setLoading(true); fetchDetail(); }}
+          onComplete={() => fetchDetail()}
         />
       )}
 
-      {/* ── Admin Review Panel (only when pending) ──────────────────────── */}
-      {user?.role === 'admin' && app.status === 'pending' && (
+      {/* ── Admin Review Panel ──────────────────────────────────────── */}
+      {isAdmin && app.status === 'pending' && (
         <AdminReviewPanel
           applicationId={id!}
-          onComplete={() => { setLoading(true); fetchDetail(); }}
+          onComplete={() => fetchDetail()}
         />
       )}
 
-      {/* ── Main grid: Timeline + PDF Viewer ──────────────────────────── */}
+      {/* ── Main Grid: Timeline + PDF ──────────────────────────────── */}
       <div style={{ display: 'grid', gridTemplateColumns: '280px 1fr', gap: '1.5rem', alignItems: 'start' }}>
 
-        {/* ── Left: Approval Timeline ───────────────────── */}
+        {/* Timeline */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
           <div className="skeu-card" style={{ padding: '1.5rem' }}>
-            <h3 style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '1.25rem' }}>
+            <h3 style={{ fontSize: '0.78rem', fontWeight: 700, color: 'var(--color-text-muted)', textTransform: 'uppercase', letterSpacing: '0.07em', marginBottom: '1.5rem' }}>
               Approval Timeline
             </h3>
-
             <div style={{ position: 'relative', display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-              {/* Vertical connector */}
               <div style={{ position: 'absolute', left: '11px', top: '12px', bottom: '12px', width: '2px', background: 'var(--color-border)', zIndex: 0 }} />
 
-              {/* Submitted */}
               <TimelineNode icon="📝" label="Submitted" sublabel={new Date(app.created_at).toLocaleDateString()} done />
 
-              {/* Admin Review */}
+              {(!app.admin_reviews || app.admin_reviews.length === 0) && (
+                <TimelineNode icon="🔍" label="Admin Review" sublabel="Awaiting admin" pending />
+              )}
               {app.admin_reviews?.map((r: any) => (
-                <TimelineNode
-                  key={r.id}
-                  icon={r.status === 'approved' ? '✓' : '✕'}
-                  label="Admin Review"
-                  sublabel={r.comment}
-                  done={r.status === 'approved'}
-                  rejected={r.status === 'rejected'}
-                />
+                <TimelineNode key={r.id} icon={r.status === 'approved' ? '✓' : '✕'}
+                  label="Admin Review" sublabel={r.comment || 'No comment'}
+                  done={r.status === 'approved'} rejected={r.status === 'rejected'} />
               ))}
-              {app.admin_reviews?.length === 0 && <TimelineNode icon="🔍" label="Admin Review" sublabel="Awaiting admin" pending />}
 
-              {/* Approval Steps */}
               {app.approval_steps?.map((step: any, i: number) => (
-                <TimelineNode
-                  key={step.id}
-                  icon={step.status === 'approved' ? '✓' : step.status === 'rejected' ? '✕' : (i + 1).toString()}
+                <TimelineNode key={step.id}
+                  icon={step.status === 'approved' ? '✓' : step.status === 'rejected' ? '✕' : String(i + 1)}
                   label={step.approver?.designation || `Approver ${i + 1}`}
                   sublabel={step.approver?.full_name}
-                  done={step.status === 'approved'}
-                  rejected={step.status === 'rejected'}
+                  done={step.status === 'approved'} rejected={step.status === 'rejected'}
                   pending={step.status === 'pending'}
-                  signatureUrl={step.approver?.signature_url}
-                  sealUrl={step.approver?.seal_url}
-                  signedAt={step.signed_at}
-                  comment={step.comment}
+                  signatureUrl={step.approver?.signature_url} sealUrl={step.approver?.seal_url}
+                  signedAt={step.signed_at} comment={step.comment}
                 />
               ))}
 
-              {/* Final */}
-              <TimelineNode
-                icon="✅"
-                label="Final Approval"
-                sublabel={app.status === 'approved' ? 'Complete' : 'Pending all signatures'}
-                done={app.status === 'approved'}
-              />
+              <TimelineNode icon="✅" label="Final Approval"
+                sublabel={app.status === 'approved' ? 'Complete — all signatures collected' : 'Pending all signatures'}
+                done={app.status === 'approved'} />
             </div>
           </div>
 
-          {/* Attachments */}
           {app.application_attachments?.length > 0 && (
             <div className="skeu-card" style={{ padding: '1.25rem' }}>
-              <h3 style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '0.75rem' }}>
+              <h3 style={{ fontSize: '0.78rem', fontWeight: 700, color: 'var(--color-text-muted)', textTransform: 'uppercase', letterSpacing: '0.07em', marginBottom: '0.75rem' }}>
                 Attachments
               </h3>
               {app.application_attachments.map((att: any) => (
                 <a key={att.id} href={att.file_url} target="_blank" rel="noreferrer"
-                  style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.5rem', borderRadius: '8px', fontSize: '0.8rem', color: 'var(--color-primary)', textDecoration: 'none', background: 'var(--color-surface-alt)', marginBottom: '0.35rem' }}
-                >
+                  style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.5rem', borderRadius: '8px', fontSize: '0.8rem', color: 'var(--color-accent)', textDecoration: 'none', background: 'var(--color-bg-secondary)', marginBottom: '0.35rem' }}>
                   📎 {att.file_name}
                 </a>
               ))}
@@ -177,76 +178,59 @@ const ApplicationDetail: React.FC = () => {
           )}
         </div>
 
-        {/* ── Right: PDF Viewer ───────────────────────────── */}
+        {/* PDF Viewer using iframe — avoids react-pdf version issues */}
         <div className="skeu-card" style={{ padding: '1.25rem' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-            <span style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+            <span style={{ fontSize: '0.78rem', fontWeight: 700, color: 'var(--color-text-muted)', textTransform: 'uppercase', letterSpacing: '0.07em' }}>
               Document Preview
             </span>
             {app.final_pdf_url && (
-              <span style={{ fontSize: '0.7rem', fontWeight: 700, padding: '0.2rem 0.6rem', borderRadius: '9999px', background: '#dcfce7', color: '#15803d' }}>
+              <span style={{ fontSize: '0.7rem', fontWeight: 700, padding: '0.2rem 0.6rem', borderRadius: '9999px', background: '#dcfce7', color: '#15803d', border: '1px solid #bbf7d0' }}>
                 ✓ Fully Signed
               </span>
             )}
           </div>
-          <div style={{ background: '#f1f5f9', borderRadius: '8px', padding: '1rem', display: 'flex', justifyContent: 'center', overflowY: 'auto', maxHeight: '780px' }}>
-            {activePdfUrl ? (
-              <Document
-                file={activePdfUrl}
-                onLoadSuccess={({ numPages }) => setPdfPages(numPages)}
-                loading={<div style={{ padding: '2rem', color: 'var(--text-muted)' }}>Loading document...</div>}
-                error={<div style={{ padding: '2rem', color: 'var(--color-error)' }}>PDF unavailable. <a href={activePdfUrl} target="_blank" rel="noreferrer">Open directly ↗</a></div>}
-              >
-                {Array.from({ length: pdfPages }, (_, i) => (
-                  <Page key={i} pageNumber={i + 1} width={560} renderTextLayer={false} renderAnnotationLayer={false} />
-                ))}
-              </Document>
-            ) : (
-              <div style={{ padding: '3rem', color: 'var(--text-muted)', textAlign: 'center' }}>No document available</div>
-            )}
-          </div>
+          {activePdfUrl ? (
+            <iframe
+              src={activePdfUrl}
+              title="Application PDF"
+              style={{ width: '100%', height: '780px', border: 'none', borderRadius: '8px', background: '#f1f5f9' }}
+            />
+          ) : (
+            <div style={{ height: '400px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', color: 'var(--color-text-muted)', background: 'var(--color-bg-secondary)', borderRadius: '8px' }}>
+              <span style={{ fontSize: '2rem', marginBottom: '0.75rem' }}>📄</span>
+              <p style={{ margin: 0, fontSize: '0.9rem' }}>PDF will appear here once generated</p>
+            </div>
+          )}
         </div>
       </div>
     </div>
   );
 };
 
-// ── Timeline Node ──────────────────────────────────────────────────────────────
+// ── Timeline Node ──────────────────────────────────────────────────────────
 interface NodeProps {
-  icon: string;
-  label: string;
-  sublabel?: string;
-  done?: boolean;
-  rejected?: boolean;
-  pending?: boolean;
-  signatureUrl?: string;
-  sealUrl?: string;
-  signedAt?: string;
-  comment?: string;
+  icon: string; label: string; sublabel?: string;
+  done?: boolean; rejected?: boolean; pending?: boolean;
+  signatureUrl?: string; sealUrl?: string; signedAt?: string; comment?: string;
 }
 
 const TimelineNode: React.FC<NodeProps> = ({ icon, label, sublabel, done, rejected, pending, signatureUrl, sealUrl, signedAt, comment }) => {
-  const bgColor = rejected ? '#b91c1c' : done ? '#16a34a' : pending ? '#3b82f6' : '#d1d5db';
+  const bg = rejected ? '#b91c1c' : done ? '#16a34a' : pending ? 'var(--color-accent)' : '#d1d5db';
   return (
     <div style={{ display: 'flex', gap: '1rem', position: 'relative', zIndex: 1 }}>
-      <div style={{ width: '24px', height: '24px', borderRadius: '50%', background: bgColor, color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '11px', fontWeight: 700, flexShrink: 0, border: '3px solid white', boxShadow: '0 0 0 2px ' + bgColor }}>
+      <div style={{ width: '24px', height: '24px', borderRadius: '50%', background: bg, color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '11px', fontWeight: 700, flexShrink: 0, border: '3px solid white', boxShadow: `0 0 0 2px ${bg}` }}>
         {icon}
       </div>
       <div style={{ flex: 1, paddingTop: '1px' }}>
-        <p style={{ fontSize: '0.85rem', fontWeight: 700, margin: 0, color: 'var(--text-primary)' }}>{label}</p>
-        {sublabel && <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)', margin: '1px 0 0' }}>{sublabel}</p>}
+        <p style={{ fontSize: '0.85rem', fontWeight: 700, margin: 0, color: 'var(--color-text-primary)' }}>{label}</p>
+        {sublabel && <p style={{ fontSize: '0.75rem', color: 'var(--color-text-secondary)', margin: '1px 0 0' }}>{sublabel}</p>}
         {signedAt && <p style={{ fontSize: '0.7rem', color: '#16a34a', fontWeight: 700, margin: '2px 0 0' }}>Signed {new Date(signedAt).toLocaleDateString()}</p>}
-        {comment && <p style={{ fontSize: '0.72rem', color: 'var(--text-muted)', margin: '3px 0 0', fontStyle: 'italic' }}>"{comment}"</p>}
-
-        {/* Signature + Seal preview for completed steps */}
+        {comment && <p style={{ fontSize: '0.72rem', color: 'var(--color-text-muted)', margin: '3px 0 0', fontStyle: 'italic' }}>"{comment}"</p>}
         {done && (signatureUrl || sealUrl) && (
           <div style={{ display: 'flex', gap: '0.5rem', marginTop: '0.5rem', alignItems: 'center' }}>
-            {signatureUrl && (
-              <img src={signatureUrl} alt="Signature" style={{ height: '28px', objectFit: 'contain', border: '1px solid #e2e8f0', borderRadius: '4px', background: 'white', padding: '2px' }} />
-            )}
-            {sealUrl && (
-              <img src={sealUrl} alt="Seal" style={{ height: '28px', width: '28px', objectFit: 'contain', border: '1px solid #e2e8f0', borderRadius: '50%', background: 'white', padding: '1px' }} />
-            )}
+            {signatureUrl && <img src={signatureUrl} alt="Signature" style={{ height: '28px', objectFit: 'contain', border: '1px solid #e2e8f0', borderRadius: '4px', background: 'white', padding: '2px' }} />}
+            {sealUrl && <img src={sealUrl} alt="Seal" style={{ height: '28px', width: '28px', objectFit: 'contain', border: '1px solid #e2e8f0', borderRadius: '50%', background: 'white', padding: '1px' }} />}
           </div>
         )}
       </div>

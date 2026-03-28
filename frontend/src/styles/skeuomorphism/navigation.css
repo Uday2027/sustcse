@@ -152,6 +152,47 @@
   border-color: rgba(255, 255, 255, 0.4);
 }
 
+/* ── User Icon (avatar circle) ─────────────────────────────────────────── */
+.navbar__user-icon-btn {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 2px solid var(--color-accent);
+  background: transparent;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-fast);
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.navbar__user-icon-btn:hover {
+  box-shadow: 0 0 0 3px var(--color-accent-glow);
+  transform: scale(1.06);
+}
+
+.navbar__user-avatar {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.navbar__user-initials {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--color-accent);
+  letter-spacing: 0.02em;
+  user-select: none;
+}
+
+.navbar__dropdown--user {
+  min-width: 220px;
+}
+
 .navbar__dropdown {
   display: none;
   position: absolute;

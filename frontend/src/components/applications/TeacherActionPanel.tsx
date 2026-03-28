@@ -32,22 +32,22 @@ const TeacherActionPanel: React.FC<Props> = ({ applicationId, stepId, stepLabel,
   };
 
   return (
-    <div className="skeu-card" style={{ padding: '1.5rem', border: '2px solid var(--color-primary)', background: 'linear-gradient(135deg, #eff6ff 0%, #f8faff 100%)' }}>
+    <div className="skeu-card" style={{ padding: '1.5rem', border: '2px solid var(--color-accent)', background: 'linear-gradient(135deg, rgba(204,34,0,0.04) 0%, #fff 100%)' }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1rem' }}>
         <span style={{ fontSize: '1.25rem' }}>✍️</span>
         <div>
-          <h3 style={{ fontSize: '1rem', fontWeight: 700, margin: 0, color: 'var(--text-primary)' }}>
+          <h3 style={{ fontSize: '1rem', fontWeight: 700, margin: 0, color: 'var(--color-text-primary)' }}>
             Your Signature Required
           </h3>
-          <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', margin: 0 }}>
+          <p style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)', margin: 0 }}>
             {stepLabel || 'This application is awaiting your review'}
           </p>
         </div>
       </div>
 
       <div style={{ marginBottom: '1rem' }}>
-        <label style={{ display: 'block', fontSize: '0.78rem', fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.4rem' }}>
-          Comment <span style={{ color: 'var(--text-muted)', fontWeight: 400 }}>(required for rejection)</span>
+        <label style={{ display: 'block', fontSize: '0.78rem', fontWeight: 700, color: 'var(--color-text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.4rem' }}>
+          Comment <span style={{ color: 'var(--color-text-muted)', fontWeight: 400 }}>(required for rejection)</span>
         </label>
         <textarea
           className="skeu-input"
@@ -64,7 +64,7 @@ const TeacherActionPanel: React.FC<Props> = ({ applicationId, stepId, stepLabel,
           onClick={() => handleAction('reject')}
           disabled={!!loading}
           className="skeu-btn"
-          style={{ flex: 1, color: 'var(--color-error)', borderColor: 'var(--color-error)' }}
+          style={{ flex: 1, color: 'var(--color-danger)', borderColor: 'var(--color-danger)' }}
         >
           {loading === 'reject' ? 'Rejecting...' : '✕ Reject'}
         </button>
