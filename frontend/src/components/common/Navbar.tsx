@@ -1,7 +1,7 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useState, useEffect, useRef } from 'react';
 import { useAuth } from '../../context/AuthContext';
-import { FiMenu, FiX, FiChevronDown, FiUser, FiSettings, FiLogOut, FiLayout } from 'react-icons/fi';
+import { FiMenu, FiX, FiUser, FiSettings, FiLogOut, FiLayout, FiChevronDown } from 'react-icons/fi';
 import gsap from 'gsap';
 
 const publicLinks = [
@@ -30,7 +30,9 @@ export default function Navbar() {
   const navigate = useNavigate();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [userMenuOpen, setUserMenuOpen] = useState(false);
   const navRef = useRef<HTMLElement>(null);
+  const userMenuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 50);
@@ -44,11 +46,20 @@ export default function Navbar() {
     }
   }, [scrolled]);
 
-  useEffect(() => { setMobileOpen(false); }, [location.pathname]);
+  useEffect(() => { setMobileOpen(false); setUserMenuOpen(false); }, [location.pathname]);
+
+  // Close user menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (userMenuRef.current && !userMenuRef.current.contains(e.target as Node)) {
+        setUserMenuOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   const isAdmin = user?.role === 'admin' || user?.role === 'super_admin';
-
-  // Build initials from full name
   const getInitials = (name: string) =>
     name.split(' ').slice(0, 2).map(w => w[0]).join('').toUpperCase();
 
@@ -65,8 +76,10 @@ export default function Navbar() {
             if (link.subLinks) {
               return (
                 <div key={link.label} className="navbar__user-menu" style={{ marginLeft: 0 }}>
-                  <div className={`navbar__link ${location.pathname.startsWith(link.path) || link.subLinks.some(s => location.pathname === s.path) ? 'navbar__link--active' : ''}`}
-                    style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.2rem', border: 'none', background: 'transparent', padding: '0.5rem' }}>
+                  <div
+                    className={`navbar__link ${location.pathname.startsWith(link.path) || link.subLinks.some(s => location.pathname === s.path) ? 'navbar__link--active' : ''}`}
+                    style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.2rem', border: 'none', background: 'transparent', padding: '0.5rem' }}
+                  >
                     {link.label} <FiChevronDown style={{ marginTop: '2px', opacity: 0.7 }} />
                   </div>
                   <div className="navbar__dropdown">
@@ -80,21 +93,24 @@ export default function Navbar() {
               );
             }
             return (
-              <Link key={link.path} to={link.path}
+              <Link
+                key={link.path} to={link.path}
                 className={`navbar__link ${location.pathname === link.path ? 'navbar__link--active' : ''}`}
-                onClick={() => setMobileOpen(false)}>
+                onClick={() => setMobileOpen(false)}
+              >
                 {link.label}
               </Link>
             );
           })}
 
           {user ? (
-            <div className="navbar__user-menu">
-              {/* User Icon — clicking navigates to /dashboard */}
+            <div className="navbar__user-menu" ref={userMenuRef}>
+              {/* User Icon — click toggles dropdown */}
               <button
                 className="navbar__user-icon-btn"
-                onClick={() => navigate('/dashboard')}
-                title={`${user.full_name} — Go to Dashboard`}
+                onClick={() => setUserMenuOpen(prev => !prev)}
+                title={user.full_name}
+                aria-expanded={userMenuOpen}
               >
                 {(user as any).avatar_url ? (
                   <img src={(user as any).avatar_url} alt={user.full_name} className="navbar__user-avatar" />
@@ -103,32 +119,42 @@ export default function Navbar() {
                 )}
               </button>
 
-              {/* Hover Dropdown */}
-              <div className="navbar__dropdown navbar__dropdown--user">
-                <div style={{ padding: '0.75rem 1rem', borderBottom: '1px solid var(--color-border)' }}>
-                  <p style={{ fontSize: '0.85rem', fontWeight: 700, margin: 0, color: 'var(--color-text-primary)' }}>{user.full_name}</p>
-                  <p style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', margin: '2px 0 0', textTransform: 'capitalize' }}>{user.role}</p>
-                </div>
+              {/* Click-based dropdown */}
+              {userMenuOpen && (
+                <div className="navbar__dropdown navbar__dropdown--user navbar__dropdown--open">
+                  <div style={{ padding: '0.85rem 1rem', borderBottom: '1px solid var(--color-border)' }}>
+                    <p style={{ fontSize: '0.875rem', fontWeight: 700, margin: 0, color: 'var(--color-text-primary)' }}>{user.full_name}</p>
+                    <p style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', margin: '2px 0 0', textTransform: 'capitalize' }}>{user.role.replace('_', ' ')}</p>
+                  </div>
 
-                <Link to="/dashboard" className="navbar__dropdown-item">
-                  <FiLayout size={13} style={{ marginRight: '0.5rem', verticalAlign: 'middle' }} />
-                  Dashboard
-                </Link>
-                <Link to="/profile" className="navbar__dropdown-item">
-                  <FiUser size={13} style={{ marginRight: '0.5rem', verticalAlign: 'middle' }} />
-                  Profile
-                </Link>
-                {isAdmin && (
-                  <Link to="/admin" className="navbar__dropdown-item" style={{ color: 'var(--color-accent)', fontWeight: 600 }}>
-                    <FiSettings size={13} style={{ marginRight: '0.5rem', verticalAlign: 'middle' }} />
-                    Admin Panel
+                  <Link to="/dashboard" className="navbar__dropdown-item" onClick={() => setUserMenuOpen(false)}>
+                    <FiLayout size={13} style={{ marginRight: '0.5rem', verticalAlign: 'middle' }} />
+                    Dashboard
                   </Link>
-                )}
-                <button onClick={logout} className="navbar__dropdown-item navbar__dropdown-item--logout">
-                  <FiLogOut size={13} style={{ marginRight: '0.5rem', verticalAlign: 'middle' }} />
-                  Logout
-                </button>
-              </div>
+                  <Link to="/profile" className="navbar__dropdown-item" onClick={() => setUserMenuOpen(false)}>
+                    <FiUser size={13} style={{ marginRight: '0.5rem', verticalAlign: 'middle' }} />
+                    Profile
+                  </Link>
+                  {isAdmin && (
+                    <Link
+                      to="/admin"
+                      className="navbar__dropdown-item"
+                      style={{ color: 'var(--color-accent)', fontWeight: 600 }}
+                      onClick={() => setUserMenuOpen(false)}
+                    >
+                      <FiSettings size={13} style={{ marginRight: '0.5rem', verticalAlign: 'middle' }} />
+                      Admin Panel
+                    </Link>
+                  )}
+                  <button
+                    onClick={() => { logout(); setUserMenuOpen(false); }}
+                    className="navbar__dropdown-item navbar__dropdown-item--logout"
+                  >
+                    <FiLogOut size={13} style={{ marginRight: '0.5rem', verticalAlign: 'middle' }} />
+                    Logout
+                  </button>
+                </div>
+              )}
             </div>
           ) : (
             <Link to="/auth" className="navbar__link navbar__link--login">Login</Link>

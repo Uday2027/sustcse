@@ -9,12 +9,14 @@ import {
 const sidebarLinks = [
   { to: '/admin', label: 'Dashboard', icon: FiHome, exact: true },
   { to: '/admin/users', label: 'Users', icon: FiUsers },
+  { to: '/admin/applications', label: 'Applications', icon: FiClipboard },
+  { to: '/admin/finance', label: 'Finance', icon: FiDollarSign },
   { to: '/admin/notices', label: 'Notices', icon: FiBell },
   { to: '/admin/events', label: 'Events', icon: FiCalendar },
   { to: '/admin/society', label: 'Society', icon: FiStar },
   { to: '/admin/permissions', label: 'Permissions', icon: FiShield },
-  { to: '/admin/sessions', label: 'Sessions', icon: FiClipboard },
-  { to: '/admin/email-logs', label: 'Email Logs', icon: FiFileText },
+  { to: '/admin/sessions', label: 'Sessions', icon: FiFileText },
+  { to: '/admin/email-logs', label: 'Email Logs', icon: FiMail },
   { to: '/admin/send-email', label: 'Send Email', icon: FiSend },
 ];
 

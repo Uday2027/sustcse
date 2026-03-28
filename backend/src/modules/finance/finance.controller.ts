@@ -1,6 +1,8 @@
 import { Response, NextFunction } from 'express';
 import { AuthRequest } from '../../middleware/auth';
 import * as financeService from './finance.service';
+import { uploadFile } from '../../services/cloudinary.service';
+import { createError } from '../../middleware/errorHandler';
 
 // =====================
 // Fiscal Years
@@ -87,8 +89,9 @@ export const deleteFiscalYear = async (req: AuthRequest, res: Response, next: Ne
 export const getBankStatements = async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     const page = parseInt(req.query.page as string) || 1;
-    const limit = parseInt(req.query.limit as string) || 10;
-    const fiscalYearId = req.query.fiscalYearId as string | undefined;
+    const limit = parseInt(req.query.limit as string) || 50;
+    // Support both fiscal_year_id (snake_case from frontend) and fiscalYearId (camelCase)
+    const fiscalYearId = (req.query.fiscal_year_id || req.query.fiscalYearId) as string | undefined;
 
     const result = await financeService.getBankStatements(page, limit, fiscalYearId);
 
@@ -114,11 +117,46 @@ export const getBankStatementById = async (req: AuthRequest, res: Response, next
 
 /**
  * POST /api/finance/bank-statements
- * Create a new bank statement.
+ * Create a new bank statement, optionally uploading a file to Cloudinary.
+ * Accepts multipart/form-data with fields: fiscal_year_id, statement_date, description, amount, notes
+ * and an optional `file` attachment (PDF, image, Excel, etc.)
  */
 export const createBankStatement = async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
-    const data = await financeService.createBankStatement(req.body);
+    const { fiscal_year_id, statement_date, description, amount, notes } = req.body;
+
+    if (!fiscal_year_id || !statement_date) {
+      throw createError(400, 'fiscal_year_id and statement_date are required to upload a bank statement');
+    }
+
+    let file_url: string | undefined;
+    let file_name: string | undefined;
+
+    const uploadedFile = req.file;
+    if (uploadedFile) {
+      const uploaded = await uploadFile(
+        uploadedFile.buffer,
+        'finance/bank-statements',
+        uploadedFile.originalname,
+        uploadedFile.mimetype
+      );
+      file_url = uploaded.secure_url;
+      file_name = uploadedFile.originalname;
+    } else if (req.body.file_url) {
+      file_url = req.body.file_url;
+      file_name = req.body.file_name || 'Statement';
+    }
+
+    const data = await financeService.createBankStatement({
+      fiscal_year_id,
+      statement_date,
+      description: description || null,
+      amount: amount ? parseFloat(amount) : null,
+      notes: notes || null,
+      file_url: file_url || null,
+      file_name: file_name || null,
+      uploaded_by: req.user!.id,
+    });
 
     res.status(201).json({ success: true, data });
   } catch (error) {

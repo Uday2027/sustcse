@@ -209,7 +209,11 @@
   animation: fadeInDown var(--transition-fast) ease-out;
 }
 
-.navbar__user-menu:hover .navbar__dropdown {
+.navbar__user-menu:not(:has(.navbar__user-icon-btn)):hover .navbar__dropdown {
+  display: block;
+}
+
+.navbar__dropdown--open {
   display: block;
 }
 

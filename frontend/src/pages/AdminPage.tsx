@@ -9,6 +9,8 @@ import EmailLog from '../components/admin/EmailLog';
 import EmailComposer from '../components/admin/EmailComposer';
 import SessionConfig from '../components/admin/SessionConfig';
 import SectionPermissions from '../components/admin/SectionPermissions';
+import ApplicationsPage from './ApplicationsPage';
+import FinancePage from './FinancePage';
 
 export default function AdminPage() {
   return (
@@ -16,6 +18,9 @@ export default function AdminPage() {
       <Routes>
         <Route index element={<AdminDashboard />} />
         <Route path="users" element={<UserManagement />} />
+        <Route path="applications" element={<ApplicationsPage />} />
+        <Route path="applications/:id" element={<ApplicationsPage />} />
+        <Route path="finance" element={<FinancePage />} />
         <Route path="notices" element={<NoticeManagement />} />
         <Route path="events" element={<EventManagement />} />
         <Route path="society" element={<SocietyManagement />} />

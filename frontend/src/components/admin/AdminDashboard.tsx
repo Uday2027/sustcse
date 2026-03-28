@@ -85,6 +85,8 @@ export default function AdminDashboard() {
         <h3 className="skeu-heading skeu-heading--sm" style={{ marginBottom: '1rem' }}>Quick Actions</h3>
         <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
           <Link to="/admin/users?status=pending" className="skeu-btn skeu-btn--primary">Review Pending Users</Link>
+          <Link to="/admin/applications" className="skeu-btn skeu-btn--primary">Application Inbox</Link>
+          <Link to="/admin/finance" className="skeu-btn">Finance Dashboard</Link>
           <Link to="/admin/send-email" className="skeu-btn">Send Email</Link>
           <Link to="/admin/sessions" className="skeu-btn">Manage Sessions</Link>
           <Link to="/admin/permissions" className="skeu-btn">Manage Permissions</Link>
